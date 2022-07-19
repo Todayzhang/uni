@@ -1,0 +1,196 @@
+{
+  "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+    {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "主页面",
+        "app-plus": {
+          "titleNView": false //禁用原生导航栏  
+        }
+      }
+    },
+    {
+      "path": "pages/index/blueindex",
+      "style": {
+        "navigationBarTitleText": "蓝牙主页面",
+        "app-plus": {
+          "titleNView": false //禁用原生导航栏  
+        }
+      }
+    },
+    {
+      "path": "pages/equipment/index",//ok
+      "style": {
+        "navigationBarTitleText": "设备",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    }, {
+      "path": "pages/test/index",
+      "style": {
+        "navigationBarTitleText": "试验",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    }, 
+    {
+      "path": "pages/test/directResistanceTest",//ok111
+      "style": {
+        "navigationBarTitleText": "直阻测试-参数设置",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/test/testResult",
+      "style": {
+        "navigationBarTitleText": "直阻测试-测试结果",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/loop/parameterSetting",//ok
+      "style": {
+        "navigationBarTitleText": "回路-参数设置",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/loop/testResult",
+      "style": {
+        "navigationBarTitleText": "回路-测试结果",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/directresistance/parameterSetting",//ok
+      "style": {
+        "navigationBarTitleText": "直阻-参数设置",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/directresistance/testResult",
+      "style": {
+        "navigationBarTitleText": "直阻-测试结果",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    }, {
+      "path": "pages/switch/index",//ok
+      "style": {
+        "navigationBarTitleText": "开关",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/switch/parameterSetting",//ok
+      "style": {
+        "navigationBarTitleText": "开关-参数设置",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/dielectricloss/parameterSetting",//ok
+      "style": {
+        "navigationBarTitleText": "介损-参数设置",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/statistics/statistics",
+      "style": {
+        "navigationBarTitleText": "统计",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/statistics/boole",
+      "style": {
+        "navigationBarTitleText": "统计",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/statistics/boole",
+      "style": {
+        "navigationBarTitleText": "统计",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/me/me",
+      "style": {
+        "navigationBarTitleText": "我的",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/me/light",
+      "style": {
+        "navigationBarTitleText": "亮度调节",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/me/languagesettings",
+      "style": {
+        "navigationBarTitleText": "语言设置",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    },
+    {
+      "path": "pages/me/currentversion",
+      "style": {
+        "navigationBarTitleText": "软件版本",
+        "navigationBarBackgroundColor": "#519BDA",
+        "navigationBarTextStyle": "white"
+      }
+    }
+  ],
+  "tabBar": {
+    "color": "#8a8a8a",
+    "selectedColor": "#1f97e6",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [{
+        "pagePath": "pages/index/index",
+        "text": "测试",
+        "iconPath": "static/images/test.png",
+        "selectedIconPath": "static/images/tested.png"
+      },
+      {
+        "pagePath": "pages/statistics/boole",
+        "text": "统计",
+        "iconPath": "static/images/statistics.png",
+        "selectedIconPath": "static/images/statisticsed.png"
+      },
+      {
+        "pagePath": "pages/me/me",
+        "text": "我的",
+        "iconPath": "static/images/me.png",
+        "selectedIconPath": "static/images/meed.png"
+      }
+    ]
+  },
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8",
+    "pageOrientation": "auto"
+  }
+}

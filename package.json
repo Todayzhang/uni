@@ -1,0 +1,19 @@
+{
+  "name": "uni",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://oauth2:GzwtNdz4ucCTsSN3ybDd@gitcode.net/zhangToday/uni.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "vconsole": "^3.12.1"
+  }
+}

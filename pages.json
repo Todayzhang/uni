@@ -1,7 +1,7 @@
 {
   "pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
     {
-      "path": "pages/index/index",
+      "path": "pages/index/blueindex",
       "style": {
         "navigationBarTitleText": "主页面",
         "app-plus": {
@@ -10,7 +10,7 @@
       }
     },
     {
-      "path": "pages/index/blueindex",
+      "path": "pages/index/index",
       "style": {
         "navigationBarTitleText": "蓝牙主页面",
         "app-plus": {
@@ -159,7 +159,19 @@
         "navigationBarBackgroundColor": "#519BDA",
         "navigationBarTextStyle": "white"
       }
-    }
+    },
+	{
+	           "path": "uni_modules/HF-HF_debugging/pages/next/next",
+	           "style": {
+	               "navigationStyle": "custom",
+	               "backgroundColor": "transparent",
+	               "app-plus": {
+	                   "animationType": "slide-in-bottom",
+	                   "background": "transparent",
+	                   "popGesture": "none"
+	               }
+	           }
+	 }
   ],
   "tabBar": {
     "color": "#8a8a8a",
@@ -191,6 +203,18 @@
     "navigationBarTitleText": "uni-app",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8",
-    "pageOrientation": "auto"
+    "pageOrientation": "auto",
+	"subNVues": [{
+	            "id": "concat", // 唯一标识  
+	            "path": "uni_modules/HF-HF_debugging/pages/subnvue/concat", // 页面路径  
+	            "style": {
+	                "position": "absolute",
+	                "right": "80rpx",
+	                "bottom": "120rpx",
+	                "width": "200rpx",
+	                "height": "80rpx",
+	                "background": "transparent"
+	            }
+	        }]
   }
 }

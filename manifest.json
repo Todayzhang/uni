@@ -54,20 +54,20 @@
                 "geolocation" : {
                     "amap" : {
                         "__platform__" : [ "android" ],
-                        "appkey_ios" : "",
+                        "appkey_ios" : "0b48b24a3fb1d8c9b372c751b24ad4f8",
                         "appkey_android" : "0b48b24a3fb1d8c9b372c751b24ad4f8"
                     }
                 }
             },
             "icons" : {
                 "android" : {
-                    "hdpi" : "F:/weChat/WeChat Files/wxid_ielyug4ebx7v22/FileStorage/File/2022-03/尺寸/72.png",
-                    "xhdpi" : "F:/weChat/WeChat Files/wxid_ielyug4ebx7v22/FileStorage/File/2022-03/尺寸/96.png",
-                    "xxhdpi" : "F:/weChat/WeChat Files/wxid_ielyug4ebx7v22/FileStorage/File/2022-03/尺寸/144.png",
-                    "xxxhdpi" : "F:/weChat/WeChat Files/wxid_ielyug4ebx7v22/FileStorage/File/2022-03/尺寸/192.png"
+                    "hdpi" : "C:/Users/zjz/Desktop/uni.png",
+                    "xhdpi" : "C:/Users/zjz/Desktop/uni.png",
+                    "xxhdpi" : "C:/Users/zjz/Desktop/uni.png",
+                    "xxxhdpi" : "C:/Users/zjz/Desktop/uni.png"
                 },
                 "ios" : {
-                    "appstore" : "F:/weChat/WeChat Files/wxid_ielyug4ebx7v22/FileStorage/File/2022-03/尺寸/1024.png"
+                    "appstore" : "C:/Users/zjz/Desktop/uni.png"
                 }
             }
         },

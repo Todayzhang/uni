@@ -188,7 +188,7 @@
         this.week = week
         this.time = hour + ":" + minute
       }, 1000)
-      this.getLocation()
+      //this.getLocation()
     },
     methods: {
       // 扫一扫

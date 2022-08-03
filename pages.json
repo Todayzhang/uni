@@ -172,7 +172,16 @@
 	               }
 	           }
 	 }
-  ],
+      ,{
+            "path" : "pages/statistics/bluetooth",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
+    ],
   "tabBar": {
     "color": "#8a8a8a",
     "selectedColor": "#1f97e6",
@@ -185,7 +194,7 @@
         "selectedIconPath": "static/images/tested.png"
       },
       {
-        "pagePath": "pages/statistics/boole",
+        "pagePath": "pages/statistics/bluetooth",
         "text": "统计",
         "iconPath": "static/images/statistics.png",
         "selectedIconPath": "static/images/statisticsed.png"

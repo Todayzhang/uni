@@ -2,8 +2,8 @@
     "name" : "uni",
     "appid" : "__UNI__AD7093E",
     "description" : "",
-    "versionName" : "1.0.1",
-    "versionCode" : "100",
+    "versionName" : "1.0.3",
+    "versionCode" : 101,
     "transformPx" : false,
     /* 5+App特有相关 */
     "app-plus" : {
@@ -12,7 +12,7 @@
         "compilerVersion" : 3,
         "splashscreen" : {
             "alwaysShowBeforeRender" : true,
-            "waiting" : true,
+            "waiting" : false,
             "autoclose" : true,
             "delay" : 0
         },
@@ -44,7 +44,8 @@
                     "<uses-permission android:name=\"android.permission.VIBRATE\"/>",
                     "<uses-permission android:name=\"android.permission.WAKE_LOCK\"/>",
                     "<uses-permission android:name=\"android.permission.WRITE_SETTINGS\"/>"
-                ]
+                ],
+                "minSdkVersion" : 21
             },
             /* ios打包配置 */
             "ios" : {
@@ -112,6 +113,20 @@
                     "pid" : "3458",
                     "parameters" : {}
                 }
+            },
+            "Common-BLE" : {
+                "__plugin_info__" : {
+                    "name" : "低功耗蓝牙开发插件 - [试用版，仅用于自定义调试基座]",
+                    "description" : "本插件封装了低功耗蓝牙开发的api，修复解决官方的蓝牙问题，适合单设备、多设备的读、写、通知等主要功能；完善了数据分包返回的错乱、大小、不完整等一系列问题，适合各种蓝牙打印机、跳绳、温度计等等设备",
+                    "platforms" : "Android",
+                    "url" : "https://ext.dcloud.net.cn/plugin?id=4945",
+                    "android_package_name" : "",
+                    "ios_bundle_id" : "",
+                    "isCloud" : true,
+                    "bought" : 0,
+                    "pid" : "4945",
+                    "parameters" : {}
+                }
             }
         }
     },
@@ -150,3 +165,5 @@
         "landscape-secondary"
     ]
 }
+/* 5+App特有相关 */
+

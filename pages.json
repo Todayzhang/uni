@@ -19,7 +19,7 @@
       }
     },
     {
-      "path": "pages/equipment/index",//ok
+      "path": "pages/equipment/index", //ok
       "style": {
         "navigationBarTitleText": "设备",
         "navigationBarBackgroundColor": "#519BDA",
@@ -32,9 +32,9 @@
         "navigationBarBackgroundColor": "#519BDA",
         "navigationBarTextStyle": "white"
       }
-    }, 
+    },
     {
-      "path": "pages/test/directResistanceTest",//ok111
+      "path": "pages/test/directResistanceTest", //ok111
       "style": {
         "navigationBarTitleText": "直阻测试-参数设置",
         "navigationBarBackgroundColor": "#519BDA",
@@ -50,7 +50,7 @@
       }
     },
     {
-      "path": "pages/loop/parameterSetting",//ok
+      "path": "pages/loop/parameterSetting", //ok
       "style": {
         "navigationBarTitleText": "回路-参数设置",
         "navigationBarBackgroundColor": "#519BDA",
@@ -66,7 +66,7 @@
       }
     },
     {
-      "path": "pages/directresistance/parameterSetting",//ok
+      "path": "pages/directresistance/parameterSetting", //ok
       "style": {
         "navigationBarTitleText": "直阻-参数设置",
         "navigationBarBackgroundColor": "#519BDA",
@@ -81,7 +81,7 @@
         "navigationBarTextStyle": "white"
       }
     }, {
-      "path": "pages/switch/index",//ok
+      "path": "pages/switch/index", //ok
       "style": {
         "navigationBarTitleText": "开关",
         "navigationBarBackgroundColor": "#519BDA",
@@ -89,7 +89,7 @@
       }
     },
     {
-      "path": "pages/switch/parameterSetting",//ok
+      "path": "pages/switch/parameterSetting", //ok
       "style": {
         "navigationBarTitleText": "开关-参数设置",
         "navigationBarBackgroundColor": "#519BDA",
@@ -97,7 +97,7 @@
       }
     },
     {
-      "path": "pages/dielectricloss/parameterSetting",//ok
+      "path": "pages/dielectricloss/parameterSetting", //ok
       "style": {
         "navigationBarTitleText": "介损-参数设置",
         "navigationBarBackgroundColor": "#519BDA",
@@ -160,28 +160,35 @@
         "navigationBarTextStyle": "white"
       }
     },
-	{
-	           "path": "uni_modules/HF-HF_debugging/pages/next/next",
-	           "style": {
-	               "navigationStyle": "custom",
-	               "backgroundColor": "transparent",
-	               "app-plus": {
-	                   "animationType": "slide-in-bottom",
-	                   "background": "transparent",
-	                   "popGesture": "none"
-	               }
-	           }
-	 }
-      ,{
-            "path" : "pages/statistics/bluetooth",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "",
-                "enablePullDownRefresh": false
-            }
-            
+    {
+      "path": "uni_modules/HF-HF_debugging/pages/next/next",
+      "style": {
+        "navigationStyle": "custom",
+        "backgroundColor": "transparent",
+        "app-plus": {
+          "animationType": "slide-in-bottom",
+          "background": "transparent",
+          "popGesture": "none"
         }
-    ],
+      }
+    },
+    {
+      "path": "pages/statistics/bluetooth",
+      "style": {
+        "navigationBarTitleText": "经典蓝牙",
+        "enablePullDownRefresh": false
+      }
+
+    }, 
+    {
+      "path": "pages/statistics/bluetoothble",
+      "style": {
+        "navigationBarTitleText": "BLE蓝牙",
+        "enablePullDownRefresh": false
+      }
+
+    }
+  ],
   "tabBar": {
     "color": "#8a8a8a",
     "selectedColor": "#1f97e6",
@@ -195,13 +202,13 @@
       },
       {
         "pagePath": "pages/statistics/bluetooth",
-        "text": "统计",
+        "text": "蓝牙",
         "iconPath": "static/images/statistics.png",
         "selectedIconPath": "static/images/statisticsed.png"
       },
       {
-        "pagePath": "pages/me/me",
-        "text": "我的",
+        "pagePath": "pages/statistics/bluetoothble",
+        "text": "BLE",
         "iconPath": "static/images/me.png",
         "selectedIconPath": "static/images/meed.png"
       }
@@ -213,17 +220,17 @@
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8",
     "pageOrientation": "auto",
-	"subNVues": [{
-	            "id": "concat", // 唯一标识  
-	            "path": "uni_modules/HF-HF_debugging/pages/subnvue/concat", // 页面路径  
-	            "style": {
-	                "position": "absolute",
-	                "right": "80rpx",
-	                "bottom": "120rpx",
-	                "width": "200rpx",
-	                "height": "80rpx",
-	                "background": "transparent"
-	            }
-	        }]
+    "subNVues": [{
+      "id": "concat", // 唯一标识  
+      "path": "uni_modules/HF-HF_debugging/pages/subnvue/concat", // 页面路径  
+      "style": {
+        "position": "absolute",
+        "right": "80rpx",
+        "bottom": "120rpx",
+        "width": "200rpx",
+        "height": "80rpx",
+        "background": "transparent"
+      }
+    }]
   }
 }

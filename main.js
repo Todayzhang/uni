@@ -15,10 +15,13 @@ const i18n = new VueI18n(i18nConfig)
 // import VConsole from 'vconsole'
 // new VConsole()
 
+const bt = uni.requireNativePlugin('Common-BT');
+
 Vue.config.productionTip = false
 App.mpType = 'app'
 const app = new Vue({
   i18n,
+  bt,
     ...App
 })
 

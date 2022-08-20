@@ -102,9 +102,10 @@
                 bt.listBT(result => {
                     //result数据：{"msg":"搜索完成","list":[{"name":"蓝牙名称","address":"mac地址","status":"配对状态"}]} 
                     const msg = JSON.stringify(result);
+					console.log(result)
 					
                     // console.log(msg);
-                    console.log('蓝牙设备列表：' + result.list);
+                    // console.log('蓝牙设备列表：' + result.list);
 					// console.log(result.list.length)
 					this.list = Array.from(JSON.parse(result.list))
 					console.log(this.list)
@@ -230,7 +231,7 @@
     }
 </script>
 
-<style>
+<style lang="less">
     button {
         margin-top: 30upx;
         margin-bottom: 30upx;

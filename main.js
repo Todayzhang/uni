@@ -6,11 +6,12 @@ let i18nConfig = {
   messages
 }
 // #ifndef VUE3
-
+import store from './common/store'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 Vue.use(VueI18n)
 const i18n = new VueI18n(i18nConfig)
+Vue.prototype.store = store
 
 // import VConsole from 'vconsole'
 // new VConsole()
@@ -22,6 +23,7 @@ App.mpType = 'app'
 const app = new Vue({
   i18n,
   bt,
+  store,
     ...App
 })
 

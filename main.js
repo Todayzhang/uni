@@ -1,17 +1,19 @@
+import { HFdebugging } from '@/uni_modules/HF-HF_debugging/common/next.js'
 import App from './App'
 import messages from './locale/index'
-import {HFdebugging} from '@/uni_modules/HF-HF_debugging/common/next.js'
 let i18nConfig = {
   locale: uni.getLocale(),
   messages
 }
 // #ifndef VUE3
-import store from './common/store'
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
+import bluetooth from './common/bluetooth'
+import store from './common/store'
 Vue.use(VueI18n)
 const i18n = new VueI18n(i18nConfig)
 Vue.prototype.store = store
+Vue.prototype.$bluetooth = bluetooth
 
 // import VConsole from 'vconsole'
 // new VConsole()

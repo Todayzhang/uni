@@ -23,7 +23,7 @@ export class Bluetooth {
 
   // 打开蓝牙
   initBluetooth() {
-    return new Promise((reslove, reject) => {
+    return new Promise((resolve, reject) => {
       let BluetoothAdapter, BAdapter;
       if (uni.getSystemInfoSync().platform === "android") {
         BluetoothAdapter = plus.android.importClass(
@@ -32,12 +32,12 @@ export class Bluetooth {
         BAdapter = BluetoothAdapter.getDefaultAdapter();
         if (!BAdapter.isEnabled()) {
           classicBluetooth.openBT((result) => {
-            const msg = JSON.stringify(result);
-            reslove(result);
+			  console.log(result)
+            // const msg = JSON.stringify(result);
+            resolve(result);
           });
         }
       }
-      reject();
     });
   }
 

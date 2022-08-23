@@ -30,14 +30,14 @@ export class Bluetooth {
           "android.bluetooth.BluetoothAdapter"
         );
         BAdapter = BluetoothAdapter.getDefaultAdapter();
-       if (!BAdapter.isEnabled()) {
+        if (!BAdapter.isEnabled()) {
           classicBluetooth.openBT((result) => {
             console.log(result);
             const msg = JSON.stringify(result);
             reslove(result);
           });
-        }else{
-          reslove({status:true});
+        } else {
+          reslove({ status: true });
         }
       }
       //reject();
@@ -45,16 +45,8 @@ export class Bluetooth {
   }
 
   // 获取蓝牙列表
-  getBluetoothList() {
-    return new Promise((reslove, reject) => {
-      classicBluetooth.listBT((result) => {
-        // code: 0开始搜索；2搜索中；1搜索完成
-        if (result.code === 1) {
-          const list = Array.from(JSON.parse(result.list));
-          reslove(list)
-        }
-      });
-    });
+  getBluetoothList(fun) {
+    classicBluetooth.listBT(fun);
   }
 
   //获取蓝牙的所有服务

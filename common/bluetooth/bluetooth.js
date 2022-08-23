@@ -30,14 +30,17 @@ export class Bluetooth {
           "android.bluetooth.BluetoothAdapter"
         );
         BAdapter = BluetoothAdapter.getDefaultAdapter();
-        if (!BAdapter.isEnabled()) {
+       if (!BAdapter.isEnabled()) {
           classicBluetooth.openBT((result) => {
+            console.log(result);
             const msg = JSON.stringify(result);
             reslove(result);
           });
+        }else{
+          reslove({status:true});
         }
       }
-      reject();
+      //reject();
     });
   }
 

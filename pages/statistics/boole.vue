@@ -1,6 +1,6 @@
 <template>
   <view>
-    <button type="primary" @click="initBlueTooth">搜索蓝牙</button>
+    <button type="primary" @click="initBlueTooth2">搜索蓝牙</button>
     <!-- <button type="primary" @click="onBluetoothDeviceFound">发现外围设备</button> -->
   <!--  <button type="primary" @click="listBT">获取蓝牙设备信息</button> -->
     <button type="primary" @click="getBLEDeviceServices">获取蓝牙所有服务</button>
@@ -43,7 +43,7 @@
       }
     },
     onShow() {
-      this.openPhoneBooth();
+      this.initBlueTooth2();
       this.onBLEConnectionStateChange();
     },
     methods: {
@@ -90,12 +90,17 @@
           console.log('蓝牙设备列表：' + result.list);
           this.bleList = Array.from(JSON.parse(result.list))
           this.bleList.forEach((value , index) => {
-          	value['connect'] = false;
+            this.$set(this.bleList[index],"connect", false)
+          //	value['connect'] = false;
           })
-          modal.toast({
-            message: msg,
+          console.log(JSON.parse(msg).code);
+          if(JSON.parse(msg).code==0){
+             modal.toast({
+            message: '搜索完成',
             duration: 1.5
           });
+          }
+         
         });
       },
       onBLEConnectionStateChange() {
@@ -133,8 +138,36 @@
             break;
         }
       },
+      initBlueTooth2(){
+       this.$bluetooth.initBluetooth().then((res)=>{
+         console.log(res);
+         if(res.status == true){
+           modal.toast({
+             message: '搜索中...',
+             duration: 10
+           });
+           this.$bluetooth.getBluetoothList().then((res)=>{
+             //  console.log();
+               this.bleList = res;
+               modal.toast({
+                 message: '搜索完成',
+                 duration: 1
+               });
+           })
+         }
+       })       
+       },
       initBlueTooth() {
-        uni.openBluetoothAdapter({
+        // this.$bluetooth.initBluetooth().then((res)=>{
+        //   console.log(res);
+        //   if(res == true){
+        //     this.$bluetooth.getBluetoothList().then((res)=>{
+        //         console.log();
+        //         this.bleList = res
+        //     })
+        //   }
+        // })       
+         uni.openBluetoothAdapter({
           success: (res) => { //已打开
             uni.getBluetoothAdapterState({ //蓝牙的匹配状态
               success: (res1) => {
@@ -195,6 +228,7 @@
       },
       //选择设备连接吧deviceId传进来
       createBLEConnection(name,deviceId,index) {
+        console.log(this.bleList);
         //data里面建立一个deviceId，存储起来
         this.name = name
         this.deviceId = deviceId
@@ -205,11 +239,15 @@
             deviceId: this.deviceId,
             success(res) {
               console.log(res)
-              //this.bleList[index].connect = true
-              this.$set(this.bleList, index, {
-                  ...this.bleList[index],
-                  connect: true
-              });
+             // this.bleList[index].connect = true
+             console.log(index);
+             console.log(_this.bleList);
+              _this.$set(_this.bleList[index],'connect',true)
+              console.log(_this.bleList[index]);
+              // this.$set(this.bleList, index, {
+              //     ...this.bleList[index],
+              //     connect: true
+              // });
               console.info(_this.bleList);
               console.log("蓝牙连接成功")
               modal.toast({

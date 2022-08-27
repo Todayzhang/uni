@@ -22,7 +22,7 @@ export class Bluetooth {
   }
 
   // 打开蓝牙
-  initBluetooth() {
+  openBluetooth() {
     return new Promise((resolve, reject) => {
       let BluetoothAdapter, BAdapter;
       if (uni.getSystemInfoSync().platform === "android") {
@@ -151,6 +151,20 @@ export class Bluetooth {
       fail: (res) => {
         console.log('notifyBLECharacteristicValueChange fail', res.errMsg)
       }
+    })
+  }
+
+  // 初始化ble蓝牙模块
+  openBluetoothAdapter() {
+    return new Promise((resolve, reject) => {
+      uni.openBluetoothAdapter({
+        success: (res) => {
+          resolve(res)
+        },
+        fail: (err) => {
+          reject(err)
+        }
+      }) 
     })
   }
 

@@ -100,7 +100,7 @@ export default {
       this.$refs.popup.close();
     },
     async getBluetoothList() {
-      const res = await this.$bluetooth.initBluetooth();
+      const res = await this.$bluetooth.openBluetooth();
       if (!res.status) {
         this.message = {
           text: "蓝牙打开失败",
@@ -109,6 +109,7 @@ export default {
         this.$refs.popup.open();
         return;
       }
+      await this.$bluetooth.openBluetoothAdapter();
       this.$bluetooth.getBluetoothList((result) => {
         const list = Array.from(JSON.parse(result.list))
           .filter((item) => item.name)

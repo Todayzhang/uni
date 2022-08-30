@@ -1,6 +1,8 @@
 // 经典蓝牙插件
 const classicBluetooth = uni.requireNativePlugin("Common-BT");
 
+const btble = uni.requireNativePlugin('Common-BLE');
+
 export function sendMessage() { }
 
 export class Bluetooth {
@@ -164,13 +166,26 @@ export class Bluetooth {
         fail: (err) => {
           reject(err)
         }
-      }) 
+      })
     })
   }
 
   // 先用ble蓝牙方法连接，否则用经理蓝牙插件方法连接
   connectBluetooth(bluetooth) {
     const { name, deviceId, status } = bluetooth
+   
+    btble.connectBT({
+      "btAddress": deviceId
+    }, result => {
+      //result数据：{"code":100,"msg":"连接成功"}，并接收数据
+      //if(result.code ==100){
+      //}
+      const msg = JSON.stringify(result);
+      console.log(msg);
+      console.log('ble插件连接蓝牙：' + msg);
+    });
+
+
     console.log(name, deviceId, status)
     this.name = name
     this.deviceId = deviceId
@@ -186,7 +201,7 @@ export class Bluetooth {
           reslove(res)
         },
         fail: (res) => {
-			console.log('ble蓝牙连接失败', res)
+          console.log('ble蓝牙连接失败', res)
           if (res.errCode == '-1') {
             console.log('蓝牙已连接，请勿重复连接')
           } else {

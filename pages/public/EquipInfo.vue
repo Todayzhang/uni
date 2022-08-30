@@ -1,17 +1,17 @@
 <template>
   <!-- 公共组件-设备头部 -->
-  <view class="topBox">
+  <view class="topBox" @click="$emit('click')">
     <image class="image topImg" mode="widthFix" src="../../static/images/equ-leg1.png" />
     <view class="topRightBox">
-      <text>HXZC-R3(20A)/变压器三相直流电阻测试仪</text>
+      <text>{{name}}</text>
       <view class="bottomText">
-        <text class="connected">{{$t('connected')}}</text>
-        <view class="topRight">
+        <text class="connected">{{isConnected?$t('connected'):$t('notconnected')}}</text>
+        <!-- <view class="topRight">
           <image class="image smallIcon" mode="widthFix" src="../../static/images/jc-small.png" />
           <text class="topRightText" :class="switchingmode==1?'actived':''" @click="switchingMode(1)">{{$t('monitoringmode')}}</text>
           <image class="image smallIcon" mode="widthFix" src="../../static/images/kz-small.png" />
           <text :class="switchingmode==2?'actived':''" @click="switchingMode(2)">{{$t('controlmodel')}}</text>
-        </view>
+        </view> -->
       </view>
     </view>
   </view>
@@ -20,6 +20,16 @@
 
 <script>
   export default {
+    props: {
+      name: {
+        type: String,
+        default: '未连接设备'
+      },
+      isConnected: {
+        type: Boolean,
+        default: false
+      }
+    },
     data() {
       return {
         // 模式 1；监测模式 2；控制模式

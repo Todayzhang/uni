@@ -121,22 +121,22 @@ export const arrayFQ = [
 
 export const arrayCap = [
     {
-        value: 'bz088888  ',
+        value: 'bz088888',
         label: '内Cn'
     },
     {
-        value: 'bz188888  ',
+        value: 'bz188888',
         label: '外Cn'
     },
 ]
 
 export const arrayIe = [
     {
-        value: 'gy088888  ',
+        value: 'gy088888',
         label: '内Un'
     },
     {
-        value: 'gy188888  ',
+        value: 'gy188888',
         label: '外Un'
     },
 ]

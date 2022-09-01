@@ -16,7 +16,9 @@
                 :value="indexUe"
                 :range="arrayUe"
               >
-                <view class="uni-input showFont">{{ arrayUe[indexUe].label }}</view>
+                <view class="uni-input showFont">{{
+                  arrayUe[indexUe].label
+                }}</view>
               </picker>
             </view>
             <span class="icon iconfont myIconEnd">&#xe687;</span>
@@ -56,7 +58,9 @@
                 :value="indexFQ"
                 :range="arrayFQ"
               >
-                <view class="uni-input showFont">{{ arrayFQ[indexFQ].label }}</view>
+                <view class="uni-input showFont">{{
+                  arrayFQ[indexFQ].label
+                }}</view>
               </picker>
             </view>
             <span class="icon iconfont myIconEnd">&#xe687;</span>
@@ -75,7 +79,9 @@
                 :value="indexCap"
                 :range="arrayCap"
               >
-                <view class="uni-input showFont">{{ arrayCap[indexCap].label }}</view>
+                <view class="uni-input showFont">{{
+                  arrayCap[indexCap].label
+                }}</view>
               </picker>
             </view>
             <span class="icon iconfont myIconEnd">&#xe687;</span>
@@ -94,7 +100,9 @@
                 :value="indexIe"
                 :range="arrayIe"
               >
-                <view class="uni-input showFont">{{ arrayIe[indexIe].label }}</view>
+                <view class="uni-input showFont">{{
+                  arrayIe[indexIe].label
+                }}</view>
               </picker>
             </view>
             <span class="icon iconfont myIconEnd">&#xe687;</span>
@@ -127,7 +135,9 @@
 <script>
 import EquipInfo from "../public/EquipInfo.vue";
 import TipsModal from "../public/TipsModal.vue";
-import { arrayUe, arrayCtype, arrayFQ, arrayCap, arrayIe } from './config.js'
+import { arrayUe, arrayCtype, arrayFQ, arrayCap, arrayIe } from "./config.js";
+const modal = uni.requireNativePlugin("modal");
+const bt = uni.requireNativePlugin("Common-BT");
 export default {
   components: {
     EquipInfo,
@@ -184,9 +194,44 @@ export default {
       });
     },
     openPopup() {
-      console.log('listPopup')
-      this.$refs.listPopup.open()
-    }
+      console.log("listPopup");
+      this.$refs.listPopup.open();
+    },
+    bindPickerChangeUe(item) {
+      this.indexUe = item.detail.value;
+      const msg = this.arrayUe[this.indexUe].value;
+      bt.sendMsg({
+        cmd: msg,
+      });
+    },
+    bindPickerChangeCtype(item) {
+      this.indexCtype = item.detail.value;
+      const msg = this.arrayCtype[this.indexCtype].value;
+      bt.sendMsg({
+        cmd: msg,
+      });
+    },
+    bindPickerChangeFQ(item) {
+      this.indexFQ = item.detail.value;
+      const msg = this.arrayFQ[this.indexFQ].value;
+      bt.sendMsg({
+        cmd: msg,
+      });
+    },
+    bindPickerChangeCap(item) {
+      this.indexCap = item.detail.value;
+      const msg = this.arrayCap[this.indexCap].value;
+      bt.sendMsg({
+        cmd: msg,
+      });
+    },
+    bindPickerChangeIe(item) {
+      this.indexIe = item.detail.value;
+      const msg = this.arrayIe[this.indexIe].value;
+      bt.sendMsg({
+        cmd: msg,
+      });
+    },
   },
 };
 </script>

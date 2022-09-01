@@ -111,7 +111,15 @@
       <tips-modal ref="popup" @determine="showResult"></tips-modal>
     </view>
     <uni-popup ref="listPopup" type="center">
-      <view>asdfasdf</view>
+      <view class="list">
+		<view class="title">请选择要连接的蓝牙</view>
+		<view class="content">
+			<view class="buletooth" v-for="(item, index) of blueList" :key="index">
+				<view class="buletooth__name">{{item.name}}</view>
+				<view class="buletooth__address">{{item.address}}</view>
+			</view>
+		</view>
+	  </view>
     </uni-popup>
   </view>
 </template>
@@ -137,6 +145,16 @@ export default {
       indexCap: 0,
       arrayIe: arrayIe,
       indexIe: 0,
+	  blueList: [{
+		name: '蓝牙1',
+		address: 'ad:3d:dd:33:d0'
+	  },{
+		name: '蓝牙2',
+		address: 'ad:3d:dd:33:d0'
+	  },{
+		name: '蓝牙3',
+		address: 'ad:3d:dd:33:d0'  
+	  }]
     };
   },
   onShow() {
@@ -232,5 +250,23 @@ export default {
 .myIconEnd {
   color: #ccc;
   margin-right: 20px;
+}
+
+.list {
+	width: 704rpx;
+	background-color: #fff;
+	border-radius: 8rpx;
+	overflow: hidden;
+	.title {
+		background-color: #519bda;
+		height: 120rpx;
+		line-height: 120rpx;
+		text-align: center;
+		font-size: 34rpx;
+		color: #fff;
+	}
+	.content {
+		height: 500rpx;
+	}
 }
 </style>

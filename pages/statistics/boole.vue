@@ -26,15 +26,6 @@
         连接
       </button>
     </view>
-    <!--    ------------------------------------------------
-    <button type="primary" @click="startBluetoothDeviceDiscovery">uni搜索蓝牙</button>
-    <view style="display: flex;justify-content: space-between;align-items: center;" v-for="(item, index) in list"
-      :key="index">
-      {{ item.name?item.name:'null' }} : {{ item.deviceId }}
-      <button class="concatBtn" type="primary" @click="createBLEConnection(item.deviceId)">连接</button>
-    </view> -->
-    <!-- <button type="primary" @click="getBLEDeviceCharacteristics">进入特征</button> -->
-
     <button type="primary" @click="writeBLECharacteristicValue">
       写入蓝牙
     </button>
@@ -162,17 +153,14 @@ export default {
       this.$bluetooth.initBluetooth().then((res) => {
         console.log(res);
         if (res.status == true) {
-          modal.toast({
-            message: "搜索中...",
-            duration: 10,
-          });
           this.$bluetooth.getBluetoothList((result) => {
             //result数据：{"msg":"搜索完成","list":[{"name":"蓝牙名称","address":"mac地址","status":"配对状态"}]}
             const msg = JSON.stringify(result);
             console.log(msg);
             console.log("已配对列表：" + result.list);
+            this.bleList = Array.from(JSON.parse(result.list));
             modal.toast({
-              message: msg,
+              message: result.msg,
               duration: 1.5,
             });
           });
@@ -251,46 +239,51 @@ export default {
       });
     },
     //选择设备连接吧deviceId传进来
-    createBLEConnection(name, deviceId, index) {
-      console.log(this.bleList);
-      //data里面建立一个deviceId，存储起来
-      this.name = name;
-      this.deviceId = deviceId;
-      const _this = this;
-      //连接蓝牙
-      uni.createBLEConnection({
-        // 这里的 deviceId 需要已经通过 createBLEConnection 与对应设备建立链接
-        deviceId: this.deviceId,
-        success(res) {
-          console.log(res);
-          // this.bleList[index].connect = true
-          console.log(index);
-          console.log(_this.bleList);
-          _this.$set(_this.bleList[index], "connect", true);
-          console.log(_this.bleList[index]);
-          // this.$set(this.bleList, index, {
-          //     ...this.bleList[index],
-          //     connect: true
-          // });
-          console.info(_this.bleList);
-          console.log("蓝牙连接成功");
-          modal.toast({
-            message: "蓝牙连接成功",
-            duration: 1,
-          });
-          _this.getBLEDeviceServices();
-        },
-        fail(res) {
-          let msg = "蓝牙连接失败";
-          if (res.errCode == "-1") {
-            msg = "蓝牙已连接，请勿重复连接";
-          }
-          modal.toast({
-            message: msg,
-            duration: 1,
-          });
-        },
+    async createBLEConnection(name, deviceId, index) {
+      const msg = this.$bluetooth.connectBluetooth(name,deviceId)
+      modal.toast({
+        message: msg,
+        duration: 1.5,
       });
+      //console.log(this.bleList);
+      //data里面建立一个deviceId，存储起来
+      // this.name = name;
+      // this.deviceId = deviceId;
+      // const _this = this;
+      // //连接蓝牙
+      // uni.createBLEConnection({
+      //   // 这里的 deviceId 需要已经通过 createBLEConnection 与对应设备建立链接
+      //   deviceId: this.deviceId,
+      //   success(res) {
+      //     console.log(res);
+      //     // this.bleList[index].connect = true
+      //     console.log(index);
+      //     console.log(_this.bleList);
+      //     _this.$set(_this.bleList[index], "connect", true);
+      //     console.log(_this.bleList[index]);
+      //     // this.$set(this.bleList, index, {
+      //     //     ...this.bleList[index],
+      //     //     connect: true
+      //     // });
+      //     console.info(_this.bleList);
+      //     console.log("蓝牙连接成功");
+      //     modal.toast({
+      //       message: "蓝牙连接成功",
+      //       duration: 1,
+      //     });
+      //     _this.getBLEDeviceServices();
+      //   },
+      //   fail(res) {
+      //     let msg = "蓝牙连接失败";
+      //     if (res.errCode == "-1") {
+      //       msg = "蓝牙已连接，请勿重复连接";
+      //     }
+      //     modal.toast({
+      //       message: msg,
+      //       duration: 1,
+      //     });
+       // },
+      //});
     },
     // 停止搜寻蓝牙设备
     stopBluetoothDevicesDiscovery() {

@@ -7,10 +7,10 @@
       <view class="bottomText">
         <text class="connected">{{$t('connected')}}</text>
         <view class="topRight">
-          <image class="image smallIcon" mode="widthFix" src="../../static/images/jc-small.png" />
+     <!--     <image class="image smallIcon" mode="widthFix" src="../../static/images/jc-small.png" />
           <text class="topRightText" :class="switchingmode==1?'actived':''" @click="switchingMode(1)">{{$t('monitoringmode')}}</text>
           <image class="image smallIcon" mode="widthFix" src="../../static/images/kz-small.png" />
-          <text :class="switchingmode==2?'actived':''" @click="switchingMode(2)">{{$t('controlmodel')}}</text>
+          <text :class="switchingmode==2?'actived':''" @click="switchingMode(2)">{{$t('controlmodel')}}</text> -->
         </view>
       </view>
     </view>

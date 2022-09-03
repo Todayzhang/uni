@@ -27,7 +27,7 @@
       <view class="centerItem sb" @click="goTo('/pages/equipment/index')">
         <text class="centerText">{{$t('equipment')}}</text>
       </view>
-      <view class="centerItem tz">
+      <view class="centerItem tz" @click="sendMsg()">
         <text class="centerText">{{$t('notice')}}</text>
       </view>
       <view class="centerItem jh">
@@ -111,6 +111,7 @@
 </template>
 
 <script>
+  const btble = uni.requireNativePlugin('Common-BLE');
   export default {
     data() {
       return {
@@ -191,6 +192,25 @@
       //this.getLocation()
     },
     methods: {
+      sendMsg(){
+        const ac = '11 04 11 a1 06'
+        // console.log(this.$store)
+       // console.log(this.$store.bluetooth.state.bluetooth.bleAddress)
+        btble.writeNotResponse({
+          "hex": false, //是否hex方式发送命令，默认false,字符串发送
+          "btAddress": this.$store.state.bluetooth.bleAddress,
+          "data": ac,
+          "charset": "GBK"
+        }, result => {
+          //接收
+          const content = JSON.stringify(result);
+          console.info(content)
+          // modal.toast({
+          //   message: content,
+          //   duration: 1.5
+          // });
+        });
+      },
       // 扫一扫
       scan(){
         uni.scanCode({

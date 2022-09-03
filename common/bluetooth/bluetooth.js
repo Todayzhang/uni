@@ -1,11 +1,13 @@
 // 经典蓝牙插件
 const classicBluetooth = uni.requireNativePlugin("Common-BT");
 
+const btble = uni.requireNativePlugin('Common-BLE');
+
 export function sendMessage() { }
 
 export class Bluetooth {
   name = ''
-  debiceId = ''
+  deviceId = ''
   // 当前ble蓝牙连接的特征值
   characteristicId = null
   // 当前ble蓝牙serviceId
@@ -22,7 +24,7 @@ export class Bluetooth {
   }
 
   // 打开蓝牙
-  initBluetooth() {
+  openBluetooth() {
     return new Promise((resolve, reject) => {
       let BluetoothAdapter, BAdapter;
       if (uni.getSystemInfoSync().platform === "android") {
@@ -33,11 +35,10 @@ export class Bluetooth {
         if (!BAdapter.isEnabled()) {
           classicBluetooth.openBT((result) => {
             console.log(result);
-            const msg = JSON.stringify(result);
-            reslove(result);
+            resolve(result);
           });
         } else {
-          reslove({ status: true });
+          resolve({ status: true });
         }
       }
       //reject();
@@ -155,10 +156,39 @@ export class Bluetooth {
     })
   }
 
+  // 初始化ble蓝牙模块
+  openBluetoothAdapter() {
+    return new Promise((resolve, reject) => {
+      uni.openBluetoothAdapter({
+        success: (res) => {
+          resolve(res)
+        },
+        fail: (err) => {
+          reject(err)
+        }
+      })
+    })
+  }
+
   // 先用ble蓝牙方法连接，否则用经理蓝牙插件方法连接
-  connectBluetooth(name, deviceId) {
+  connectBluetooth(bluetooth) {
+    const { name, deviceId, status } = bluetooth
+   
+    btble.connectBT({
+      "btAddress": deviceId
+    }, result => {
+      //result数据：{"code":100,"msg":"连接成功"}，并接收数据
+      //if(result.code ==100){
+      //}
+      const msg = JSON.stringify(result);
+      console.log(msg);
+      console.log('ble插件连接蓝牙：' + msg);
+    });
+
+
+    console.log(name, deviceId, status)
     this.name = name
-    this.debiceId = deviceId
+    this.deviceId = deviceId
     return new Promise((reslove, reject) => {
       uni.createBLEConnection({
         // 这里的 deviceId 需要已经通过 createBLEConnection 与对应设备建立链接
@@ -167,38 +197,53 @@ export class Bluetooth {
           this.isBle = true
           console.log("蓝牙连接成功")
           this.getBLEDeviceServices()
+          console.log('蓝牙连接结果', res)
           reslove(res)
         },
         fail: (res) => {
+          console.log('ble蓝牙连接失败', res)
           if (res.errCode == '-1') {
             console.log('蓝牙已连接，请勿重复连接')
           } else {
+            // console.log('ble蓝牙连接失败， 尝试经典')
             // 使用经典蓝牙连接
             // 配对
-            classicBluetooth.pairBT({
-              "btAddress": deviceId //  88:10:8F:C9:33:C5
-            }, result => {
-              //result数据：{"code":100,"msg":"配对完成，请刷新列表"} code: 2表示配对中；200表示配对成功；-200表示配对未成功，可能设备地址错误或者未同意配对
-              const msg = JSON.stringify(result);
-              if (msg.code === '200') {
-                // 配对成功，连接蓝牙
-                /**
-                 * 说明：此连接方法为长连接，连接成功后，如果蓝牙断开也会回调该方法。连接成功后，自动接收数据。code: 200表示连接成功；-200表示连接异常;-300与设备断开
-                 */
-                classicBluetooth.connectBT({
-                  "btAddress": deviceId
-                }, result => {
-                  //result数据：{"code":100,"msg":"连接成功"}，并接收数据
-                  const msg = JSON.stringify(result);
-                  this.isBle = false
-                  this.receiveFun(msg)
-                  reslove(msg)
-                });
-              }
-              if (msg.code === '-200') {
-                reject()
-              }
-            });
+            if (status === '未配对') {
+              classicBluetooth.pairBT({
+                "btAddress": deviceId //  88:10:8F:C9:33:C5
+              }, result => {
+                //result数据：{"code":100,"msg":"配对完成，请刷新列表"} code: 2表示配对中；200表示配对成功；-200表示配对未成功，可能设备地址错误或者未同意配对
+                const msg = JSON.stringify(result);
+                if (msg.code === '200') {
+                  // 配对成功，连接蓝牙
+                  /**
+                   * 说明：此连接方法为长连接，连接成功后，如果蓝牙断开也会回调该方法。连接成功后，自动接收数据。code: 200表示连接成功；-200表示连接异常;-300与设备断开
+                   */
+                  classicBluetooth.connectBT({
+                    "btAddress": deviceId
+                  }, result => {
+                    //result数据：{"code":100,"msg":"连接成功"}，并接收数据
+                    const msg = JSON.stringify(result);
+                    this.isBle = false
+                    this.receiveFun(msg)
+                    reslove(msg)
+                  });
+                }
+                if (msg.code === '-200') {
+                  reject()
+                }
+              });
+            } else {
+              classicBluetooth.connectBT({
+                "btAddress": deviceId
+              }, result => {
+                //result数据：{"code":100,"msg":"连接成功"}，并接收数据
+                const msg = JSON.stringify(result);
+                this.isBle = false
+                this.receiveFun(msg)
+                reslove(msg)
+              });
+            }
           }
         }
       })

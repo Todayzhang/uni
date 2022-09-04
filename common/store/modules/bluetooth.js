@@ -1,12 +1,12 @@
 import store from '../index.js'
 
 const state = {
-  bleAddress:'3C:E4:B0:7F:03:F8'
+  bleAddress:'3C:E4:B0:7F:03:F0'
 }
 
 const mutations = {
   updateCount(state,num){
-    state.count = num
+    state.bleAddress = num
   }
 }
 

@@ -29,7 +29,7 @@
               </picker>
             </view>
             <span class="icon iconfont myIconEnd">&#xe687;</span>
-            <!-- 	<button class="mini-btn" type="primary" size="mini">发送</button> -->
+         <!--   	<button class="mini-btn" type="primary" size="mini">发送</button> -->
           </view>
         </view>
         <view class="uni-list bottomItem">
@@ -115,8 +115,8 @@
 <script>
   import EquipInfo from '../public/EquipInfo.vue'
   import TipsModal from '../public/TipsModal.vue'
-  // const modal = uni.requireNativePlugin('modal');
-  // const btble = uni.requireNativePlugin('Common-BLE');
+  const modal = uni.requireNativePlugin('modal');
+  const btble = uni.requireNativePlugin('Common-BLE');
   export default {
     components: {
       EquipInfo,
@@ -177,10 +177,11 @@
       uni.setNavigationBarTitle({ // 修改头部标题
         title: this.$i18n.messages[this.$i18n.locale].testparametersetting
       });
-      // this.openNotify()
+      this.openNotify()
     },
     onHide() {
       console.log('hidden');
+      this.closeNotify()
     },
     methods: {
       sendMsg(value) {
@@ -282,10 +283,10 @@
           //接收
           const content = JSON.stringify(result);
           console.info(content)
-          // modal.toast({
-          //   message: content,
-          //   duration: 1.5
-          // });
+          modal.toast({
+            message: content,
+            duration: 1.5
+          });
         });
       },
       //测试相别
@@ -293,10 +294,14 @@
         this.indexMu = e.target.value
         let muValue = '11 04 B7 ' + changeTosixty(this.indexMu) + 2
       },
+      //测试电流
       bindPickerChangeIe(e) {
         console.log(e.target);
-        this.indexIe = e.target.value
-        this.dlValue = this.arrayIe[this.indexIe].value
+        this.indexIe = e.target.value;
+        this.dlValue = this.arrayIe[this.indexIe].value;
+        let msg = '11 04 a1 '+this.dlValue;
+        console.info(msg);
+        this.sendToDevice(sendValue)
       },
       //折算温度  铜 铝
       bindPickerChangeZS(e){

@@ -1,5 +1,5 @@
 <template>
-  <!-- 直阻测试页面-参数设置 -->
+  <!-- 介损测试页面-参数设置 -->
   <view>
     <view class="uni-flex uni-column">
       <equip-info @click="openPopup()"></equip-info>

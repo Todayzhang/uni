@@ -132,6 +132,7 @@ import TipsModal from "../public/TipsModal.vue";
 import BlueListModal from "../public/BlueListModal";
 import { arrayUe, arrayCtype, arrayFQ, arrayCap, arrayIe } from "./config.js";
 const bt = uni.requireNativePlugin("Common-BT");
+const modal = uni.requireNativePlugin("modal");
 export default {
   components: {
     EquipInfo,
@@ -162,7 +163,10 @@ export default {
   },
   methods: {
     showResult() {
-      // 关闭确认弹框
+      // 开始测试
+      bt.sendMsg({
+        cmd: 'qd888888',
+      });
       this.$refs.popup.close();
       // this.goTo('/pages/loop/testResult')
     },
@@ -231,30 +235,53 @@ export default {
       });
     },
     bluetoothClick(item) {
-      // 配对连接
       console.log(item);
       if (item.status === "已配对") {
         // 直接连接
+        bt.connectBT(
+          {
+            btAddress: item.address,
+          },
+          (result) => {
+            const msg = JSON.stringify(result);
+            console.info(msg);
+            modal.toast({
+              message: msg,
+              duration: 1.5,
+            });
+          }
+        );
       } else {
         // 先配对再连接
-        uni.showLoading({
-          title: "配对中",
-        });
         bt.pairBT(
           {
             btAddress: item.address, //  88:10:8F:C9:33:C5
           },
           (result) => {
             if (result.code === 200) {
-              uni.showLoading({
-                title: "配对成功",
+              modal.toast({
+                message: "配对成功",
+                duration: 1.5,
               });
-              uni.hideLoading()
-            } else if(result.code === -200) {
-              uni.showLoading({
-                title: "配对失败",
+              bt.connectBT(
+                {
+                  btAddress: item.address,
+                },
+                (result) => {
+                  const msg = JSON.stringify(result);
+                  console.info(msg);
+                  modal.toast({
+                    message: msg,
+                    duration: 1.5,
+                  });
+                }
+              );
+            } else if (result.code === -200) {
+              modal.toast({
+                message: "配对失败",
+                duration: 1.5,
               });
-              uni.hideLoading()
+              uni.hideLoading();
             }
           }
         );

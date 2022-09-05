@@ -39,6 +39,7 @@
   const modal = uni.requireNativePlugin('modal');
   const btble = uni.requireNativePlugin('Common-BLE');
   // import EquipInfo from '../public/EquipInfo.vue'
+  const  data = '11 04 a1 00 b6'
   export default {
     data() {
       return {

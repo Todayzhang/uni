@@ -1,6 +1,6 @@
 <template>
   <!-- 公共组件-设备头部 -->
-  <view class="topBox">
+  <view class="topBox" @click="$emit('click')">
     <image class="image topImg" mode="widthFix" src="../../static/images/equ-leg1.png" />
     <view class="topRightBox">
       <text>HXZC-R3(20A)/变压器三相直流电阻测试仪</text>

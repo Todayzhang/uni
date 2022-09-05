@@ -117,35 +117,26 @@
 
       <!-- 确认弹框 -->
       <tips-modal ref="popup" @determine="showResult"></tips-modal>
+      <BlueListModal
+        @bluetoothClick="bluetoothClick"
+        ref="blueListModal"
+        :blueList="blueList"
+      />
     </view>
-    <uni-popup ref="listPopup" type="center">
-      <view class="list">
-        <view class="title">请选择要连接的蓝牙</view>
-        <view class="content">
-          <view
-            class="buletooth"
-            v-for="(item, index) of blueList"
-            :key="index"
-          >
-            <view class="buletooth__name">{{ item.name }}</view>
-            <view class="buletooth__address">{{ item.address }}</view>
-          </view>
-        </view>
-      </view>
-    </uni-popup>
   </view>
 </template>
 
 <script>
 import EquipInfo from "../public/EquipInfo.vue";
 import TipsModal from "../public/TipsModal.vue";
+import BlueListModal from "../public/BlueListModal";
 import { arrayUe, arrayCtype, arrayFQ, arrayCap, arrayIe } from "./config.js";
-const modal = uni.requireNativePlugin("modal");
 const bt = uni.requireNativePlugin("Common-BT");
 export default {
   components: {
     EquipInfo,
     TipsModal,
+    BlueListModal,
   },
   data() {
     return {
@@ -159,20 +150,7 @@ export default {
       indexCap: 0,
       arrayIe: arrayIe,
       indexIe: 0,
-      blueList: [
-        {
-          name: "蓝牙1",
-          address: "ad:3d:dd:33:d0",
-        },
-        {
-          name: "蓝牙2",
-          address: "ad:3d:dd:33:d0",
-        },
-        {
-          name: "蓝牙3",
-          address: "ad:3d:dd:33:d0",
-        },
-      ],
+      blueList: [],
     };
   },
   onShow() {
@@ -203,7 +181,8 @@ export default {
     },
     openPopup() {
       console.log("listPopup");
-      this.$refs.listPopup.open();
+      this.getBluttoothList();
+      this.$refs.blueListModal.open();
     },
     bindPickerChangeUe(item) {
       this.indexUe = item.detail.value;
@@ -239,6 +218,47 @@ export default {
       bt.sendMsg({
         cmd: msg,
       });
+    },
+    getBluttoothList() {
+      bt.listBT((result) => {
+        this.blueList = Array.from(JSON.parse(result.list)).map((item) => {
+          return {
+            ...item,
+            name: item.name || "未命名蓝牙",
+            address: item.address,
+          };
+        });
+      });
+    },
+    bluetoothClick(item) {
+      // 配对连接
+      console.log(item);
+      if (item.status === "已配对") {
+        // 直接连接
+      } else {
+        // 先配对再连接
+        uni.showLoading({
+          title: "配对中",
+        });
+        bt.pairBT(
+          {
+            btAddress: item.address, //  88:10:8F:C9:33:C5
+          },
+          (result) => {
+            if (result.code === 200) {
+              uni.showLoading({
+                title: "配对成功",
+              });
+              uni.hideLoading()
+            } else if(result.code === -200) {
+              uni.showLoading({
+                title: "配对失败",
+              });
+              uni.hideLoading()
+            }
+          }
+        );
+      }
     },
   },
 };
@@ -303,23 +323,5 @@ export default {
 .myIconEnd {
   color: #ccc;
   margin-right: 20px;
-}
-
-.list {
-  width: 704rpx;
-  background-color: #fff;
-  border-radius: 8rpx;
-  overflow: hidden;
-  .title {
-    background-color: #519bda;
-    height: 120rpx;
-    line-height: 120rpx;
-    text-align: center;
-    font-size: 34rpx;
-    color: #fff;
-  }
-  .content {
-    height: 500rpx;
-  }
 }
 </style>

@@ -179,7 +179,7 @@
         "enablePullDownRefresh": false
       }
 
-    }, 
+    },
     {
       "path": "pages/statistics/bluetoothble",
       "style": {

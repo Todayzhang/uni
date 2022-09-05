@@ -1,62 +1,44 @@
 <template>
   <view class="button-sp-area">
-    <button type="primary" plain="true" @click="hasPermission()">判断蓝牙权限</button>
-    <button type="primary" plain="true" @click="isSupport()">是否支持蓝牙</button>
+   <!-- <button type="primary" plain="true" @click="hasPermission()">判断蓝牙权限</button>
+    <button type="primary" plain="true" @click="isSupport()">是否支持蓝牙</button> -->
     <!-- <button type="primary" plain="true" @click="isOpen()">蓝牙是否打开</button> -->
-    <button type="primary" plain="true" @click="openBT()">打开蓝牙</button>
-    <button type="primary" plain="true" @click="closeBT()">关闭蓝牙</button>
+   <!-- <button type="primary" plain="true" @click="openBT()">打开蓝牙</button>
+    <button type="primary" plain="true" @click="closeBT()">关闭蓝牙</button> -->
     <button type="primary" plain="true" @click="isOpen()">蓝牙设备列表</button>
-    <button type="primary" plain="true" @click="listBondedBT()">已配对列表</button>
+   <!-- <equip-info :list="bleList"></equip-info> -->
+    <view class="list-wrap">
+    	<view class="list" v-for="(item, index) of bleList" :key="index">
+    		<view class="name" v-if="item.name">{{item.name}}</view>
+    		<!-- <button size="mini" @click="pairBT(item)">配对</button> -->
+    		<button size="mini"  v-if="item.name&&!item.connect" @click="connectBT(item,index)">连接</button>
+    		<button size="mini" style="color: green;" v-if="item.name&&item.connect">已连接</button>
+    	</view>
+    </view>
+ <!--   <button type="primary" plain="true" @click="listBondedBT()">已配对列表</button>
     <button type="primary" plain="true" @click="connectBT()">打开连接</button>
     <button type="primary" plain="true" @click="connectStatus()">连接状态</button>
     <button type="primary" plain="true" @click="searchRule()">设置搜索规则</button>
     <button type="primary" plain="true" @click="readRssi()">获取信号强度</button>
     <button type="primary" plain="true" @click="setMtu()">设置传输元大小</button>
-    <button type="primary" plain="true" @click="read()">读</button>
+    <button type="primary" plain="true" @click="read()">读</button> -->
     <button type="primary" plain="true" @click="writeResponse()">写,有响应</button>
     <button type="primary" plain="true" @click="writeNotResponse()">写,无响应</button>
-<!--    <button type="primary" plain="true" @click="openNotify()">打开Notify通知</button>
-    <button type="primary" plain="true" @click="closeNotify()">关闭Notify通知</button>
+    <button type="primary" plain="true" @click="openNotify()">打开Notify通知</button>
+ 
+ 
+   <!--   <button type="primary" plain="true" @click="closeNotify()">关闭Notify通知</button>
     <button type="primary" plain="true" @click="openIndicate()">打开Indicate通知</button>
-    <button type="primary" plain="true" @click="closeIndicate()">关闭Indicate通知</button> -->
-    <button type="primary" plain="true" @click="breakBT()()">断开连接</button>
-    <view class="list-wrap">
-    	<view class="list" v-for="(item, index) of bleList" :key="index">
-    		<view class="name">{{item.name}}:{{item.address}}&nbsp;{{item.status}}</view>
-    		<!-- <button size="mini" @click="pairBT(item)">配对</button> -->
-    		<button size="mini" @click="connectBT(item)">连接</button>
-    	</view>
-    </view>
+    <button type="primary" plain="true" @click="closeIndicate()">关闭Indicate通知</button> 
+    <button type="primary" plain="true" @click="breakBT()()">断开连接</button>  -->
+
   </view>
 </template>
 
 <script>
   const modal = uni.requireNativePlugin('modal');
   const btble = uni.requireNativePlugin('Common-BLE');
-  var data =
-    "! 0 200 200 1060 1\r\n" +
-    "SETMAG 2 2\r\n" +
-    "TEXT 8 0 380 8 快递包裹\r\n" +
-    // 反转变黑
-    "SETMAG 2 2\r\n" +
-    "TEXT 8 0 20 670 寄\r\n" +
-    "SETMAG 1 1\r\n" +
-    "TEXT 8 0 20 730 白小递\r\n" +
-    "TEXT 8 0 20 760 138 0013 8000\r\n" +
-    "LINE 250 650 250 830 2\r\n" +
-    "LINE 405 680 405 830 2\r\n" +
-    "LINE 1 830 580 830 2\r\n" +
-    // 二维码
-    "BARCODE QR 255 675 M 2 U 7\r\n" +
-    "MA,1106745891514\r\n" +
-    "ENDQR\r\n" +
-    "LINE 405 740 580 740 2\r\n" +
-    "SETMAG 1 1\r\n" +
-    "TEXT 8 0 415 660 已验视\r\n" +
-    "TEXT 8 0 415 750 签字栏\r\n" +
-    "TEXT 8 0 10 840 文件一件\r\n" +
-    "TEXT 8 0 470 930 已验视\r\n" +
-    "PRINT\r\n";
+  // import EquipInfo from '../public/EquipInfo.vue'
   export default {
     data() {
       return {
@@ -65,6 +47,12 @@
       }
     },
     onLoad() {},
+    onShow() {
+      //this.openNotify()
+    },
+    onHide() {
+     this.closeNotify()
+    },
     methods: {
       hasPermission() {
         btble.hasPermission(result => {
@@ -148,11 +136,16 @@
           const msg = JSON.stringify(result); 
           //console.log(result);
           console.log('蓝牙设备列表：' + result.list);
-          this.bleList = Array.from(JSON.parse(result.list))
-          modal.toast({
-            message: msg,
-            duration: 1.5
+         this.bleList = Array.from(JSON.parse(result.list))
+         this.bleList.forEach((value, index) => {
+            this.$set(this.bleList[index], "connect", false);
+          //  this.bleList.push(bleList[index])
           });
+          
+          // modal.toast({
+          //   message: msg,
+          //   duration: 1.5
+          // });
         });
       },
       listBondedBT() {
@@ -167,8 +160,8 @@
           });
         });
       },
-      connectBT(item) {
-        console.log('连接'+item);
+      connectBT(item,index) {
+        //console.log('连接'+item);
         btble.connectBT({
           "btAddress": item.address
         }, result => {
@@ -176,9 +169,19 @@
           //if(result.code ==100){
             this.btAddress = item.address
           //}
+          this.$store.commit('updateCount',item.address)
           const msg = JSON.stringify(result);
           console.log(msg);
           console.log('连接蓝牙：' + msg);
+          console.log(this.bleList);
+          for (let i = 0; i < this.bleList.length; i++) {
+            if(i==index){
+              this.$set(this.bleList[i], "connect", true)
+             }else{
+               this.$set(this.bleList[i], "connect", false)
+             }
+          }
+          console.log(this.bleList);
           modal.toast({
             message: msg,
             duration: 1.5
@@ -234,6 +237,7 @@
             message: content,
             duration: 1.5
           });
+          this.openNotify()
         });
       },
       writeNotResponse() {
@@ -249,6 +253,7 @@
             message: content,
             duration: 1.5
           });
+          this.openNotify()
         });
       },
       openNotify() {
@@ -339,3 +344,13 @@
     }
   }
 </script>
+<style lang="less" scoped>
+  .list{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5rpx;
+    .name{
+      width: 400rpx;
+    }
+  }  
+</style>

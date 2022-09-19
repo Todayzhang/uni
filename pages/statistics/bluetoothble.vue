@@ -1,33 +1,41 @@
 <template>
   <view class="button-sp-area">
-   <!-- <button type="primary" plain="true" @click="hasPermission()">判断蓝牙权限</button>
+    <!-- <button type="primary" plain="true" @click="hasPermission()">判断蓝牙权限</button>
     <button type="primary" plain="true" @click="isSupport()">是否支持蓝牙</button> -->
     <!-- <button type="primary" plain="true" @click="isOpen()">蓝牙是否打开</button> -->
-   <!-- <button type="primary" plain="true" @click="openBT()">打开蓝牙</button>
+    <!-- <button type="primary" plain="true" @click="openBT()">打开蓝牙</button>
     <button type="primary" plain="true" @click="closeBT()">关闭蓝牙</button> -->
     <button type="primary" plain="true" @click="isOpen()">蓝牙设备列表</button>
-   <!-- <equip-info :list="bleList"></equip-info> -->
+    <!-- <equip-info :list="bleList"></equip-info> -->
     <view class="list-wrap">
-    	<view class="list" v-for="(item, index) of bleList" :key="index">
-    		<view class="name" v-if="item.name">{{item.name}}</view>
-    		<!-- <button size="mini" @click="pairBT(item)">配对</button> -->
-    		<button size="mini"  v-if="item.name&&!item.connect" @click="connectBT(item,index)">连接</button>
-    		<button size="mini" style="color: green;" v-if="item.name&&item.connect">已连接</button>
-    	</view>
+      <view class="list" v-for="(item, index) of bleList" :key="index">
+        <view class="name" v-show="item.name">{{item.name}}</view>
+        <!-- <button size="mini" @click="pairBT(item)">配对</button> -->
+        <button size="mini" v-if="item.name&&!item.connect" @click="connectBT(item,index)">连接</button>
+        <button size="mini" style="color: green;" v-if="item.name&&item.connect">已连接</button>
+      </view>
     </view>
- <!--   <button type="primary" plain="true" @click="listBondedBT()">已配对列表</button>
+    <!--   <button type="primary" plain="true" @click="listBondedBT()">已配对列表</button>
     <button type="primary" plain="true" @click="connectBT()">打开连接</button>
     <button type="primary" plain="true" @click="connectStatus()">连接状态</button>
     <button type="primary" plain="true" @click="searchRule()">设置搜索规则</button>
     <button type="primary" plain="true" @click="readRssi()">获取信号强度</button>
     <button type="primary" plain="true" @click="setMtu()">设置传输元大小</button>
     <button type="primary" plain="true" @click="read()">读</button> -->
+  <!--  <view style="margin-top: 2em;">
+      当前传输的数据为：
+    </view>
+    <input type="text" v-model="blueData" placeholder="请输入要传递的值" />
+    <button size="mini" plain="true" @click="blueData='5a a5 06 83 10 34 01 00 02'">切换2</button>
+    <button size="mini" plain="true" @click="blueData='6A A6 05 01 A1 00 A7'">返回</button>
     <button type="primary" plain="true" @click="writeResponse()">写,有响应</button>
     <button type="primary" plain="true" @click="writeNotResponse()">写,无响应</button>
-    <button type="primary" plain="true" @click="openNotify()">打开Notify通知</button>
- 
- 
-   <!--   <button type="primary" plain="true" @click="closeNotify()">关闭Notify通知</button>
+    <button type="primary" plain="true" @click="writeResponse2()">写,有响应2</button>
+    <button type="primary" plain="true" @click="writeNotResponse2()">写,无响应2</button>
+    <button type="primary" plain="true" @click="openNotify()">打开Notify通知</button> -->
+
+
+    <!--   <button type="primary" plain="true" @click="closeNotify()">关闭Notify通知</button>
     <button type="primary" plain="true" @click="openIndicate()">打开Indicate通知</button>
     <button type="primary" plain="true" @click="closeIndicate()">关闭Indicate通知</button> 
     <button type="primary" plain="true" @click="breakBT()()">断开连接</button>  -->
@@ -39,12 +47,13 @@
   const modal = uni.requireNativePlugin('modal');
   const btble = uni.requireNativePlugin('Common-BLE');
   // import EquipInfo from '../public/EquipInfo.vue'
-  const  data = '11 04 a1 00 b6'
+  const data = '6A A6 05 01 A1 00 A7'
   export default {
     data() {
       return {
         title: '',
-        bleList:[]
+        bleList: [],
+        blueData: '6A A6 05 01 A1 00 A7'
       }
     },
     onLoad() {},
@@ -52,7 +61,7 @@
       //this.openNotify()
     },
     onHide() {
-     this.closeNotify()
+      this.closeNotify()
     },
     methods: {
       hasPermission() {
@@ -90,9 +99,9 @@
             duration: 1.5
           });
           console.log(result.status);
-          if(!result.status){
+          if (!result.status) {
             this.openBT();
-          }else{
+          } else {
             this.listBT();
           }
         });
@@ -107,9 +116,9 @@
             message: msg,
             duration: 1.5
           });
-          if(!result.status){
+          if (!result.status) {
             this.openBT();
-          }else{
+          } else {
             this.listBT();
           }
         });
@@ -126,27 +135,28 @@
           });
         });
       },
-      listBT() {   
+      listBT() {
         modal.toast({
-          message: '正在搜索，请耐心等',
+          message: '搜索中...',
           duration: 1.5
         });
         this.bleList = []
         btble.listBT(result => {
           //result数据：{"msg":"搜索完成","list":[{"name":"蓝牙名称","address":"mac地址","status":"配对状态"}]}
-          const msg = JSON.stringify(result); 
-          //console.log(result);
-          console.log('蓝牙设备列表：' + result.list);
-         this.bleList = Array.from(JSON.parse(result.list))
-         this.bleList.forEach((value, index) => {
+          const msg = JSON.stringify(result);
+          console.log('搜索蓝牙设备：' + msg);
+          this.bleList = Array.from(JSON.parse(result.list))
+          this.bleList.forEach((value, index) => {
             this.$set(this.bleList[index], "connect", false);
-          //  this.bleList.push(bleList[index])
+            //  this.bleList.push(bleList[index])
           });
-          
-          // modal.toast({
-          //   message: msg,
-          //   duration: 1.5
-          // });
+          //if(msg.msg == '搜索完成'){
+          modal.toast({
+            message: result.msg,
+            duration: 1.5
+          });
+          //}
+
         });
       },
       listBondedBT() {
@@ -161,30 +171,24 @@
           });
         });
       },
-      connectBT(item,index) {
+      connectBT(item, index) {
         //console.log('连接'+item);
         btble.connectBT({
           "btAddress": item.address
         }, result => {
-          //result数据：{"code":100,"msg":"连接成功"}，并接收数据
-          //if(result.code ==100){
-            this.btAddress = item.address
-          //}
-          this.$store.commit('updateCount',item.address)
           const msg = JSON.stringify(result);
-          console.log(msg);
           console.log('连接蓝牙：' + msg);
-          console.log(this.bleList);
+          this.btAddress = item.address
+          this.$store.commit('updateCount', item.address)
           for (let i = 0; i < this.bleList.length; i++) {
-            if(i==index){
+            if (i == index) {
               this.$set(this.bleList[i], "connect", true)
-             }else{
-               this.$set(this.bleList[i], "connect", false)
-             }
+            } else {
+              this.$set(this.bleList[i], "connect", false)
+            }
           }
-          console.log(this.bleList);
           modal.toast({
-            message: msg,
+            message: result,
             duration: 1.5
           });
         });
@@ -229,32 +233,72 @@
         btble.writeResponse({
           "hex": false, //是否hex方式发送命令，默认false,字符串发送
           "btAddress": this.btAddress,
-          "data": data,
+          "data": this.blueData,
           "charset": "GBK"
         }, result => {
           //接收
-          const content = JSON.stringify(result);
+          const content = 'writeResponse=>' + JSON.stringify(result);
           modal.toast({
             message: content,
             duration: 1.5
           });
-          this.openNotify()
+          //  this.openNotify()
+        });
+      },
+      writeResponse2() {
+        // let msg = '>y t s 1 \r'
+        // // 向蓝牙设备发送一个0x00的16进制数据
+        // const buffer = new ArrayBuffer(msg.length)
+        // const dataView = new DataView(buffer)
+        btble.writeResponse({
+          "hex": true, //是否hex方式发送命令，默认false,字符串发送
+          "btAddress": this.btAddress,
+          "data": this.blueData,
+          "charset": "GBK"
+        }, result => {
+          //接收
+          const content = 'writeResponse2=>' + JSON.stringify(result);
+          modal.toast({
+            message: content,
+            duration: 1.5
+          });
+          //  this.openNotify()
         });
       },
       writeNotResponse() {
         btble.writeNotResponse({
           "hex": false, //是否hex方式发送命令，默认false,字符串发送
           "btAddress": this.btAddress,
-          "data": data,
+          "data": this.blueData,
           "charset": "GBK"
         }, result => {
           //接收
-          const content = JSON.stringify(result);
+          const content = 'writeNotResponse=>' + JSON.stringify(result);
           modal.toast({
             message: content,
             duration: 1.5
           });
-          this.openNotify()
+          //  this.openNotify()
+        });
+      },
+      writeNotResponse2() {
+        //console.log('data=>',data)
+        //let msg = '30018887963705376'
+        // const buffer = new ArrayBuffer(msg.length);
+        // const dataView = new DataView(buffer);
+        btble.writeNotResponse({
+          "hex": true, //是否hex方式发送命令，默认false,字符串发送
+          "btAddress": this.btAddress,
+          "data": this.blueData,
+          "charset": "GBK"
+        }, result => {
+          //接收
+          const content = 'writeNotResponse2=>' + JSON.stringify(result);
+          modal.toast({
+            message: content,
+            duration: 3
+          });
+          //  this.openNotify()
         });
       },
       openNotify() {
@@ -263,7 +307,7 @@
           const content = JSON.stringify(result);
           modal.toast({
             message: content,
-            duration: 1.5
+            duration: 3
           });
         });
       },
@@ -275,7 +319,7 @@
           const content = JSON.stringify(result);
           modal.toast({
             message: content,
-            duration: 1.5
+            duration: 3
           });
         });
       },
@@ -285,7 +329,7 @@
           const content = JSON.stringify(result);
           modal.toast({
             message: content,
-            duration: 1.5
+            duration: 3
           });
         });
       },
@@ -346,12 +390,13 @@
   }
 </script>
 <style lang="less" scoped>
-  .list{
+  .list {
     display: flex;
     justify-content: space-between;
     margin-bottom: 5rpx;
-    .name{
+
+    .name {
       width: 400rpx;
     }
-  }  
+  }
 </style>

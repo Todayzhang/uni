@@ -13,7 +13,7 @@
               <input class="uni-input" type="number" style="text-align: right;" @input="replaceInput"
                 v-model="changeValue1" placeholder="请输入" />
             </view>
-            <span class="icon iconfont myIconEnd">&#xe687;</span>
+            <!-- <span class="icon iconfont myIconEnd">&#xe687;</span> -->
             <button class="mini-btn" type="primary" size="mini" @click="sendMsg(1)">发送</button>
           </view>
         </view>
@@ -29,7 +29,7 @@
               </picker>
             </view>
             <span class="icon iconfont myIconEnd">&#xe687;</span>
-         <!--   	<button class="mini-btn" type="primary" size="mini">发送</button> -->
+            <!--   	<button class="mini-btn" type="primary" size="mini">发送</button> -->
           </view>
         </view>
         <view class="uni-list bottomItem">
@@ -68,8 +68,8 @@
             <view class="uni-list-cell-left">
               {{$t('conversiontemperature')}}(0~200℃)
             </view>
-           <view class="uni-list-cell-db lineHang" style="display: flex;">
-              <input class="uni-input" type="number" style="text-align: right;" @input="replaceInput"
+            <view class="uni-list-cell-db lineHang" style="display: flex;">
+              <input class="uni-input" type="number" style="text-align: right;" @input="replaceInput2"
                 v-model="changeValue2" placeholder="请输入" />
               <picker @change="bindPickerChangeZS" :value="indexZS" :range="arrayZS">
                 <view class="uni-input showFont">{{arrayZS[indexZS]}}</view>
@@ -79,14 +79,14 @@
             <button class="mini-btn" type="primary" size="mini" @click="sendMsg(5)">发送</button>
           </view>
         </view>
-       
+
         <view class="uni-list bottomItem lastOne">
           <view class="uni-list-cell">
             <view class="uni-list-cell-left">
               {{$t('tappingposition')}}(0~99)
             </view>
             <view class="uni-list-cell-db lineHang">
-              <input class="uni-input" type="number" style="text-align: right;" @input="replaceInput"
+              <input class="uni-input" type="number" style="text-align: right;" @input="replaceInput3"
                 v-model="changeValue3" placeholder="请输入" />
               <!--  <picker @change="bindPickerChangeFJ" :value="indexFJ" :range="arrayFJ">
                  <view class="uni-input showFont">{{arrayFJ[indexFJ]}}</view>
@@ -96,7 +96,7 @@
             <button class="mini-btn" type="primary" size="mini" @click="sendMsg(6)">发送</button>
           </view>
         </view>
-     
+
       </view>
 
       <!-- 底部按钮 -->
@@ -115,6 +115,7 @@
 <script>
   import EquipInfo from '../public/EquipInfo.vue'
   import TipsModal from '../public/TipsModal.vue'
+  import { changeTosixty,checkEnd } from './sixtyChange.js'
   const modal = uni.requireNativePlugin('modal');
   const btble = uni.requireNativePlugin('Common-BLE');
   export default {
@@ -128,31 +129,31 @@
         indexModel: 0,
         arrayIe: [{
             name: 'Auto',
-            value: '00 b6'
+            value: '00'
           },
           {
             name: '<20mA',
-            value: '01 b7'
+            value: '01'
           },
           {
             name: '40mA',
-            value: '02 b8'
+            value: '02'
           },
           {
             name: '200mA',
-            value: '03 b9'
+            value: '03'
           },
           {
             name: '1A',
-            value: '04 ba'
+            value: '04'
           },
           {
             name: '3A',
-            value: '05 bb'
+            value: '05'
           },
           {
             name: '10A',
-            value: '06 bc'
+            value: '06'
           }
         ],
         indexIe: 0,
@@ -193,11 +194,7 @@
 
         } else if (value == 3) { //测试相别
 
-        } else if (value == 4) { //绕组温度
-          let D1 = '2B'
-          if (this.changeValue < 0) {
-            D1 = '2D'
-          }
+        } else if (value == 4) { //绕组温度     
           let newChange = this.changeValue
           if (!newChange || newChange < -50 || newChange > 200) {
             uni.showToast({
@@ -207,47 +204,36 @@
             this.changeValue = '';
             return;
           }
-          let length = String(Math.abs(newChange)).length
-          if (length == 2) {
-            newChange = '0' + Math.abs(newChange)
-          } else if (length == 1) {
-            newChange = '00' + Math.abs(newChange)
-          }
-          console.log(newChange);
-          let D2 = '3' + newChange.split('')[0]
-          let D3 = '3' + newChange.split('')[1]
-          let D4 = '3' + newChange.split('')[2]
-
-          sendValue = '11 07 B1 ' + D1 + ' ' + D2 + ' ' + D3 + ' ' + D4
-          sendValue = sendValue + ' ' + this.checkEnd(sendValue)
-          console.log('sendValue=>', sendValue)
+          const DRes = this.toTemp(this.changeValue)
+          sendValue = '6aa60601a2' + DRes
+          sendValue = sendValue + checkEnd(sendValue)
+          console.log('绕组温度=>', sendValue)
         } else if (value == 5) { //折算温度
-
+          let newChange = this.changeValue2
+          if (!newChange || newChange < 0 || newChange > 200) {
+            uni.showToast({
+              title: '温度数据不符合，请重新输入',
+              duration: 1000
+            });
+            this.changeValue2 = '';
+            return;
+          }
+          const DRes = this.toTemp(this.changeValue2)
+          sendValue = '6aa60601a3' + DRes
+          sendValue = sendValue + checkEnd(sendValue)
+          console.log('换算温度=>', sendValue)
         } else if (value == 6) { //分接位置
-
+          const sendTap = changeTosixty(this.changeValue3)
+          sendValue = '6aa60501b8' + sendTap
+          sendValue = sendValue + checkEnd(sendValue)
         }
-        this.sendToDevice(sendValue)
+        console.log(sendValue)
+        // this.sendToDevice(sendValue)
         //  console.log(this.$store)
         // console.log(this.$store.bluetooth.state.bluetooth.bleAddress)
 
       },
-      checkEnd(str) {
-        let itotal = 0,
-          len = str.length,
-          num = 0;
-        while (num < len) {
-          let s = str.substring(num, num + 2);
-          itotal += parseInt(s, 16);
-          num = num + 2;
-        }
-        let mode = itotal % 256;
-        let shex = mode.toString(16);
-        let iLen = shex.length;
-        if (iLen < 2) {
-          shex = "0" + shex;
-        }
-        return shex;
-      },
+
       //打开通知
       openNotify() {
         btble.openNotify(result => {
@@ -275,7 +261,7 @@
       },
       sendToDevice(value) {
         btble.writeNotResponse({
-          "hex": false, //是否hex方式发送命令，默认false,字符串发送
+          "hex": true, //是否hex方式发送命令，默认false,字符串发送
           "btAddress": this.$store.state.bluetooth.bleAddress,
           "data": value,
           "charset": "GBK"
@@ -292,29 +278,37 @@
       //测试相别
       bindPickerChangeMu(e) {
         this.indexMu = e.target.value
-        let muValue = '11 04 B7 ' + changeTosixty(this.indexMu) + 2
+        console.log(e.target)
+        let muValue = '6aa60501b7' + changeTosixty(e.target.value)
+        muValue = muValue + checkEnd(muValue) 
+        //this.sendToDevice(muValue)
       },
       //测试电流
       bindPickerChangeIe(e) {
         console.log(e.target);
         this.indexIe = e.target.value;
-        this.dlValue = this.arrayIe[this.indexIe].value;
-        let msg = '11 04 a1 '+this.dlValue;
+        this.dlValue = this.arrayIe[e.target.value].value;
+        let msg = '6aa60501a1' + this.dlValue;
+        msg = msg + checkEnd(msg)
         console.info(msg);
-        this.sendToDevice(sendValue)
+        //this.sendToDevice(msg)
       },
-      //折算温度  铜 铝
-      bindPickerChangeZS(e){
-        console.log('折算温度=>',console.log(e.target))
-      },
-      //十进制转16进制
-      changeTosixty(num) {
-        let sixtyNum = Int(num).toString(16)
-        if (String(sixtyNum).length == 1) {
-          sixtyNum = '0' + sixtyNum
+      //折算温度切换 铜 铝
+      bindPickerChangeZS(e) {
+        console.log(console.log(e.target))
+        let selectValue = this.arrayZS[e.target.value]
+        let sendValue = '6aa60501a4'
+        if (selectValue == '铜') {
+          sendValue = sendValue + '01'
+        } else if (selectValue == '铝') {
+          sendValue = sendValue + '02'
         }
-        return sixtyNum
+        sendValue = sendValue + checkEnd(sendValue)
+        console.log(sendValue)
+        // this.sendToDevice(sendValue)
       },
+
+      //监听input框的数据 限制在 -50~200 之间
       replaceInput(event) {
         var value = event.target.value;
         if (value > 200) {
@@ -323,14 +317,88 @@
           this.changeValue = -50;
         }
       },
+      replaceInput2(event) {
+        var value = event.target.value;
+        if (value > 200) {
+          this.changeValue2 = 200;
+        } else if (value < 0) {
+          this.changeValue2 = 0;
+        }
+      },
+      replaceInput3(event) {
+        var value = event.target.value;
+        if (value > 99) {
+          this.changeValue2 = 99;
+        } else if (value < 0) {
+          this.changeValue2 = 0;
+        }
+      },
+      /**温度转换成16进制*/
+      toTemp(sourceNum) {
+        sourceNum = sourceNum * 10
+        // 数字取绝对值
+        let absoluteValue = Math.abs(sourceNum)
+        // 是否为负数标识 true:负数 false:正数
+        let isNegative = absoluteValue != sourceNum
+        if (isNegative) {
+          // 转换成二进制
+          let twoString = absoluteValue.toString(2)
+          // 计算需要补的位数
+          let len = `${twoString}`.length
+          let comNum = 16 - len
+          // 补位
+          let addStr = ''
+          for (let i = 0; i < comNum; i++) {
+            addStr += '0'
+          }
+          let afterComp = addStr + twoString
+          // 二进制取反
+          let twoStringReverse = this.numReverse(afterComp)
+          let res = parseInt(twoStringReverse, 2)
+          // 负数，这里需要+1    
+          res++
+          return res.toString(16)
+        } else {
+          let str = sourceNum.toString(16)
+          if (str.length == 1) {
+            str = '000' + str;
+          } else if (str.length == 2) {
+            str = "00" + str;
+          } else if (str.length == 3) {
+            str = "0" + str;
+          }
+          return str
+        }
+      },
+      numReverse(str) {
+        let arr = str.split('')
+        let newArr = []
+        arr.forEach(element => {
+          if (element === "0") {
+            newArr.push("1")
+          } else {
+            newArr.push("0")
+          }
+
+        });
+        return newArr.join('')
+      },
       // 确定，跳转到结果页面
       sure() {
-        this.$refs.popup.close()
-        let msg = '11 04 a5 01 bb'
-        sendToDevice(msg, (result) => {
-          console.log(result)
-          this.goTo('/pages/directresistance/testResult')
-        })
+        this.$refs.popup.close();
+        let item = {
+          "fjwz":this.changeValue3,//分接位置
+          "csxb":this.arrayMu[this.indexMu],//测试相别
+          "csdl":this.arrayIe[this.indexIe].name //测试电流
+        }
+        this.goTo('/pages/directresistance/testResult?item='+ encodeURIComponent(JSON.stringify(item)))
+        // let msg = '6aa60501a501'
+        // msg = msg + checkEnd(msg)
+        // console.log('msg=>',msg);
+        // sendToDevice(msg, (result) => {
+        //   console.log(result)
+        //   this.goTo('/pages/directresistance/testResult')
+        // })
       },
       open() {
         this.$refs.popup.open()

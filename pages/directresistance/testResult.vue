@@ -11,8 +11,8 @@
 
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText">03.47</text>
-            <text class="numDesc">{{$t('company')}}：UΩ</text>
+            <text class="numText">{{testResult}}</text>
+            <text class="numDesc">{{$t('company')}}：Ω</text>
           </view>
         </view>
       </view>
@@ -24,8 +24,8 @@
         </view>
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText">03.47</text>
-            <text class="numDesc">{{$t('company')}}：UΩ</text>
+            <text class="numText">{{convertedResult}}</text>
+            <text class="numDesc">{{$t('company')}}：Ω</text>
           </view>
         </view>
       </view>
@@ -50,7 +50,7 @@
         </view>
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText">0</text>
+            <text class="numText">{{fjwz}}</text>
           </view>
         </view>
       </view>
@@ -64,7 +64,7 @@
 
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText">27.47</text>
+            <text class="numText">{{csdl}}</text>
             <text class="numDesc">{{$t('company')}}：A</text>
           </view>
         </view>
@@ -79,7 +79,7 @@
 
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText">AB</text>
+            <text class="numText">{{csxb}}</text>
           </view>
         </view>
       </view>
@@ -103,14 +103,69 @@
 <script>
   export default {
     data() {
-      return {}
+      return {
+        testResult:'0.1225m',
+        convertedResult:'0.1225m',
+        csdl: "",
+        csxb: "",
+        fjwz: ""
+      }
     },
     onShow() {
        uni.setNavigationBarTitle({// 修改头部标题
            title: this.$i18n.messages[this.$i18n.locale].testres
        });
      },
-    methods: {}
+     onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
+            const item = JSON.parse(decodeURIComponent(option.item))
+            this.csdl =  item.csdl
+            this.csxb = item.csxb
+            this.fjwz = item.fjwz
+            console.log(item);
+     },
+    methods: {
+      
+      //将16进制转为 字符串
+      hexToString(str){
+      　　var val="",len = str.length/2;
+      　　for(var i = 0; i < len; i++){
+      　　　　val += String.fromCharCode(parseInt(str.substr(i*2,2),16));
+      　　}
+      	//console.log(val,'16进制转字符串')
+      	this.utf8to16(val);
+      },
+      //处理中文乱码问题
+      utf8to16(str) {
+        var out, i, len, c;
+        var char2, char3;
+        out = "";
+        len = str.length;
+        i = 0;
+        while(i < len) {
+       	c = str.charCodeAt(i++);
+       	switch(c >> 4){ 
+         		case 0: case 1: case 2: case 3: case 4: case 5: case 6: case 7:
+      	 		out += str.charAt(i-1);
+      	 	break;
+         		case 12: case 13:
+      	 		char2 = str.charCodeAt(i++);
+      	 		out += String.fromCharCode(((c & 0x1F) << 6) | (char2 & 0x3F));
+      	 	break;
+         		case 14:
+      	 		char2 = str.charCodeAt(i++);
+      	 		char3 = str.charCodeAt(i++);
+      	 		out += String.fromCharCode(((c & 0x0F) << 12) |
+      			((char2 & 0x3F) << 6) |
+      			((char3 & 0x3F) << 0));
+      	 	break;
+        	}
+        }
+      
+      	console.log(out,'out')
+      	return out;
+      }
+
+    }
   }
 </script>
 

@@ -14,7 +14,7 @@
                 v-model="changeValue1" placeholder="请输入" />
             </view>
             <!-- <span class="icon iconfont myIconEnd">&#xe687;</span> -->
-            <button class="mini-btn" type="primary" size="mini" @click="sendMsg(1)">发送</button>
+            <button class="mini-btn" type="primary" size="mini">发送</button>
           </view>
         </view>
 
@@ -115,14 +115,19 @@
 <script>
   import EquipInfo from '../public/EquipInfo.vue'
   import TipsModal from '../public/TipsModal.vue'
-  import { changeTosixty,checkEnd } from './sixtyChange.js'
-  const modal = uni.requireNativePlugin('modal');
-  const btble = uni.requireNativePlugin('Common-BLE');
+  import {
+    bleBoole
+  } from '../mixins/mixins.js'
+  import {
+    changeTosixty,
+    checkEnd
+  } from './sixtyChange.js'
   export default {
     components: {
       EquipInfo,
       TipsModal
     },
+    mixins: [bleBoole],
     data() {
       return {
         arrayModel: [this.$t('directresistancecurrent'), 'value2', 'value3', 'value4', 'value5'],
@@ -171,7 +176,7 @@
         changeValue1: '',
         changeValue2: '',
         changeValue3: '',
-        dlValue: ''
+        dlValue: '',
       }
     },
     onShow() {
@@ -181,24 +186,34 @@
       this.openNotify()
     },
     onHide() {
-      console.log('hidden');
+      console.log('直阻 hidden');
+      clearInterval(this.timer)
       this.closeNotify()
     },
     methods: {
       sendMsg(value) {
         let sendValue = ''
-        if (value == 1) { //试品类型
-          let msg = '11 04 a1 '
-          msg += this.dlValue
-        } else if (value == 2) { //测试电流
+        // if (value == 1) { //试品类型
+        //   let msg = '11 04 a1 '
+        //   msg += this.changeValue1
+        //   console.log(222);
+        // } else if (value == 2) { //测试电流
+        //   if (this.changeValue1) {
+        //     this.$model.toast({
+        //       message: '当前试品型号为空,请重新输入！',
+        //       duration: 1.5
+        //     })
+        //   }else{
+        //    return
+        //   }
+        // } else if (value == 3) { //测试相别
 
-        } else if (value == 3) { //测试相别
-
-        } else if (value == 4) { //绕组温度     
+        // } else
+         if (value == 4) { //绕组温度     
           let newChange = this.changeValue
           if (!newChange || newChange < -50 || newChange > 200) {
-            uni.showToast({
-              title: '温度数据不符合，请重新输入',
+            this.$model.toast({
+              message: '温度数据不符合，请重新输入',
               duration: 1000
             });
             this.changeValue = '';
@@ -211,8 +226,8 @@
         } else if (value == 5) { //折算温度
           let newChange = this.changeValue2
           if (!newChange || newChange < 0 || newChange > 200) {
-            uni.showToast({
-              title: '温度数据不符合，请重新输入',
+            this.$model.toast({
+              message: '温度数据不符合，请重新输入',
               duration: 1000
             });
             this.changeValue2 = '';
@@ -226,62 +241,20 @@
           const sendTap = changeTosixty(this.changeValue3)
           sendValue = '6aa60501b8' + sendTap
           sendValue = sendValue + checkEnd(sendValue)
+          console.log('分接位置=>', sendValue)
         }
-        console.log(sendValue)
-        // this.sendToDevice(sendValue)
-        //  console.log(this.$store)
-        // console.log(this.$store.bluetooth.state.bluetooth.bleAddress)
-
-      },
-
-      //打开通知
-      openNotify() {
-        btble.openNotify(result => {
-          //接收
-          const content = JSON.stringify(result);
-          modal.toast({
-            message: content,
-            duration: 1.5
-          });
-        });
-      },
-      //关闭通知
-      closeNotify() {
-        btble.closeNotify({
-          "btAddress": this.$store.state.bluetooth.bleAddress
-        }, result => {
-          //接收
-          const content = JSON.stringify(result);
-          console.info(content)
-          modal.toast({
-            message: content,
-            duration: 1.5
-          });
-        });
-      },
-      sendToDevice(value) {
-        btble.writeNotResponse({
-          "hex": true, //是否hex方式发送命令，默认false,字符串发送
-          "btAddress": this.$store.state.bluetooth.bleAddress,
-          "data": value,
-          "charset": "GBK"
-        }, result => {
-          //接收
-          const content = JSON.stringify(result);
-          console.info(content)
-          modal.toast({
-            message: content,
-            duration: 1.5
-          });
-        });
+        console.log(`-----------发送请求--${sendValue}-------`)
+        this.sendMsgToDevice(sendValue)
       },
       //测试相别
       bindPickerChangeMu(e) {
         this.indexMu = e.target.value
         console.log(e.target)
         let muValue = '6aa60501b7' + changeTosixty(e.target.value)
-        muValue = muValue + checkEnd(muValue) 
+        muValue = muValue + checkEnd(muValue)
         //this.sendToDevice(muValue)
+        console.log(`-------发送请求--测试相别---${muValue}----`)
+        this.sendMsgToDevice(muValue)
       },
       //测试电流
       bindPickerChangeIe(e) {
@@ -291,12 +264,13 @@
         let msg = '6aa60501a1' + this.dlValue;
         msg = msg + checkEnd(msg)
         console.info(msg);
-        //this.sendToDevice(msg)
+        this.sendMsgToDevice(msg)
       },
       //折算温度切换 铜 铝
       bindPickerChangeZS(e) {
         console.log(console.log(e.target))
         let selectValue = this.arrayZS[e.target.value]
+        this.indexZS = e.target.value
         let sendValue = '6aa60501a4'
         if (selectValue == '铜') {
           sendValue = sendValue + '01'
@@ -304,8 +278,8 @@
           sendValue = sendValue + '02'
         }
         sendValue = sendValue + checkEnd(sendValue)
-        console.log(sendValue)
-        // this.sendToDevice(sendValue)
+        console.log('切换铜铝=>  ', sendValue)
+        this.sendMsgToDevice(sendValue)
       },
 
       //监听input框的数据 限制在 -50~200 之间
@@ -385,29 +359,28 @@
       },
       // 确定，跳转到结果页面
       sure() {
-        this.$refs.popup.close();
         let item = {
-          "fjwz":this.changeValue3,//分接位置
-          "csxb":this.arrayMu[this.indexMu],//测试相别
-          "csdl":this.arrayIe[this.indexIe].name //测试电流
+          "spxh": this.changeValue1, //试品型号
+          "csxb": this.arrayMu[this.indexMu], //测试相别
+          "csdl": this.arrayIe[this.indexIe].name, //测试电流
+          "rzwd": this.changeValue, //绕组温度
+          "zswd": this.changeValue2, //折算温度
+          "zscz": this.arrayZS[this.indexZS], //折算材质 铜-铝
+          "fjwz": this.changeValue3, //分接位置
         }
-        this.goTo('/pages/directresistance/testResult?item='+ encodeURIComponent(JSON.stringify(item)))
-        // let msg = '6aa60501a501'
-        // msg = msg + checkEnd(msg)
-        // console.log('msg=>',msg);
-        // sendToDevice(msg, (result) => {
-        //   console.log(result)
-        //   this.goTo('/pages/directresistance/testResult')
-        // })
+        //this.goTo('/pages/directresistance/testResult?item=' + encodeURIComponent(JSON.stringify(item)))
+        let msg = '6aa60501a501'
+        msg = msg + checkEnd(msg)
+        console.log('msg=>', msg);
+        this.sendMsgToDevice(msg, () => {
+          //console.log(result)
+          this.$refs.popup.close();
+          console.log('请求成功，跳转页面')
+          this.goTo('/pages/directresistance/testResult?item=' + encodeURIComponent(JSON.stringify(item)))
+        })
       },
       open() {
         this.$refs.popup.open()
-      },
-      // 页面跳转
-      goTo(url) {
-        uni.navigateTo({
-          url: url
-        })
       }
     }
   }

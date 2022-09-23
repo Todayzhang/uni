@@ -5,7 +5,7 @@
     <!-- <button type="primary" plain="true" @click="isOpen()">蓝牙是否打开</button> -->
     <!-- <button type="primary" plain="true" @click="openBT()">打开蓝牙</button>
     <button type="primary" plain="true" @click="closeBT()">关闭蓝牙</button> -->
-    <button type="primary" plain="true" @click="isOpen()">蓝牙设备列表</button>
+    <button type="primary" plain="true" @click="isOpen()">重新搜索蓝牙</button>
     <!-- <equip-info :list="bleList"></equip-info> -->
     <view class="list-wrap">
       <view class="list" v-for="(item, index) of bleList" :key="index">
@@ -44,8 +44,8 @@
 </template>
 
 <script>
-  const modal = uni.requireNativePlugin('modal');
-  const btble = uni.requireNativePlugin('Common-BLE');
+  // const this.$modal = uni.requireNativePlugin('this.$modal');
+  // const this.$btble = uni.requireNativePlugin('Common-BLE');
   // import EquipInfo from '../public/EquipInfo.vue'
   const data = '6A A6 05 01 A1 00 A7'
   export default {
@@ -56,7 +56,9 @@
         blueData: '6A A6 05 01 A1 00 A7'
       }
     },
-    onLoad() {},
+    onLoad() {      
+      this.isOpen()
+    },
     onShow() {
       //this.openNotify()
     },
@@ -65,36 +67,36 @@
     },
     methods: {
       hasPermission() {
-        btble.hasPermission(result => {
+        this.$btble.hasPermission(result => {
           //result数据：{"status":true} 如果没有权限程序会自动申请权限
           const msg = JSON.stringify(result);
           console.log(msg);
           console.log('蓝牙权限：' + result.status);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });
         });
       },
       isSupport() {
-        btble.isSupport(result => {
+        this.$btble.isSupport(result => {
           //result数据：{"status":true}
           const msg = JSON.stringify(result);
           console.log(msg);
           console.log('是否支持蓝牙：' + result.status);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });
         });
       },
       isOpen() {
-        btble.isOpen(result => {
+        this.$btble.isOpen(result => {
           //result数据：{"status":true}
           const msg = JSON.stringify(result);
           console.log(msg);
           console.log('蓝牙是否打开：' + result.status);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });
@@ -107,12 +109,12 @@
         });
       },
       openBT() {
-        btble.openBT(result => {
+        this.$btble.openBT(result => {
           //result数据：{"status":true}
           const msg = JSON.stringify(result);
           console.log(msg);
           console.log('开启蓝牙是否成功：' + result.status);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });
@@ -124,24 +126,24 @@
         });
       },
       closeBT() {
-        btble.closeBT(result => {
+        this.$btble.closeBT(result => {
           //result数据：{"status":true}
           const msg = JSON.stringify(result);
           console.log(msg);
           console.log('蓝牙是否关闭：' + result.status);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });
         });
       },
       listBT() {
-        modal.toast({
+        this.$modal.toast({
           message: '搜索中...',
           duration: 1.5
         });
         this.bleList = []
-        btble.listBT(result => {
+        this.$btble.listBT(result => {
           //result数据：{"msg":"搜索完成","list":[{"name":"蓝牙名称","address":"mac地址","status":"配对状态"}]}
           const msg = JSON.stringify(result);
           console.log('搜索蓝牙设备：' + msg);
@@ -151,7 +153,7 @@
             //  this.bleList.push(bleList[index])
           });
           //if(msg.msg == '搜索完成'){
-          modal.toast({
+          this.$modal.toast({
             message: result.msg,
             duration: 1.5
           });
@@ -160,12 +162,12 @@
         });
       },
       listBondedBT() {
-        btble.listBondedBT(result => {
+        this.$btble.listBondedBT(result => {
           //result数据：{"msg":"搜索完成","list":[{"name":"蓝牙名称","address":"mac地址","status":"配对状态"}]}
           const msg = JSON.stringify(result);
           console.log(msg);
           console.log('已配对列表：' + result.list);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });
@@ -173,7 +175,7 @@
       },
       connectBT(item, index) {
         //console.log('连接'+item);
-        btble.connectBT({
+        this.$btble.connectBT({
           "btAddress": item.address
         }, result => {
           const msg = JSON.stringify(result);
@@ -187,50 +189,50 @@
               this.$set(this.bleList[i], "connect", false)
             }
           }
-          modal.toast({
+          this.$modal.toast({
             message: result,
             duration: 1.5
           });
         });
       },
       breakBT() {
-        btble.breakBT({
+        this.$btble.breakBT({
           "btAddress": this.btAddress
         }, result => {
           //result数据：{"code":100,"msg":"连接成功"}
           const msg = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });
         });
       },
       connectStatus() {
-        btble.connectStatus({
+        this.$btble.connectStatus({
           "btAddress": this.btAddress
         }, result => {
           //接收
           const content = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 1.5
           });
         });
       },
       read() {
-        btble.read({
+        this.$btble.read({
           "btAddress": this.btAddress
         }, result => {
           //接收
           const content = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 1.5
           });
         });
       },
       writeResponse() {
-        btble.writeResponse({
+        this.$btble.writeResponse({
           "hex": false, //是否hex方式发送命令，默认false,字符串发送
           "btAddress": this.btAddress,
           "data": this.blueData,
@@ -238,7 +240,7 @@
         }, result => {
           //接收
           const content = 'writeResponse=>' + JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 1.5
           });
@@ -250,7 +252,7 @@
         // // 向蓝牙设备发送一个0x00的16进制数据
         // const buffer = new ArrayBuffer(msg.length)
         // const dataView = new DataView(buffer)
-        btble.writeResponse({
+        this.$btble.writeResponse({
           "hex": true, //是否hex方式发送命令，默认false,字符串发送
           "btAddress": this.btAddress,
           "data": this.blueData,
@@ -258,7 +260,7 @@
         }, result => {
           //接收
           const content = 'writeResponse2=>' + JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 1.5
           });
@@ -266,7 +268,7 @@
         });
       },
       writeNotResponse() {
-        btble.writeNotResponse({
+        this.$btble.writeNotResponse({
           "hex": false, //是否hex方式发送命令，默认false,字符串发送
           "btAddress": this.btAddress,
           "data": this.blueData,
@@ -274,7 +276,7 @@
         }, result => {
           //接收
           const content = 'writeNotResponse=>' + JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 1.5
           });
@@ -286,7 +288,7 @@
         //let msg = '30018887963705376'
         // const buffer = new ArrayBuffer(msg.length);
         // const dataView = new DataView(buffer);
-        btble.writeNotResponse({
+        this.$btble.writeNotResponse({
           "hex": true, //是否hex方式发送命令，默认false,字符串发送
           "btAddress": this.btAddress,
           "data": this.blueData,
@@ -294,7 +296,7 @@
         }, result => {
           //接收
           const content = 'writeNotResponse2=>' + JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 3
           });
@@ -302,51 +304,51 @@
         });
       },
       openNotify() {
-        btble.openNotify(result => {
+        this.$btble.openNotify(result => {
           //接收
           const content = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 3
           });
         });
       },
       closeNotify() {
-        btble.closeNotify({
+        this.$btble.closeNotify({
           "btAddress": this.btAddress
         }, result => {
           //接收
           const content = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 3
           });
         });
       },
       openIndicate() {
-        btble.openIndicate(result => {
+        this.$btble.openIndicate(result => {
           //接收
           const content = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 3
           });
         });
       },
       closeIndicate() {
-        btble.closeIndicate({
+        this.$btble.closeIndicate({
           "btAddress": this.btAddress
         }, result => {
           //接收
           const content = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: content,
             duration: 1.5
           });
         });
       },
       searchRule() {
-        btble.searchRule({
+        this.$btble.searchRule({
           "uuidList": [], //["1", "2"]
           "nameList": [], //["a", "b"]
           "mac": "",
@@ -354,33 +356,33 @@
         }, result => {
           //result数据：{"code":100,"msg":"连接成功"}
           const msg = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });
         });
       },
       readRssi() {
-        btble.readRssi({
+        this.$btble.readRssi({
             "btAddress": this.btAddress
           },
           result => {
             //result数据：{"code":100,"msg":"连接成功"}
             const msg = JSON.stringify(result);
-            modal.toast({
+            this.$modal.toast({
               message: msg,
               duration: 1.5
             });
           });
       },
       setMtu() {
-        btble.setMtu({
+        this.$btble.setMtu({
           "btAddress": this.btAddress,
           "mtu": 100
         }, result => {
           //result数据：{"code":100,"msg":"连接成功"}
           const msg = JSON.stringify(result);
-          modal.toast({
+          this.$modal.toast({
             message: msg,
             duration: 1.5
           });

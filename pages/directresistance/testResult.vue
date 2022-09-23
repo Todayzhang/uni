@@ -38,7 +38,7 @@
 
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText">4</text>
+            <text class="numText">0</text>
           </view>
         </view>
       </view>
@@ -87,7 +87,7 @@
       <!-- 底部按钮 -->
       <!-- <view class="fixedBox"> -->
       <view class="btmBtnBox">
-        <view class="bottomBtn left">{{$t('retest')}}</view>
+        <view class="bottomBtn left" @click="reSet">{{$t('retest')}}</view>
         <view class="bottomBtn center">{{$t('datalocking')}}</view>
         <view class="bottomBtn right">{{$t('resultstorage')}}</view>
       </view>
@@ -101,14 +101,26 @@
 </template>
 
 <script>
+  import {
+    bleBoole
+  } from '../mixins/mixins.js'
+  import {
+    changeTosixty,
+    checkEnd
+  } from './sixtyChange.js'
   export default {
+    mixins: [bleBoole],
     data() {
       return {
-        testResult:'0.1225m',
-        convertedResult:'0.1225m',
-        csdl: "",
-        csxb: "",
-        fjwz: ""
+        testResult:'0.000m',//测试电阻
+        convertedResult:'0.000m',//折算电阻
+        spxh:'',//试品型号
+        csxb:'',//测试相别
+        csdl:'',//测试电流
+        rzwd:'',//绕组温度
+        zswd:'',//折算温度
+        zscz:'',//折算材质 铜-铝
+        fjwz:'',//分接位置
       }
     },
     onShow() {
@@ -116,15 +128,46 @@
            title: this.$i18n.messages[this.$i18n.locale].testres
        });
      },
+     onHide() {
+       clearInterval(this.timer)
+       this.closeNotify()
+     },
      onLoad: function (option) { //option为object类型，会序列化上个页面传递的参数
-            const item = JSON.parse(decodeURIComponent(option.item))
-            this.csdl =  item.csdl
-            this.csxb = item.csxb
-            this.fjwz = item.fjwz
+            const item = JSON.parse(decodeURIComponent(option.item))   
+            this.spxh = item.spxh  //试品型号
+            this.csxb = item.csxb, //测试相别
+            this.csdl = item.csdl, //测试电流
+            this.rzwd = item.rzwd  //绕组温度
+            this.zswd = item.zswd  //折算温度
+            this.zscz = item.zscz, //折算材质 铜-铝
+            this.fjwz = item.fjwz  //分接位置
             console.log(item);
+            this.openNotify((res)=>{
+              const test = res.slice(8,10)
+              const result = res.slice(10,25)
+              this.$modal.toast({
+                message: res,
+                duration: 1.5
+              });
+              if(test == 58){//测试电阻
+                this.testResult = this.hexToString(result)
+              }else if(test == 59){ //折算电阻
+                this.convertedResult = this.hexToString(result)
+              }
+            })
      },
     methods: {
-      
+      //重新获取 复位
+      reSet(){
+        let resetMsg = '6aa60501aa01'
+        resetMsg = resetMsg + checkEnd(resetMsg)
+        console.log('msg=>', resetMsg);
+        this.sendMsgToDevice(resetMsg, () => {
+          //console.log(result)
+          console.log('请求成功，跳转页面')
+          this.goTo('/pages/directresistance/parameterSetting')
+        })
+      },
       //将16进制转为 字符串
       hexToString(str){
       　　var val="",len = str.length/2;

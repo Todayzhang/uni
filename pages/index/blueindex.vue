@@ -18,7 +18,7 @@
           </view>
         </view>
         <view class="textShow">
-          {{$t('index.topdesc')}}
+       <!--   {{$t('index.topdesc')}} -->
         </view>
       </view>
     </view>
@@ -318,7 +318,7 @@
     }
 
     .bottomTime {
-      height: 250rpx;
+      height: 148rpx;
       border-radius: 8rpx;
       margin-bottom: 25rpx;
       padding: 0 40rpx 28rpx 40rpx;

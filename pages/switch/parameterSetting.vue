@@ -207,7 +207,7 @@
               {{$t('reclosingtime')}}
             </view>
             <view class="uni-list-cell-db lineHang">
-              <picker @change="bindPickerChangeClose" :value="indexClose" :range="arrClose" :range-key="'name'">
+              <picker @change="bindPickerChangeClose" :value="indexClose" :range="arrOpen" :range-key="'name'">
                 <view class="uni-input showFont">{{arrOpen[indexClose].name}}</view>
               </picker>
             </view>
@@ -443,35 +443,43 @@
         this.$refs.popup.close()
       },
       // 开关类型
-      bindPickerChangeSwitch() {
+      bindPickerChangeSwitch(e) {
+        this.indexSwitch = e.target.value
         this.dataSwitch = this.arrSwitch[this.indexSwitch]
       },
       //触发模式
-      bindPickerChangeTrigger() {
+      bindPickerChangeTrigger(e) {
+        this.indexTrigger = e.target.value
         this.dataTrigger = this.arrTrigger[this.indexTrigger]
       },
       //传感器类型
-      bindPickerChangeSensort() {
+      bindPickerChangeSensort(e) {
+        this.indexSensort = e.target.value
         this.dataSensort = this.arrSensort[this.indexSensort]
       },
       //传感器数量
-      bindPickerChangeNum() {
+      bindPickerChangeNum(e) {
+        this.indexNum = e.target.value
         this.dataNum = this.arrNum[this.indexNum]
       },
       //传感器位置
-      bindPickerChangeAddress() {
+      bindPickerChangeAddress(e) {
+        this.indexAddress = e.target.value
         this.dataAddress = this.arrAddress[this.indexAddress]
       },
       //重合闸分闸时间
-      bindPickerChangeOpen() {
+      bindPickerChangeOpen(e) {
+        this.indexOpen = e.target.value
         this.dataOpen = this.arrOpen[this.indexOpen]
       },
       //重合闸合闸时间
-      bindPickerChangeClose() {
+      bindPickerChangeClose(e) {
+        this.indexClose = e.target.value
         this.dataClose = this.arrOpen[this.indexClose]
       },
       //测试时间
-      bindPickerChangeTest() {
+      bindPickerChangeTest(e) {
+        this.indexTest = e.target.value
         this.dataTest = this.arrTest[this.indexTest]
       },
       

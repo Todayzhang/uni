@@ -140,7 +140,7 @@
             this.rzwd = item.rzwd  //绕组温度
             this.zswd = item.zswd  //折算温度
             this.zscz = item.zscz, //折算材质 铜-铝
-            this.fjwz = item.fjwz  //分接位置
+            this.fjwz = item.fjwz  //分接位置 6aa604015e63
             console.log(item);
             this.openNotify((res)=>{
               const test = res.slice(8,10)

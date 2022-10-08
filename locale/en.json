@@ -89,6 +89,7 @@
   "triggermode":"Trigger mode",
   "sensortype":"Sensor type",
   "numberofsensors":"Number of sensors",
+  "addressofsensors":"Address of sensors",
   "reclosingopeningtime":"Reclosing opening time",
   "reclosingtime":"Reclosing time",
   "speedtype":"Speed type",

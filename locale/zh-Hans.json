@@ -89,6 +89,7 @@
   "triggermode":"触发模式",
   "sensortype":"传感器类型",
   "numberofsensors":"传感器数量",
+  "addressofsensors":"传感器位置",
   "reclosingopeningtime":"重合闸分闸时间",
   "reclosingtime":"重合闸合闸时间",
   "speedtype":"速度类型",

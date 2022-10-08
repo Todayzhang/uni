@@ -11,7 +11,7 @@
 
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText color1">0.102</text>
+            <text class="numText color1">{{cssj}}</text>
             <text class="numDesc">{{$t('company')}}：UΩ</text>
           </view>
         </view>
@@ -24,7 +24,7 @@
         </view>
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText color2">2</text>
+            <text class="numText color2">{{csxh}}</text>
           </view>
         </view>
       </view>
@@ -37,7 +37,7 @@
 
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText color3">32.47</text>
+            <text class="numText color3">{{csdl}}</text>
             <text class="numDesc">{{$t('company')}}：A</text>
           </view>
         </view>
@@ -52,7 +52,7 @@
 
         <view class="resRightBox">
           <view class="rightTextItem">
-            <text class="numText color4">10</text>
+            <text class="numText color4">{{sjxz}}</text>
             <text class="numDesc">{{$t('company')}}：S</text>
           </view>
         </view>
@@ -77,7 +77,31 @@
 <script>
   export default {
     data() {
-      return {}
+      return {
+        cssj:0, //测试数据
+        csxh:0, //测试序号
+        csdl:50, //测试电流
+        sjxz:10  //测试时间
+      }
+    },
+    onLoad(option) {
+       const item = JSON.parse(decodeURIComponent(option.item))   
+      this.dlxz = item.dlxz, //折算材质 铜-铝
+      this.sjxz = item.sjxz  //分接位置 6aa604015e63
+      console.log(item);
+      this.openNotify((res)=>{
+        const test = res.slice(8,10)
+        const result = res.slice(10,25)
+        this.$modal.toast({
+          message: res,
+          duration: 1.5
+        });
+        if(test == 58){//测试电阻
+          this.testResult = this.hexToString(result)
+        }else if(test == 59){ //折算电阻
+          this.convertedResult = this.hexToString(result)
+        }
+      })
     },
     onShow() {
        uni.setNavigationBarTitle({// 修改头部标题

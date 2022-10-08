@@ -4,14 +4,14 @@
     <view class="uni-flex uni-column">
       <equip-info></equip-info>
       <view class="row">
-        <view class="rowItem rowLeft" @click="goTo('/pages/switch/parameterSetting')">
+        <view class="rowItem rowLeft" @click="goToTest('1')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-zd.png" />
           <view style="flex: 1;">
             <text class="centerText">{{$t('automatictesting')}}</text>
           </view>
         </view>
 
-        <view class="rowItem">
+        <view class="rowItem" @click="goToTest('2')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-fh.png" />
           <view style="flex: 1;">
             <text class="centerText">{{$t('openingandclosingtest')}}</text>
@@ -20,14 +20,14 @@
       </view>
 
       <view class="row">
-        <view class="rowItem rowLeft">
+        <view class="rowItem rowLeft" @click="goToTest('3')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-fz.png" />
           <view style="flex: 1;">
             <text class="centerText">{{$t('openingtest')}}</text>
           </view>
         </view>
 
-        <view class="rowItem">
+        <view class="rowItem" @click="goToTest('4')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-hz.png" />
           <view style="flex: 1;">
             <text class="centerText">{{$t('closingandopeningtest')}}</text>
@@ -36,14 +36,14 @@
       </view>
 
       <view class="row">
-        <view class="rowItem rowLeft">
+        <view class="rowItem rowLeft" @click="goToTest('5')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-hh.png" />
           <view style="flex: 1;">
             <text class="centerText">{{$t('closingtest')}}</text>
           </view>
         </view>
 
-        <view class="rowItem">
+        <view class="rowItem" @click="goToTest('6')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-hh.png" />
           <view style="flex: 1;">
             <text class="centerText">{{$t('closingopeningandclosing')}}</text>
@@ -52,14 +52,14 @@
       </view>
 
       <view class="row">
-        <view class="rowItem rowLeft">
+        <view class="rowItem rowLeft" @click="goToTest('7')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-sd.png" />
           <view style="flex: 1;">
             <text class="centerText">{{$t('manualopeningandclosing')}}</text>
           </view>
         </view>
 
-        <view class="rowItem">
+        <view class="rowItem" @click="goToTest('8')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-dy.png" />
           <view style="flex: 1;">
             <text class="centerText">{{$t('lowvoltagetest')}}</text>
@@ -80,7 +80,10 @@
       EquipInfo
     },
     data() {
-      return {}
+      return {
+        sendHead: '5aa50683000400',
+        getHead: '5aa50682000400',
+      }
     },
     onShow() {
       uni.setNavigationBarTitle({ // 修改头部标题
@@ -88,6 +91,27 @@
       });
     },
     methods: {
+      goToTest(num) {
+        let currModule = this.sendHead + this.$changeTosixty(num)
+        console.log(currModule);
+        let sendValue = currModule + this.$checkEndhl(currModule)
+        console.log(sendValue);
+        let getModule = this.getHead + this.$changeTosixty(num)
+        let getValue = getModule + this.$checkEndhl(getModule)
+        let item = {}
+        //确定当前测试的项目  自动测试/分合测试/分闸测试/合分合
+        const isTest = true;
+        if (!isTest) {
+          this.sendMsgToDevice(sendValue, getValue, () => {
+            console.log('请求成功，跳转页面')
+            this.goTo('/pages/switch/parameterSetting?item=' + encodeURIComponent(JSON.stringify(item)))
+          })
+        } else {
+          console.log('直接跳转页面！')
+          this.goTo('/pages/switch/parameterSetting?item=' + encodeURIComponent(JSON.stringify(item)))
+        }
+
+      },
       goTo(url) {
         uni.navigateTo({
           url

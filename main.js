@@ -10,12 +10,12 @@ import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 import bluetooth from './common/bluetooth'
 import store from './common/store'
-
+import plugins from './plugins'
+Vue.use(plugins)
 Vue.use(VueI18n)
 const i18n = new VueI18n(i18nConfig)
 Vue.prototype.store = store
 Vue.prototype.$bluetooth = bluetooth
-
 const btble = uni.requireNativePlugin('Common-BLE');
 const modal = uni.requireNativePlugin('modal');
 Vue.prototype.$btble = btble

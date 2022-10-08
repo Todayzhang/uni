@@ -372,7 +372,7 @@
         let msg = '6aa60501a501'
         msg = msg + checkEnd(msg)
         console.log('msg=>', msg);
-        this.sendMsgToDevice(msg, () => {
+        this.sendMsgToDevice(msg,'', () => {
           //console.log(result)
           this.$refs.popup.close();
           console.log('请求成功，跳转页面')

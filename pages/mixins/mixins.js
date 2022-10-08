@@ -13,8 +13,9 @@ export  const bleBoole = {
       }
     },
   methods:{
-    sendMsgToDevice(sendValue,callback){
-      this.currSendMsg = sendValue //存储当前发送的消息
+    sendMsgToDevice(sendValue,getMsg,sendcallback){
+      console.log(`-----发送-------${sendValue}----------------`);
+      this.currSendMsg = getMsg?getMsg:sendValue //存储当前发送的消息
       this.flag = true //请求中等待返回...
       this.count = 3 //循环3次
       if (this.flag) {
@@ -54,14 +55,17 @@ export  const bleBoole = {
               message: '发送成功！',
               duration: 1.5
             });
-            callback()
+            if(sendcallback){
+              sendcallback()
+            }
             console.log('请求返回成功，不在请求')
           }
         }, 3000)
       }
     },
     //ble发送数据 
-    sendToDevice(value,callback) {
+    sendToDevice(value,blecallback) {
+      console.log('fasongzhong........')
       this.$btble.writeNotResponse({
         "hex": true, //是否hex方式发送命令，默认false,字符串发送
         "btAddress": this.$store.state.bluetooth.bleAddress,
@@ -70,18 +74,20 @@ export  const bleBoole = {
       }, result => {
         //接收
         const content = JSON.stringify(result);
-        console.info(content)
+       // console.info(content)
         this.$modal.toast({
           message: result.msg,
           duration: 1.5
         });
         if(result.code === -200){
-          callback()
+          if(blecallback){
+            blecallback()
+          }
         }
       });
     },
     //打开通知
-    openNotify(callback) {
+    openNotify(callback2) {
      // console.log("@@@",this.$store.state.bluetooth.bleAddress)
       this.$btble.openNotify(result => {
         //接收
@@ -91,10 +97,11 @@ export  const bleBoole = {
             this.flag = false
           }
           console.log('接收设备返回=>', content)
+          
         }else{
           console.log('当前无信息发送=>', content)
-          if(result.data){
-            callback(result.data)
+          if(result.data && callback2){
+            callback2 && callback2(result.data)
           }
         }   
         // this.$modal.toast({
@@ -122,6 +129,25 @@ export  const bleBoole = {
       uni.navigateTo({
         url: url
       })
+    },
+    checkEnd(str) {
+      //str = str.replace(/\s*/g,"")
+      str = str.split('6aa6')[1]
+      let itotal = 0,
+        len = str.length,
+        num = 0;
+      while (num < len) {
+        let s = str.substring(num, num + 2);
+        itotal += parseInt(s, 16);
+        num = num + 2;
+      }
+      let mode = itotal % 256;
+      let shex = mode.toString(16);
+      let iLen = shex.length;
+      if (iLen < 2) {
+        shex = "0" + shex;
+      }
+      return shex;
     }
   }
 }

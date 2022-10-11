@@ -2,81 +2,7 @@
   <!-- 开关-参数设置 -->
   <view>
     <view class="uni-flex uni-column">
-      <equip-info></equip-info>
-      <view class="centerBox">
-        <view class="centerTop">
-          <text>{{$t('fracturenumber')}}</text>
-          <view>
-            <text>{{$t('close')}}</text>
-            <span class="icon topIcon" style="background-color: #4dbfab;"></span>
-            <text>{{$t('branch')}}</text>
-            <span class="icon topIcon" style="background-color: red;"></span>
-          </view>
-        </view>
-        <!-- 显示红点绿点 -->
-        <view class="centerBtm">
-          <view class="centerBtmItem close">
-            <text>A1</text>
-            <span class="icon"></span>
-          </view>
 
-          <view class="centerBtmItem open">
-            <text>B1</text>
-            <span class="icon"></span>
-          </view>
-
-          <view class="centerBtmItem close">
-            <text>C1</text>
-            <span class="icon"></span>
-          </view>
-          <view class="centerBtmItem close">
-            <text>A2</text>
-            <span class="icon"></span>
-          </view>
-
-          <view class="centerBtmItem open">
-            <text>B2</text>
-            <span class="icon"></span>
-          </view>
-
-          <view class="centerBtmItem close">
-            <text>C2</text>
-            <span class="icon"></span>
-          </view>
-
-        </view>
-
-        <view class="centerBtm">
-          <view class="centerBtmItem close">
-            <text>A3</text>
-            <span class="icon"></span>
-          </view>
-
-          <view class="centerBtmItem open">
-            <text>B3</text>
-            <span class="icon"></span>
-          </view>
-
-          <view class="centerBtmItem close">
-            <text>C3</text>
-            <span class="icon"></span>
-          </view>
-          <view class="centerBtmItem close">
-            <text>A4</text>
-            <span class="icon"></span>
-          </view>
-
-          <view class="centerBtmItem open">
-            <text>B4</text>
-            <span class="icon"></span>
-          </view>
-
-          <view class="centerBtmItem close">
-            <text>C4</text>
-            <span class="icon"></span>
-          </view>
-        </view>
-      </view>
       <view class="bottomBox">
         <view class="uni-list bottomItem">
           <view class="uni-list-cell">
@@ -114,10 +40,10 @@
               {{$t('travelswitch')}}
             </view>
             <view class="uni-list-cell-db lineHang">
-              <input class="uni-input" type="number" style="text-align: right;" @input="replaceInputTravel"
-                v-model.number="travelSwitchData" placeholder="输出电压(V)" />
+              <input class="uni-input" type="number" style="text-align: right;" @blur="travelOnblur" @input="replaceInputTravel"
+                v-model.lazy.number="travelSwitchData" placeholder="请输入" />
             </view>
-            <span class="icon iconfont myIconEnd">&#xe687;</span>
+            <!-- <span class="icon iconfont myIconEnd">&#xe687;</span> -->
           </view>
         </view>
 
@@ -236,6 +162,7 @@
         <view class="uni-list bottomItem">
           <view class="uni-list-cell">
             <view class="uni-list-cell-left">
+              <!-- 速度类型 -->
               {{$t('speedtype')}}
             </view>
             <view class="uni-list-cell-db lineHang">
@@ -250,6 +177,7 @@
         <view class="uni-list bottomItem">
           <view class="uni-list-cell">
             <view class="uni-list-cell-left">
+              <!-- 合前 -->
               {{$t('preclosingspeed')}}
             </view>
             <view class="uni-list-cell-db lineHang">
@@ -264,6 +192,7 @@
         <view class="uni-list bottomItem">
           <view class="uni-list-cell">
             <view class="uni-list-cell-left">
+              <!-- 分后 -->
               {{$t('splitspeed')}}
             </view>
             <view class="uni-list-cell-db lineHang">
@@ -292,13 +221,17 @@
 <script>
   import EquipInfo from '../public/EquipInfo.vue'
   import TipsModal from '../public/TipsModal.vue'
+  import {bleBoole} from '../mixins/mixins.js'
   export default {
+    mixins: [bleBoole],
     components: {
       EquipInfo,
       TipsModal
     },
     data() {
       return {
+        setHead:'5aa50683',
+        getHead:'5aa50682',
         // 开关类型
         arrSwitch: [{
           name: "金属触头",
@@ -358,34 +291,34 @@
         //分闸
         arrOpen: [{
           name: '100ms',
-          value: '1'
+          value: '100'
         }, {
           name: '200ms',
-          value: '2'
+          value: '200'
         }, {
           name: '300ms',
-          value: '3'
+          value: '300'
         }, {
           name: '400ms',
-          value: '4'
+          value: '400'
         }, {
           name: '500ms',
-          value: '5'
+          value: '500'
         }, {
           name: '600ms',
-          value: '6'
+          value: '600'
         }, {
           name: '700ms',
-          value: '7'
+          value: '700'
         }, {
           name: '800ms',
-          value: '8'
+          value: '800'
         }, {
           name: '900ms',
-          value: '9'
+          value: '900'
         }, {
           name: '1000ms',
-          value: '10'
+          value: '1000'
         }],
         indexOpen: 0,
         dataOpen: '',
@@ -395,28 +328,28 @@
         //测试时间
         arrTest: [{
           name: '250ms',
-          value: '1'
+          value: '250'
         }, {
           name: '500ms',
-          value: '2'
+          value: '500'
         }, {
           name: '1000ms',
-          value: '3'
+          value: '1000'
         }, {
           name: '2000ms',
-          value: '4'
+          value: '2000'
         }, {
           name: '4000ms',
-          value: '5'
+          value: '4000'
         }, {
           name: '10000ms',
-          value: '6'
+          value: '10000'
         }, {
           name: '15000ms',
-          value: '7'
+          value: '15000'
         }, {
           name: '20000ms',
-          value: '8'
+          value: '20000'
         }],
         indexTest: 0,
         dataTest: '',
@@ -446,41 +379,104 @@
       bindPickerChangeSwitch(e) {
         this.indexSwitch = e.target.value
         this.dataSwitch = this.arrSwitch[this.indexSwitch]
+        let sendValue = this.setHead + '000c00'+ this.$changeTosixty(this.dataSwitch.value)
+        sendValue = sendValue + this.$checkEndhl(sendValue)
+        console.log('sendValue=>',sendValue)
+        let getModule = this.getHead + '000c00'+ this.$changeTosixty(this.dataSwitch.value)
+        let getValue = getModule + this.$checkEndhl(getModule)
+        console.log('getValue=>',getValue)
       },
       //触发模式
       bindPickerChangeTrigger(e) {
         this.indexTrigger = e.target.value
         this.dataTrigger = this.arrTrigger[this.indexTrigger]
+        let sendValue = this.setHead + '000f00'+ this.$changeTosixty(this.dataTrigger.value)
+        sendValue = sendValue + this.$checkEndhl(sendValue)
+        console.log('sendValue=>',sendValue)
+        let getModule = this.getHead + '000f00'+ this.$changeTosixty(this.dataTrigger.value)
+        let getValue = getModule + this.$checkEndhl(getModule)
+        console.log('getValue=>',getValue)
       },
       //传感器类型
       bindPickerChangeSensort(e) {
         this.indexSensort = e.target.value
         this.dataSensort = this.arrSensort[this.indexSensort]
+        this.setSensor()
+        // let sendValue = this.setHead + '001212'+ this.$changeTosixty(this.dataSensort.value)
+        // sendValue = sendValue + this.$checkEndhl(sendValue)
+        // console.log('sendValue=>',sendValue)
+        // let getModule = this.getHead + '001212'+ this.$changeTosixty(this.dataSensort.value)
+        // let getValue = getModule + this.$checkEndhl(getModule)
+        // console.log('getValue=>',getValue)
+        // this.sendMsgToDevice(sendValue, getValue, () => {
+        //   console.log('请求成功')
+          
+        // })
       },
       //传感器数量
       bindPickerChangeNum(e) {
         this.indexNum = e.target.value
         this.dataNum = this.arrNum[this.indexNum]
+        this.setSensor()
+        // let sendValue = this.setHead + '000c00'+ this.$changeTosixty(this.dataNum.value)
+        // sendValue = sendValue + this.$checkEndhl(sendValue)
+        // console.log('sendValue=>',sendValue)
+        // let getModule = this.getHead + '001212'+ this.$changeTosixty(this.dataNum.value)
+        // let getValue = getModule + this.$checkEndhl(getModule)
+        // console.log('getValue=>',getValue)
       },
       //传感器位置
       bindPickerChangeAddress(e) {
         this.indexAddress = e.target.value
         this.dataAddress = this.arrAddress[this.indexAddress]
+        this.setSensor()
+        // console.log('getValue=>',getValue)
+      },
+      /**设置传感器*/
+      setSensor(){
+        const num1 = this.dataNum.value?this.dataNum.value:'1';
+        const num2 = this.dataSensort.value?this.dataSensort.value:'3';
+        const num3 = this.$changeTosixty(this.dataAddress.value?this.dataAddress.value:'1');
+        const numCount = num1 + num2 + this.$changeTosixty(num3)
+        let sendValue = this.setHead + '0012'+ numCount
+        sendValue = sendValue + this.$checkEndhl(sendValue)
+        console.log('sendValue=>',sendValue)
+        let getModule = this.getHead + '0012'+ numCount
+        let getValue = getModule + this.$checkEndhl(getModule)
+        console.log('sendValue=>',getValue)
       },
       //重合闸分闸时间
       bindPickerChangeOpen(e) {
         this.indexOpen = e.target.value
         this.dataOpen = this.arrOpen[this.indexOpen]
+        let sendValue = this.setHead + '001300'+ this.$changeTosixty(this.dataOpen.value)
+        sendValue = sendValue + this.$checkEndhl(sendValue)
+        console.log('sendValuez=>',sendValue)
+        let getModule = this.getHead +  '001300'+ this.$changeTosixty(this.dataOpen.value)
+        let getValue = getModule + this.$checkEndhl(getModule)
+        console.log('getValuezz=>',getValue)
       },
       //重合闸合闸时间
       bindPickerChangeClose(e) {
         this.indexClose = e.target.value
         this.dataClose = this.arrOpen[this.indexClose]
+        let sendValue = this.setHead + '001400'+ this.$changeTosixty(this.dataClose.value)
+        sendValue = sendValue + this.$checkEndhl(sendValue)
+        console.log('sendValue=>',sendValue)
+        let getModule = this.getHead +  '001400'+ this.$changeTosixty(this.dataClose.value)
+        let getValue = getModule + this.$checkEndhl(getModule)
+        console.log('getValue=>',getValue)
       },
       //测试时间
       bindPickerChangeTest(e) {
         this.indexTest = e.target.value
         this.dataTest = this.arrTest[this.indexTest]
+        let sendValue = this.setHead + '001500'+ this.$changeTosixty(this.dataTest.value)
+        sendValue = sendValue + this.$checkEndhl(sendValue)
+        console.log('sendValue=>',sendValue)
+        let getModule = this.getHead + '001500'+ this.$changeTosixty(this.dataTest.value)
+        let getValue = getModule + this.$checkEndhl(getModule)
+        console.log('getValue=>',getValue)
       },
       
       /**输出电压*/
@@ -500,6 +496,15 @@
         } else if (value < 0) {
           this.travelSwitchData = 0;
         }
+      },
+      travelOnblur(e){
+        console.log(e.detail.value*10)
+        const value = this.$largechangeTosixty(e.detail.value*10)
+        let sendValue = this.setHead + '000e'+ value
+         sendValue = sendValue + this.$checkEndhl(sendValue)
+        let getModule = this.getHead + '000e'+ value
+        let getValue = getModule + this.$checkEndhl(getModule)
+        console.log(sendValue);
       },
       // 展示测试结果
       goTo(url) {

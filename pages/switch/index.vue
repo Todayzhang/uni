@@ -3,6 +3,80 @@
 
     <view class="uni-flex uni-column">
       <equip-info></equip-info>
+       <view class="centerBox">
+         <view class="centerTop">
+           <text>{{$t('fracturenumber')}}</text>
+           <view>
+             <text>{{$t('close')}}</text>
+             <span class="icon topIcon" style="background-color: #4dbfab;"></span>
+             <text>{{$t('branch')}}</text>
+             <span class="icon topIcon" style="background-color: red;"></span>
+           </view>
+         </view>
+         
+         <view class="centerBtm">
+           <view class="centerBtmItem close">
+             <text>A1</text>
+             <span class="icon"></span>
+           </view>
+      
+           <view class="centerBtmItem open">
+             <text>B1</text>
+             <span class="icon"></span>
+           </view>
+      
+           <view class="centerBtmItem close">
+             <text>C1</text>
+             <span class="icon"></span>
+           </view>
+           <view class="centerBtmItem close">
+             <text>A2</text>
+             <span class="icon"></span>
+           </view>
+      
+           <view class="centerBtmItem open">
+             <text>B2</text>
+             <span class="icon"></span>
+           </view>
+      
+           <view class="centerBtmItem close">
+             <text>C2</text>
+             <span class="icon"></span>
+           </view>
+      
+         </view>
+      
+         <view class="centerBtm">
+           <view class="centerBtmItem close">
+             <text>A3</text>
+             <span class="icon"></span>
+           </view>
+      
+           <view class="centerBtmItem open">
+             <text>B3</text>
+             <span class="icon"></span>
+           </view>
+      
+           <view class="centerBtmItem close">
+             <text>C3</text>
+             <span class="icon"></span>
+           </view>
+           <view class="centerBtmItem close">
+             <text>A4</text>
+             <span class="icon"></span>
+           </view>
+      
+           <view class="centerBtmItem open">
+             <text>B4</text>
+             <span class="icon"></span>
+           </view>
+      
+           <view class="centerBtmItem close">
+             <text>C4</text>
+             <span class="icon"></span>
+           </view>
+         </view>
+       </view>
       <view class="row">
         <view class="rowItem rowLeft" @click="goToTest('1')">
           <image class="image btmImage" mode="widthFix" src="../../static/images/switch-zd.png" />
@@ -75,7 +149,9 @@
 
 <script>
   import EquipInfo from '../public/EquipInfo.vue'
+  import {bleBoole} from '../mixins/mixins.js'
   export default {
+    mixins: [bleBoole],
     components: {
       EquipInfo
     },

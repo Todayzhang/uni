@@ -1,5 +1,6 @@
 export default {
   install(Vue) {
+    //2个字节
     Vue.prototype.$changeTosixty=(num)=> {
       let sixtyNum = Number(num).toString(16)
       if (String(sixtyNum).length == 1) {
@@ -7,7 +8,19 @@ export default {
       }
       return sixtyNum
     },
-
+    //需要4个字节
+    Vue.prototype.$largechangeTosixty=(num)=> {
+      let sixtyNum = Number(num).toString(16)
+      const length = String(sixtyNum).length
+      if ( length == 1) {
+        sixtyNum = '000' + sixtyNum
+      } else if(length==2){
+        sixtyNum = '00' + sixtyNum
+      } else if(length == 3){
+        sixtyNum = '0' + sixtyNum
+      }
+      return sixtyNum
+    },
     Vue.prototype.$checkEnd=(str)=> {
       //str = str.replace(/\s*/g,"")
       str = str.split('6aa6')[1]

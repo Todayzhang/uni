@@ -17,7 +17,7 @@ export  const bleBoole = {
       console.log(`-----发送-------${sendValue}----------------`);
       this.currSendMsg = getMsg?getMsg:sendValue //存储当前发送的消息
       this.flag = true //请求中等待返回...
-      this.count = 3 //循环3次
+      this.count = 3   //循环3次
       if (this.flag) {
         this.$modal.toast({
           message: '发送中',

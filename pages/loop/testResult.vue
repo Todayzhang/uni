@@ -86,7 +86,7 @@
     },
     onLoad(option) {
        const item = JSON.parse(decodeURIComponent(option.item))   
-      this.dlxz = item.dlxz, //折算材质 铜-铝
+      this.csdl = item.csdl, //折算材质 铜-铝
       this.sjxz = item.sjxz  //分接位置 6aa604015e63
       console.log(item);
       this.openNotify((res)=>{
@@ -96,9 +96,9 @@
           message: res,
           duration: 1.5
         });
-        if(test == 58){//测试电阻
+        if(test == 58){//测试电流
           this.testResult = this.hexToString(result)
-        }else if(test == 59){ //折算电阻
+        }else if(test == 59){ //测试时间
           this.convertedResult = this.hexToString(result)
         }
       })

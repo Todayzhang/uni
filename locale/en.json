@@ -116,5 +116,7 @@
   "softwareversion":"Software version",
   "aboutus":"About us",
   "currentversion":"Current version",
-  "statistics":"Statistics"
+  "statistics":"Statistics",
+  "parametersetting": "Parameters",
+  "energy": "Energy"
 }

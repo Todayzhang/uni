@@ -142,7 +142,9 @@
       </view>
 
     </view>
-    <view>
+    <view class="btmBtnBox">
+      <view class="bottomBtn" @click="open()">{{ $t("parametersetting") }}</view>
+      <view class="bottomBtn" @click="open()">{{ $t("energy") }}</view>
     </view>
   </view>
 </template>
@@ -263,5 +265,24 @@
 
   .rowLeft {
     margin-right: 20rpx;
+  }
+
+  .btmBtnBox {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    padding: 0 20rpx;
+    display: flex;
+
+    .bottomBtn {
+      height: 100rpx;
+      border-radius: 50rpx;
+      flex: 1;
+      background-size: 100% auto;
+      text-align: center;
+      line-height: 80rpx;
+      color: #FFF;
+      background-color: #4dbfab;
+    }
   }
 </style>

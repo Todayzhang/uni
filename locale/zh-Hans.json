@@ -116,5 +116,7 @@
   "softwareversion":"软件版本",
   "aboutus":"关于我们",
   "currentversion":"当前版本号",
-  "statistics":"统计"
+  "statistics":"统计",
+  "parametersetting": "参数设置",
+  "energy": "电机储能"
 }

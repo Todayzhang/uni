@@ -197,7 +197,47 @@
   }
 </script>
 
-<style scoped>
+<style lang="less" scoped>
+
+  .centerBox {
+    background-color: #FFFFFF;
+    padding: 20rpx;
+    margin-bottom: 20rpx;
+  }
+
+  .centerBtm {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .centerBtmItem {
+    display: inline-block;
+    height: 80rpx;
+    width: 120rpx;
+    border-radius: 15rpx;
+    margin: 5rpx;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .close {
+    border: 1px solid #4dbfab;
+  }
+
+  .open {
+    border: 1px solid red;
+  }
+
+  .icon {
+    display: inline-block;
+    height: 20rpx;
+    width: 20rpx;
+    border-radius: 50%;
+    margin-left: 20rpx;
+  }
+
   .row {
     display: flex;
     flex-direction: row;

@@ -119,5 +119,6 @@
   "statistics":"Statistics",
   "parametersetting": "Parameters",
   "energy": "Energy",
-  "modelSelect": "modelSelect"
+  "modelSelect": "modelSelect",
+  "currentvoltage": "Current Voltage"
 }

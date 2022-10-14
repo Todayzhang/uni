@@ -119,5 +119,6 @@
   "statistics":"统计",
   "parametersetting": "参数设置",
   "energy": "电机储能",
-  "modelSelect": "模式选择"
+  "modelSelect": "模式选择",
+  "currentvoltage": "当前电压"
 }

@@ -253,7 +253,25 @@
     border-radius: 50%;
     margin-left: 20rpx;
   }
+  .topIcon {
+    margin-left: 5rpx;
+    margin-right: 20rpx;
+  }
 
+  .close .icon {
+    background-color: #4dbfab;
+  }
+
+  .open .icon {
+    background-color: red;
+  }
+
+  .centerTop {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 10rpx;
+  }
   .row {
     display: flex;
     flex-direction: row;

@@ -26,7 +26,7 @@
               {{$t('outputvoltage')}}(V)
             </view>
             <view class="uni-list-cell-db lineHang">
-              <input class="uni-input" type="number" style="text-align: right;" @input="replaceInputVoltage"
+              <input class="uni-input inputRight" type="number" @input="replaceInputVoltage"
                 v-model.number="outPutVoltageData" placeholder="输出电压(V)" />
             </view>
             <!-- <span class="icon iconfont myIconEnd">&#xe687;</span> -->
@@ -40,7 +40,7 @@
               {{$t('travelswitch')}}
             </view>
             <view class="uni-list-cell-db lineHang">
-              <input class="uni-input" type="number" style="text-align: right;" @blur="travelOnblur" @input="replaceInputTravel"
+              <input class="uni-input inputRight" type="number" @blur="travelOnblur" @input="replaceInputTravel"
                 v-model.lazy.number="travelSwitchData" placeholder="请输入" />
             </view>
             <!-- <span class="icon iconfont myIconEnd">&#xe687;</span> -->
@@ -148,9 +148,9 @@
               {{$t('testtime')}}
             </view>
             <view class="uni-list-cell-db lineHang">
-             <picker @change="bindPickerChangeTest" :value="indexTest" :range="arrTest" :range-key="'name'">
-               <view class="uni-input showFont">{{arrTest[indexTest].name}}</view>
-             </picker>
+              <picker @change="bindPickerChangeTest" :value="indexTest" :range="arrTest" :range-key="'name'">
+                <view class="uni-input showFont">{{arrTest[indexTest].name}}</view>
+              </picker>
             </view>
             <span class="icon iconfont myIconEnd">&#xe687;</span>
           </view>
@@ -166,8 +166,8 @@
               {{$t('speedtype')}}
             </view>
             <view class="uni-list-cell-db lineHang">
-              <picker @change="bindPickerChangeEl" :value="indexEl" :range="arrayEl">
-                <view class="uni-input showFont">{{arrayEl[indexEl]}}</view>
+              <picker @change="bindPickerChangeEl" :value="indexEl" :range="arrayEl" :range-key="'name'">
+                <view class="uni-input showFont">{{arrayEl[indexEl].name}}</view>
               </picker>
             </view>
             <span class="icon iconfont myIconEnd">&#xe687;</span>
@@ -176,31 +176,37 @@
 
         <view class="uni-list bottomItem">
           <view class="uni-list-cell">
-            <view class="uni-list-cell-left">
-              <!-- 合前 -->
+            <view class="clickBtn" @click="changeQianText(qianText,1)">{{qianText}}</view>
+            <view class="clickBtn">
+              <input class="uni-input inputRight" :disabled="indexEl!=10" v-model="zhongText" placeholder="" />
+            </view>
+            <view class="clickBtn" @click="changeHouText(houText,1)">{{houText}}</view>
+            <!--            <view class="uni-list-cell-left">   
               {{$t('preclosingspeed')}}
             </view>
             <view class="uni-list-cell-db lineHang">
-              <picker @change="bindPickerChange" :value="index" :range="array">
-                <view class="uni-input showFont">{{array[index]}}</view>
-              </picker>
+               <input class="uni-input inputRight" type="number"
+                 v-model.number="preclosingspeedNum" placeholder="输出电压(V)" />
             </view>
-            <span class="icon iconfont myIconEnd">&#xe687;</span>
+            <span class="icon iconfont myIconEnd">&#xe687;</span> -->
           </view>
         </view>
 
         <view class="uni-list bottomItem">
           <view class="uni-list-cell">
-            <view class="uni-list-cell-left">
-              <!-- 分后 -->
+            <view class="clickBtn" @click="changeQianTextb(bqianText,2)">{{bqianText}}</view>
+            <view class="clickBtn">
+              <input class="uni-input inputRight" :disabled="indexEl!=10" v-model="bzhongText" placeholder="" />
+            </view>
+            <view class="clickBtn" @click="changeHouText(bhouText,2)">{{bhouText}}</view>
+            <!--  <view class="uni-list-cell-left">
               {{$t('splitspeed')}}
             </view>
             <view class="uni-list-cell-db lineHang">
-              <picker @change="bindPickerChange" :value="index" :range="array">
-                <view class="uni-input showFont">{{array[index]}}</view>
-              </picker>
+               <input class="uni-input inputRight" type="number"
+                 v-model.number="splitspeedNum" placeholder="输出电压(V)" />
             </view>
-            <span class="icon iconfont myIconEnd">&#xe687;</span>
+            <span class="icon iconfont myIconEnd">&#xe687;</span> -->
           </view>
         </view>
 
@@ -221,17 +227,21 @@
 <script>
   import EquipInfo from '../public/EquipInfo.vue'
   import TipsModal from '../public/TipsModal.vue'
-  import {bleBoole} from '../mixins/mixins.js'
+  import {
+    bleBoole
+  } from '../mixins/mixins.js'
   export default {
     mixins: [bleBoole],
     components: {
       EquipInfo,
       TipsModal
     },
+
     data() {
       return {
-        setHead:'5aa50683',
-        getHead:'5aa50682',
+        currTestMode: 1,
+        setHead: '5aa50683',
+        getHead: '5aa50682',
         // 开关类型
         arrSwitch: [{
           name: "金属触头",
@@ -274,7 +284,7 @@
         //传感器数量
         arrNum: ['1'],
         indexNum: 0,
-        dataNum:'',
+        dataNum: '',
         //传感器位置
         arrAddress: [{
           name: 'A相',
@@ -353,11 +363,131 @@
         }],
         indexTest: 0,
         dataTest: '',
-        arrayEl:[],
-        indexEl:0,
-        array:[],
-        index:0
+        qianText: '合前',
+        zhongText: '10',
+        houText: 'mm',
+        bqianText: '分后',
+        bzhongText: '10',
+        bhouText: 'mm',
+        arrayEl: [{
+          name: '油开关I',
+          value: '0',
+          qianText: '合前',
+          zhongText: '10',
+          houText: 'ms',
+          bqianText: '分后',
+          bzhongText: '10',
+          bhouText: 'ms'
+        }, {
+          name: '油开关Ⅱ',
+          value: '1',
+          qianText: '合前后',
+          zhongText: '5',
+          houText: 'ms',
+          bqianText: '分前后',
+          bzhongText: '5',
+          bhouText: 'ms'
+        }, {
+          name: '油开关Ⅲ',
+          value: '2',
+          qianText: '合前后',
+          zhongText: '10',
+          houText: 'ms',
+          bqianText: '分前后',
+          bzhongText: '10',
+          bhouText: 'ms'
+        }, {
+          name: '真空开关10kV-I',
+          value: '3',
+          qianText: '合前',
+          zhongText: '6',
+          houText: 'mm',
+          bqianText: '分后',
+          bzhongText: '6',
+          bhouText: 'mm'
+        }, {
+          name: '真空开关10kV-Ⅱ',
+          value: '4',
+          qianText: '合前',
+          zhongText: '平均',
+          houText: '速度',
+          bqianText: '分后',
+          bzhongText: '6',
+          bhouText: 'mm'
+        }, {
+          name: '真空开关35kV',
+          value: '5',
+          qianText: '合前',
+          zhongText: '12',
+          houText: 'mm',
+          bqianText: '分后',
+          bzhongText: '12',
+          bhouText: 'mm'
+        }, {
+          name: 'LW8-35型SF6开关',
+          value: '6',
+          qianText: '合前',
+          zhongText: '16',
+          houText: 'mm',
+          bqianText: '分后',
+          bzhongText: '32',
+          bhouText: 'mm'
+        }, {
+          name: 'LW6型SF6开关',
+          value: '7',
+          qianText: '合前',
+          zhongText: '36',
+          houText: 'mm',
+          bqianText: '分后',
+          bzhongText: '72',
+          bhouText: 'mm'
+        }, {
+          name: 'LW6型SF7开关',
+          value: '8',
+          qianText: '合前',
+          zhongText: '120',
+          houText: 'mm',
+          bqianText: '分后',
+          bzhongText: '120',
+          bhouText: 'mm'
+        }, {
+          name: '西开SF6开关',
+          value: '9',
+          qianText: '到',
+          zhongText: '断点',
+          houText: '10%',
+          bqianText: '到',
+          bzhongText: '断点',
+          bhouText: '10%'
+        }, {
+          name: '自定义',
+          value: '10',
+          qianText: '合前',
+          zhongText: '10',
+          houText: 'ms',
+          bqianText: '分后',
+          bzhongText: '10',
+          bhouText: 'ms'
+        }],
+        indexEl: 0,
+        array: [],
+        index: 0,
+        preclosingspeedNum: 10,
+        splitspeedNum: 10,
+
       }
+    },
+    watch: {
+      zhongText(newValue) {
+        if (this.indexEl == 10) {
+          this.arrayEl[this.indexEl].zhongText = newValue
+        }
+      },
+      bzhongText(newValue) {
+        if (this.indexEl == 10) {
+          this.arrayEl[this.indexEl].bzhongText = newValue
+        }
+      },
     },
     onShow() {
       uni.setNavigationBarTitle({ // 修改头部标题
@@ -370,60 +500,68 @@
         this.$refs.popup.open()
       },
       sure() {
-        this.$refs.popup.close()
+        let sendValue = '5aa506830016'+'0001'+'9a'
+        let getValue = '5aa506820016'+'0001'+'99'
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+          this.$refs.popup.close()
+        })
+        setTimeout(()=>{
+          this.$refs.popup.close()
+        },5000)
       },
       close() {
         this.$refs.popup.close()
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+        })
       },
-      // 开关类型
+      // 开关类型  
       bindPickerChangeSwitch(e) {
-        this.indexSwitch = e.target.value
-        this.dataSwitch = this.arrSwitch[this.indexSwitch]
-        let sendValue = this.setHead + '000c00'+ this.$changeTosixty(this.dataSwitch.value)
-        sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValue=>',sendValue)
-        let getModule = this.getHead + '000c00'+ this.$changeTosixty(this.dataSwitch.value)
-        let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('getValue=>',getValue)
+        //手动分合 - 低压测试 设置无效
+        if (this.currTestMode != 7 && this.currTestMode != 8) {
+          this.indexSwitch = e.target.value
+          this.dataSwitch = this.arrSwitch[this.indexSwitch]
+          let sendValue = this.setHead + '000c00' + this.$changeTosixty(this.dataSwitch.value)
+          sendValue = sendValue + this.$checkEndhl(sendValue)
+          console.log('sendValue=>', sendValue)
+          let getModule = this.getHead + '000c00' + this.$changeTosixty(this.dataSwitch.value)
+          let getValue = getModule + this.$checkEndhl(getModule)
+          console.log('getValue=>', getValue)
+          this.sendMsgToDevice(sendValue, getValue, () => {
+            console.log('请求成功')
+          })
+        }
+
       },
       //触发模式
       bindPickerChangeTrigger(e) {
-        this.indexTrigger = e.target.value
-        this.dataTrigger = this.arrTrigger[this.indexTrigger]
-        let sendValue = this.setHead + '000f00'+ this.$changeTosixty(this.dataTrigger.value)
-        sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValue=>',sendValue)
-        let getModule = this.getHead + '000f00'+ this.$changeTosixty(this.dataTrigger.value)
-        let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('getValue=>',getValue)
+        //手动分合 - 低压测试 设置无效
+        if (this.currTestMode != 7 && this.currTestMode != 8) {
+          this.indexTrigger = e.target.value
+          this.dataTrigger = this.arrTrigger[this.indexTrigger]
+          let sendValue = this.setHead + '000f00' + this.$changeTosixty(this.dataTrigger.value)
+          sendValue = sendValue + this.$checkEndhl(sendValue)
+          console.log('sendValue=>', sendValue)
+          let getModule = this.getHead + '000f00' + this.$changeTosixty(this.dataTrigger.value)
+          let getValue = getModule + this.$checkEndhl(getModule)
+          console.log('getValue=>', getValue)
+          this.sendMsgToDevice(sendValue, getValue, () => {
+            console.log('请求成功')
+          })
+        }
       },
       //传感器类型
       bindPickerChangeSensort(e) {
         this.indexSensort = e.target.value
         this.dataSensort = this.arrSensort[this.indexSensort]
         this.setSensor()
-        // let sendValue = this.setHead + '001212'+ this.$changeTosixty(this.dataSensort.value)
-        // sendValue = sendValue + this.$checkEndhl(sendValue)
-        // console.log('sendValue=>',sendValue)
-        // let getModule = this.getHead + '001212'+ this.$changeTosixty(this.dataSensort.value)
-        // let getValue = getModule + this.$checkEndhl(getModule)
-        // console.log('getValue=>',getValue)
-        // this.sendMsgToDevice(sendValue, getValue, () => {
-        //   console.log('请求成功')
-          
-        // })
       },
       //传感器数量
       bindPickerChangeNum(e) {
         this.indexNum = e.target.value
         this.dataNum = this.arrNum[this.indexNum]
         this.setSensor()
-        // let sendValue = this.setHead + '000c00'+ this.$changeTosixty(this.dataNum.value)
-        // sendValue = sendValue + this.$checkEndhl(sendValue)
-        // console.log('sendValue=>',sendValue)
-        // let getModule = this.getHead + '001212'+ this.$changeTosixty(this.dataNum.value)
-        // let getValue = getModule + this.$checkEndhl(getModule)
-        // console.log('getValue=>',getValue)
       },
       //传感器位置
       bindPickerChangeAddress(e) {
@@ -433,52 +571,75 @@
         // console.log('getValue=>',getValue)
       },
       /**设置传感器*/
-      setSensor(){
-        const num1 = this.dataNum.value?this.dataNum.value:'1';
-        const num2 = this.dataSensort.value?this.dataSensort.value:'3';
-        const num3 = this.$changeTosixty(this.dataAddress.value?this.dataAddress.value:'1');
+      setSensor() {
+        const num1 = this.dataNum.value ? this.dataNum.value : '1';
+        const num2 = this.dataSensort.value ? this.dataSensort.value : '3';
+        const num3 = this.$changeTosixty(this.dataAddress.value ? this.dataAddress.value : '1');
         const numCount = num1 + num2 + this.$changeTosixty(num3)
-        let sendValue = this.setHead + '0012'+ numCount
+        let sendValue = this.setHead + '0012' + numCount
         sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValue=>',sendValue)
-        let getModule = this.getHead + '0012'+ numCount
+        console.log('sendValue=>', sendValue)
+        let getModule = this.getHead + '0012' + numCount
         let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('sendValue=>',getValue)
+        console.log('sendValue=>', getValue)
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+        })
       },
       //重合闸分闸时间
       bindPickerChangeOpen(e) {
         this.indexOpen = e.target.value
         this.dataOpen = this.arrOpen[this.indexOpen]
-        let sendValue = this.setHead + '001300'+ this.$changeTosixty(this.dataOpen.value)
+        let sendValue = this.setHead + '0013' + this.$largechangeTosixty(this.dataOpen.value)
         sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValuez=>',sendValue)
-        let getModule = this.getHead +  '001300'+ this.$changeTosixty(this.dataOpen.value)
+        console.log('sendValuez=>', sendValue)
+        let getModule = this.getHead + '0013' + this.$largechangeTosixty(this.dataOpen.value)
         let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('getValuezz=>',getValue)
+        console.log('getValuezz=>', getValue)
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+        })
       },
       //重合闸合闸时间
       bindPickerChangeClose(e) {
         this.indexClose = e.target.value
         this.dataClose = this.arrOpen[this.indexClose]
-        let sendValue = this.setHead + '001400'+ this.$changeTosixty(this.dataClose.value)
+        let sendValue = this.setHead + '0014' + this.$largechangeTosixty(this.dataClose.value)
         sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValue=>',sendValue)
-        let getModule = this.getHead +  '001400'+ this.$changeTosixty(this.dataClose.value)
+        console.log('sendValue=>', sendValue)
+        let getModule = this.getHead + '0014' + this.$largechangeTosixty(this.dataClose.value)
         let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('getValue=>',getValue)
+        console.log('getValue=>', getValue)
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+        })
       },
       //测试时间
       bindPickerChangeTest(e) {
         this.indexTest = e.target.value
         this.dataTest = this.arrTest[this.indexTest]
-        let sendValue = this.setHead + '001500'+ this.$changeTosixty(this.dataTest.value)
+        let sendValue = this.setHead + '0015' + this.$largechangeTosixty(this.dataTest.value)
         sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValue=>',sendValue)
-        let getModule = this.getHead + '001500'+ this.$changeTosixty(this.dataTest.value)
+        console.log('sendValue=>', sendValue)
+        let getModule = this.getHead + '0015' + this.$largechangeTosixty(this.dataTest.value)
         let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('getValue=>',getValue)
+        console.log('getValue=>', getValue)
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+        })
       },
-      
+      //速度定义
+      bindPickerChangeEl(e) {
+        this.indexEl = e.target.value
+        console.log(this.indexEl)
+        const showText = this.arrayEl[this.indexEl]
+        this.qianText = showText.qianText
+        this.zhongText = showText.zhongText
+        this.houText = showText.houText
+        this.bqianText = showText.bqianText
+        this.bzhongText = showText.bzhongText
+        this.bhouText = showText.bhouText
+      },
       /**输出电压*/
       replaceInputVoltage(event) {
         var value = event.target.value;
@@ -497,14 +658,53 @@
           this.travelSwitchData = 0;
         }
       },
-      travelOnblur(e){
-        console.log(e.detail.value*10)
-        const value = this.$largechangeTosixty(e.detail.value*10)
-        let sendValue = this.setHead + '000e'+ value
-         sendValue = sendValue + this.$checkEndhl(sendValue)
-        let getModule = this.getHead + '000e'+ value
+      travelOnblur(e) {
+        console.log(e.detail.value * 10)
+        const value = this.$largechangeTosixty(e.detail.value * 10)
+        let sendValue = this.setHead + '000e' + value
+        sendValue = sendValue + this.$checkEndhl(sendValue)
+        let getModule = this.getHead + '000e' + value
         let getValue = getModule + this.$checkEndhl(getModule)
         console.log(sendValue);
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+        })
+      },
+      changeQianText(text) {
+        if (this.indexEl == 10) {
+          let changeText = '合前'
+          if (text === changeText) {
+            changeText = '合前后'
+          }
+          this.qianText = changeText
+          this.arrayEl[10].qianText = changeText
+        }
+      },
+      changeQianTextb(text) {
+        if (this.indexEl == 10) {
+          let changeText = '分后'
+          if (text === changeText) {
+            changeText = '分前后'
+          }
+          this.bqianText = changeText
+          this.arrayEl[10].bqianText = changeText
+        }
+      },
+      changeHouText(text, flag) {
+        if (this.indexEl == 10) {
+          let changeText = 'mm'
+          if (text === changeText) {
+            changeText = 'ms'
+          }
+          if (flag == 1) {
+            this.houText = changeText
+            this.arrayEl[10].houText = changeText
+          } else {
+            this.bhouText = changeText
+            this.arrayEl[10].bhouText = changeText
+          }
+        }
+
       },
       // 展示测试结果
       goTo(url) {
@@ -517,65 +717,6 @@
 </script>
 
 <style lang="less" scoped>
-  .centerBox {
-    background-color: #FFFFFF;
-    padding: 20rpx 20rpx 40rpx 20rpx;
-    // margin-bottom: 10rpx;
-  }
-
-  .centerBtm {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .centerBtmItem {
-    display: inline-block;
-    height: 80rpx;
-    width: 120rpx;
-    border-radius: 15rpx;
-    margin: 5rpx;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  .close {
-    border: 1px solid #4dbfab;
-  }
-
-  .open {
-    border: 1px solid red;
-  }
-
-  .icon {
-    display: inline-block;
-    height: 20rpx;
-    width: 20rpx;
-    border-radius: 50%;
-    margin-left: 20rpx;
-  }
-
-  .topIcon {
-    margin-left: 5rpx;
-    margin-right: 20rpx;
-  }
-
-  .close .icon {
-    background-color: #4dbfab;
-  }
-
-  .open .icon {
-    background-color: red;
-  }
-
-  .centerTop {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-bottom: 10rpx;
-  }
-
 
   .btmBtnBox {
     position: fixed;
@@ -612,6 +753,13 @@
     // height: 95rpx;
     display: flex;
     justify-content: space-between;
+
+    .clickBtn {
+      width: 6em;
+      text-align: center;
+      background-color: #d8d0cc;
+      margin: 5rpx 0;
+    }
   }
 
   .uni-list-cell-left {
@@ -636,5 +784,9 @@
     color: #ccc;
     margin-right: 20px;
     height: 60rpx;
+  }
+
+  .inputRight {
+    text-align: right;
   }
 </style>

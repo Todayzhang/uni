@@ -118,5 +118,6 @@
   "currentversion":"当前版本号",
   "statistics":"统计",
   "parametersetting": "参数设置",
-  "energy": "电机储能"
+  "energy": "电机储能",
+  "modelSelect": "模式选择"
 }

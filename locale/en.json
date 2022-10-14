@@ -118,5 +118,6 @@
   "currentversion":"Current version",
   "statistics":"Statistics",
   "parametersetting": "Parameters",
-  "energy": "Energy"
+  "energy": "Energy",
+  "modelSelect": "modelSelect"
 }

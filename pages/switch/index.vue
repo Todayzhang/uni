@@ -142,10 +142,24 @@
       </view>
 
     </view>
-    <view class="btmBtnBox">
-      <view class="bottomBtn" @click="open()">{{ $t("parametersetting") }}</view>
-      <view class="bottomBtn" @click="open()">{{ $t("energy") }}</view>
+    <!-- 底部按钮 -->
+    <view class="btnFix">
+      <view class="btmBtnBox">
+        <view class="bottomBtn left">{{$t('parametersetting')}}</view>
+        <view class="bottomBtn right">{{$t('energy')}}</view>
+      </view>
     </view>
+    <!-- <view class="btnFix">
+      <view class="btmBtnBox">
+        <view class="bottomBtn left">{{$t('modelSelect')}}</view>
+        <view class="bottomBtn right">{{$t('starttesting')}}</view>
+      </view>
+    </view> -->
+    <!-- <view class="btnFix">
+      <view class="btmBtnBox">
+        <view class="bottomBtn" @click="open()">{{$t('starttesting')}}</view>
+      </view>
+    </view> -->
   </view>
 </template>
 
@@ -267,22 +281,40 @@
     margin-right: 20rpx;
   }
 
-  .btmBtnBox {
+  .btnFix {
     position: fixed;
-    bottom: 0px;
+    bottom: 0;
     width: 100%;
-    padding: 0 20rpx;
-    display: flex;
 
-    .bottomBtn {
-      height: 100rpx;
-      border-radius: 50rpx;
-      flex: 1;
-      background-size: 100% auto;
-      text-align: center;
-      line-height: 80rpx;
-      color: #FFF;
-      background-color: #4dbfab;
+    
+    .btmBtnBox {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+
+      .bottomBtn {
+        height: 100rpx;
+        width: 600rpx;
+        background-size: 100% auto;
+        text-align: center;
+        line-height: 80rpx;
+        color: #FFF;
+        background: url(../../static/images/btn-big-green.png) no-repeat;
+        background-size: 100% auto;
+        &.left {
+          margin: 0 20rpx;
+          width: 300rpx;
+          background: url(../../static/images/btn-center-blue.png) no-repeat;
+          background-size: 100% auto;
+        }
+        &.right {
+          margin: 0 20rpx;
+          width: 300rpx;
+          background: url(../../static/images/btn-center-green.png) no-repeat;
+          background-size: 100% auto;
+        }
+      }
     }
-  }
+  }  
 </style>

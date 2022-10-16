@@ -119,6 +119,12 @@
   "statistics":"Statistics",
   "parametersetting": "Parameters",
   "energy": "Energy",
+  "adjustingstartvoltage":"Adjusting Start Voltage",
   "modelSelect": "modelSelect",
-  "currentvoltage": "Current Voltage"
+  "currentvoltage": "Current Voltage",
+  "initalvolta":"Inital Volta",
+  "stepvolta":"Step Volta",
+  "duration":"Duration",
+  "continued":"Continued",
+  "once":"Once"
 }

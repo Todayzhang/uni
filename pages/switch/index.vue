@@ -144,7 +144,7 @@
 			</template>
 			<template v-else>
 				<manual v-if="currentModel === '7'" />
-				<manual v-else-if="currentModel === '8'" />
+				<lowPressure v-else-if="currentModel === '8'" />
 				<parameter-setting v-else/>
 			</template>
 		</view>
@@ -177,13 +177,15 @@
 		bleBoole
 	} from '../mixins/mixins.js'
 	import Manual from './components/manual.vue'
+	import LowPressure from './components/lowPressure.vue'
 	import ParameterSetting from './components/parameterSetting.vue'
 	export default {
 		mixins: [bleBoole],
 		components: {
 			EquipInfo,
 			Manual,
-			ParameterSetting
+			ParameterSetting,
+			LowPressure
 		},
 		data() {
 			return {

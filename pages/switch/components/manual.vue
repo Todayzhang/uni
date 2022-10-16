@@ -15,7 +15,7 @@
 			</view>
 			<view class="uni-list bottomItem">
 				<view class="uni-list-cell">
-					<view class="uni-list-cell-left">操作</view>
+					<view class="uni-list-cell-left">{{$t('adjustingstartvoltage')}}</view>
 					<view class="btns">
 						<button style="margin-right: 10rpx;" class="mini-btn" type="primary" size="mini">合闸</button>
 						<button class="mini-btn" type="primary" size="mini">分闸</button>

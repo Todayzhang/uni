@@ -119,6 +119,12 @@
   "statistics":"统计",
   "parametersetting": "参数设置",
   "energy": "电机储能",
+  "adjustingstartvoltage":"动作模式",
   "modelSelect": "模式选择",
-  "currentvoltage": "当前电压"
+  "currentvoltage": "当前电压",
+  "initalvolta":"初始电压",
+  "stepvolta":"步进电压",
+  "duration":"脉冲宽度",
+  "continued":"连续",
+  "once":"单次"
 }

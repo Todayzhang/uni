@@ -339,7 +339,7 @@
 		position: fixed;
 		bottom: 0;
 		width: 100%;
-
+		z-index: 11;
 
 		.btmBtnBox {
 			width: 100%;

@@ -58,6 +58,18 @@
 					</view>
 				</view>
 			</view>
+			
+			<view class="uni-list bottomItem">
+			  <view class="uni-list-cell">
+			    <view class="uni-list-cell-left">模式</view>
+			    <view class="uni-list-cell-db lineHang">
+			      <picker @change="bindPickerChangeTest" :value="indexOperate" :range="arrOperate" :range-key="'name'">
+			        <view class="uni-input showFont">{{arrOperate[indexOperate].name}}</view>
+			      </picker>
+			    </view>
+			    <span class="icon iconfont myIconEnd">&#xe687;</span>
+			  </view>
+			</view>
 		</view>
 	</view>
 </template>
@@ -69,8 +81,16 @@
 				currentvoltage: 220,
 				adjustingstartvoltage: '合闸',
 				initalvolta: 220,
-				stepvolta:10,
-				duration:200
+				stepvolta: 10,
+				duration: 200,
+				arrOperate: [{
+					name: this.$t('continued'),
+					value: 1
+				},{
+					name: this.$t('once'),
+					value: 2
+				}],
+				indexOperate: 0
 			}
 		},
 		methods: {
@@ -94,6 +114,22 @@
 			
 			.inputRight {
 			  text-align: right;
+			}
+			
+			.lineHang {
+			  .showFont {
+			    text-align: right;
+			    padding-right: 10px;
+			    color: #007AFF;
+			
+			  }
+			
+			}
+			
+			.myIconEnd {
+			  color: #ccc;
+			  margin-right: 20px;
+			  height: 60rpx;
 			}
 		}
 	}

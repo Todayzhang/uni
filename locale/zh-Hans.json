@@ -126,5 +126,10 @@
   "stepvolta":"步进电压",
   "duration":"脉冲宽度",
   "continued":"连续",
-  "once":"单次"
+  "once":"单次",
+  "time":"储能时间",
+  "current":"瞬时电流",
+  "maxcurrent":"最大电流",
+  "voltage":"输出电压",
+  "start": "开始"
 }

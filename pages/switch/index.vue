@@ -145,6 +145,7 @@
 			<template v-else>
 				<manual v-if="currentModel === '7'" />
 				<lowPressure v-else-if="currentModel === '8'" />
+				<Energy v-else-if="currentModel === '9'" />
 				<parameter-setting v-else/>
 			</template>
 		</view>
@@ -159,6 +160,12 @@
 			<view class="btnFix" v-if="currentModel === '7' || currentModel === '8'">
 				<view class="btmBtnBox">
 					<view class="bottomBtn" @click="resetModel()">{{$t('modelSelect')}}</view>
+				</view>
+			</view>
+			<view class="btnFix" v-else-if="currentModel === '9'">
+				<view class="btmBtnBox">
+					<view class="bottomBtn left" @click="resetModel()">{{$t('modelSelect')}}</view>
+					<view class="bottomBtn right">{{$t('start')}}</view>
 				</view>
 			</view>
 			<view class="btnFix" v-else>
@@ -178,6 +185,7 @@
 	} from '../mixins/mixins.js'
 	import Manual from './components/manual.vue'
 	import LowPressure from './components/lowPressure.vue'
+	import Energy from './components/energy.vue'
 	import ParameterSetting from './components/parameterSetting.vue'
 	export default {
 		mixins: [bleBoole],
@@ -185,7 +193,8 @@
 			EquipInfo,
 			Manual,
 			ParameterSetting,
-			LowPressure
+			LowPressure,
+			Energy
 		},
 		data() {
 			return {

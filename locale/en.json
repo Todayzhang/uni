@@ -126,5 +126,10 @@
   "stepvolta":"Step Volta",
   "duration":"Duration",
   "continued":"Continued",
-  "once":"Once"
+  "once":"Once",
+  "time":"Time",
+  "current":"Current",
+  "maxcurrent":"Max Current",
+  "voltage":"Voltage",
+  "start": "Start"
 }

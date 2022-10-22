@@ -329,6 +329,7 @@
 		align-items: center;
 		padding: 20rpx;
 		margin-bottom: 20rpx;
+    z-index: 20;
 	}
 
 	.rowLeft {

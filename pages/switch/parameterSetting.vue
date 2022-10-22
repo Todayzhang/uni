@@ -180,7 +180,7 @@
             <view class="clickBtn">
               <input class="uni-input inputRight" :disabled="indexEl!=10" v-model="zhongText" placeholder="" />
             </view>
-            <view class="clickBtn" @click="changeHouText(houText,1)">{{houText}}</view>
+            <view class="clickBtn" style="margin-right: 10px;"  @click="changeHouText(houText,1)">{{houText}}</view>
             <!--            <view class="uni-list-cell-left">   
               {{$t('preclosingspeed')}}
             </view>
@@ -198,7 +198,7 @@
             <view class="clickBtn">
               <input class="uni-input inputRight" :disabled="indexEl!=10" v-model="bzhongText" placeholder="" />
             </view>
-            <view class="clickBtn" @click="changeHouText(bhouText,2)">{{bhouText}}</view>
+            <view class="clickBtn" style="margin-right: 10px;" @click="changeHouText(bhouText,2)">{{bhouText}}</view>
             <!--  <view class="uni-list-cell-left">
               {{$t('splitspeed')}}
             </view>

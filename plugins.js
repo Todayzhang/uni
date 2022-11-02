@@ -23,7 +23,13 @@ export default {
     },
     Vue.prototype.$checkEnd=(str)=> {
       //str = str.replace(/\s*/g,"")
-      str = str.split('6aa6')[1]
+      str = str.split('6aa6')
+      if(str.length>1){
+        str = str[1]
+      }else{
+        str = str[0]
+      }
+      console.log('计算校验str=》',str)
       let itotal = 0,
         len = str.length,
         num = 0;

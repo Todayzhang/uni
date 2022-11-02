@@ -209,6 +209,17 @@
 				title: this.$i18n.messages[this.$i18n.locale].switch
 			});
 		},
+    onHide(){
+      
+    },
+    onBackPress(event){
+       console.log('点击了返回')
+     //  return true;
+       const sendCode = '6aa60506160223'
+       this.sendMsgToDevice(sendCode, '', () => {
+         console.log('请求成功')
+       })
+    },
 		methods: {
 			goToTest(num) {
 				this.isModelSelect = false

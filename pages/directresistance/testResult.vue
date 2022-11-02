@@ -151,8 +151,6 @@
               });
               if(test == 58){//测试电阻
                 this.testResult = this.hexToString(result)
-              }else if(test == 59){ //折算电阻
-                this.convertedResult = this.hexToString(result)
               }
             })
      },

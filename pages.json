@@ -207,7 +207,7 @@
         "selectedIconPath": "static/images/statisticsed.png"
       },
       {
-        "pagePath": "pages/statistics/bluetoothble",
+        "pagePath": "pages/me/me",
         "text": "BLE",
         "iconPath": "static/images/me.png",
         "selectedIconPath": "static/images/meed.png"

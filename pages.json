@@ -88,14 +88,14 @@
         "navigationBarTextStyle": "white"
       }
     },
-    {
-      "path": "pages/switch/parameterSetting", //ok
-      "style": {
-        "navigationBarTitleText": "开关-参数设置",
-        "navigationBarBackgroundColor": "#519BDA",
-        "navigationBarTextStyle": "white"
-      }
-    },
+    // {
+    //   "path": "pages/switch/parameterSetting", //ok
+    //   "style": {
+    //     "navigationBarTitleText": "开关-参数设置",
+    //     "navigationBarBackgroundColor": "#519BDA",
+    //     "navigationBarTextStyle": "white"
+    //   }
+    // },
     {
       "path": "pages/dielectricloss/parameterSetting", //ok
       "style": {

@@ -308,6 +308,9 @@ export default {
             console.log('res=>',res)
           })
         // }
+      } else {
+        // 电机储能
+        this.isModelSelect = false
       }
     },
     resetModel() {

@@ -226,11 +226,11 @@
 </template>
 
 <script>
-  import EquipInfo from '../public/EquipInfo.vue'
-  import TipsModal from '../public/TipsModal.vue'
+  import EquipInfo from '../../public/EquipInfo.vue'
+  import TipsModal from '../../public/TipsModal.vue'
   import {
     bleBoole
-  } from '../mixins/mixins.js'
+  } from '../../mixins/mixins.js'
   export default {
     mixins: [bleBoole],
     components: {
@@ -785,7 +785,7 @@
     line-height: 80rpx;
     color: #FFF;
     margin: 0 20rpx;
-    background: url(../../static/images/btn-big-green.png) no-repeat;
+    background: url(../../../static/images/btn-big-green.png) no-repeat;
     background-size: 100% auto;
     margin: 0 auto;
   }

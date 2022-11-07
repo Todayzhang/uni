@@ -27,6 +27,7 @@
             </view>
             <view class="uni-list-cell-db lineHang">
               <input class="uni-input inputRight" type="number" @input="replaceInputVoltage"
+                @blur="sendLargeData(outPutVoltageData,'06060d')"
                 v-model.number="outPutVoltageData" placeholder="输出电压(V)" />
             </view>
             <!-- <span class="icon iconfont myIconEnd">&#xe687;</span> -->
@@ -40,7 +41,7 @@
               {{$t('travelswitch')}}
             </view>
             <view class="uni-list-cell-db lineHang">
-              <input class="uni-input inputRight" type="number" @blur="travelOnblur" @input="replaceInputTravel"
+              <input class="uni-input inputRight" type="number" @blur="sendLargeData(travelSwitchData/0.1,'06060e')" @input="replaceInputTravel"
                 v-model.lazy.number="travelSwitchData" placeholder="请输入" />
             </view>
             <!-- <span class="icon iconfont myIconEnd">&#xe687;</span> -->
@@ -180,7 +181,7 @@
             <view class="clickBtn">
               <input class="uni-input inputRight" :disabled="indexEl!=10" v-model="zhongText" placeholder="" />
             </view>
-            <view class="clickBtn" @click="changeHouText(houText,1)">{{houText}}</view>
+            <view class="clickBtn" style="margin-right: 10px;"  @click="changeHouText(houText,1)">{{houText}}</view>
             <!--            <view class="uni-list-cell-left">   
               {{$t('preclosingspeed')}}
             </view>
@@ -198,7 +199,7 @@
             <view class="clickBtn">
               <input class="uni-input inputRight" :disabled="indexEl!=10" v-model="bzhongText" placeholder="" />
             </view>
-            <view class="clickBtn" @click="changeHouText(bhouText,2)">{{bhouText}}</view>
+            <view class="clickBtn" style="margin-right: 10px;" @click="changeHouText(bhouText,2)">{{bhouText}}</view>
             <!--  <view class="uni-list-cell-left">
               {{$t('splitspeed')}}
             </view>
@@ -211,9 +212,9 @@
         </view>
 
       </view>
-      <!-- <view class="btmBtnBox">
+      <view class="btmBtnBox">
         <view class="bottomBtn" @click="open()">{{$t('starttesting')}}</view>
-      </view> -->
+      </view>
 
       <!-- 确认弹框 -->
       <tips-modal ref="popup" @determine="sure"></tips-modal>
@@ -225,11 +226,11 @@
 </template>
 
 <script>
-  import EquipInfo from '../../public/EquipInfo.vue'
-  import TipsModal from '../../public/TipsModal.vue'
+  import EquipInfo from '../public/EquipInfo.vue'
+  import TipsModal from '../public/TipsModal.vue'
   import {
     bleBoole
-  } from '../../mixins/mixins.js'
+  } from '../mixins/mixins.js'
   export default {
     mixins: [bleBoole],
     components: {
@@ -240,8 +241,8 @@
     data() {
       return {
         currTestMode: 1,
-        setHead: '5aa50683',
-        getHead: '5aa50682',
+        setHead: '6aa6',
+        getHead: '6aa6',
         // 开关类型
         arrSwitch: [{
           name: "金属触头",
@@ -493,16 +494,65 @@
       uni.setNavigationBarTitle({ // 修改头部标题
         title: this.$i18n.messages[this.$i18n.locale].switchparametersetting
       });
+      this.getNotify()
     },
     methods: {
+      getNotify(){
+        console.log('接收消息')
+        this.openNotify((res)=>{
+          if(res.includes('6aa605061603')){
+            this.$modal.toast({
+              message: '测试完成！',
+              duration: 1
+            });
+          }else if(res.includes('6aa618060b')){
+            this.$modal.toast({
+              message: '开始赋值！',
+              duration: 1
+            });
+          }
+        })
+      },
+      //传输油管开关数据
       open() {
         // open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
-        this.$refs.popup.open()
+        //  let sendValue = '6aa60506160122'
+        if(this.indexEl == 10){
+          //console.log('vvvv')
+          let qianValue = 1
+          if(this.qianText == '合前后' || this.qianText == '分前后' ){
+            qianValue = 2
+          }
+          let zhongValue = this.$changeTosixty(this.zhongText)
+          let houValue = 1
+          if(this.houText == 'ms' ){
+            houValue = 2
+          }
+          let bqianValue = 1
+          if(this.bqianText == '合前后' || this.bqianText == '分前后' ){
+            bqianValue = 2
+          }
+          let bzhongValue = this.$changeTosixty(this.bzhongText)
+          let bhouValue = 1
+          if( this.bhouText == 'ms' ){
+            bhouValue = 2
+          }
+          const sendCode = this.setHead + '080611' + qianValue +zhongValue+houValue+bqianValue+bzhongValue+bhouValue
+          const sendValue = sendCode + this.$checkEnd(sendCode)
+          //console.log(sendValue)
+          this.sendMsgToDevice(sendValue, '', () => {
+            console.log('请求成功')
+          })
+        }
+        //  console.log()
+        //this.sendLargeData()
+        //this.$refs.popup.open()
       },
       sure() {
-        let sendValue = '5aa506830016'+'0001'+'9a'
-        let getValue = '5aa506820016'+'0001'+'99'
-        this.sendMsgToDevice(sendValue, getValue, () => {
+        let sendValue = '6aa60506160122'
+        console.log(sendValue)
+        //let getValue = '6aa606820016'+'0001'+'99'
+        this.sendMsgToDevice(sendValue, '', () => {
           console.log('请求成功')
           this.$refs.popup.close()
         })
@@ -517,39 +567,17 @@
         })
       },
       // 开关类型  
-      bindPickerChangeSwitch(e) {
-        //手动分合 - 低压测试 设置无效
-        if (this.currTestMode != 7 && this.currTestMode != 8) {
+      bindPickerChangeSwitch(e) {  
           this.indexSwitch = e.target.value
           this.dataSwitch = this.arrSwitch[this.indexSwitch]
-          let sendValue = this.setHead + '000c00' + this.$changeTosixty(this.dataSwitch.value)
-          sendValue = sendValue + this.$checkEndhl(sendValue)
-          console.log('sendValue=>', sendValue)
-          let getModule = this.getHead + '000c00' + this.$changeTosixty(this.dataSwitch.value)
-          let getValue = getModule + this.$checkEndhl(getModule)
-          console.log('getValue=>', getValue)
-          this.sendMsgToDevice(sendValue, getValue, () => {
-            console.log('请求成功')
-          })
-        }
-
+          this.sendMinData(this.dataSwitch.value,'05060c')
       },
       //触发模式
-      bindPickerChangeTrigger(e) {
-        //手动分合 - 低压测试 设置无效
-        if (this.currTestMode != 7 && this.currTestMode != 8) {
+      bindPickerChangeTrigger(e) {      
           this.indexTrigger = e.target.value
           this.dataTrigger = this.arrTrigger[this.indexTrigger]
-          let sendValue = this.setHead + '000f00' + this.$changeTosixty(this.dataTrigger.value)
-          sendValue = sendValue + this.$checkEndhl(sendValue)
-          console.log('sendValue=>', sendValue)
-          let getModule = this.getHead + '000f00' + this.$changeTosixty(this.dataTrigger.value)
-          let getValue = getModule + this.$checkEndhl(getModule)
-          console.log('getValue=>', getValue)
-          this.sendMsgToDevice(sendValue, getValue, () => {
-            console.log('请求成功')
-          })
-        }
+          console.log(this.dataTrigger.value)
+          this.sendMinData(this.dataTrigger.value,'05830f','05820f')
       },
       //传感器类型
       bindPickerChangeSensort(e) {
@@ -575,58 +603,62 @@
         const num1 = this.dataNum.value ? this.dataNum.value : '1';
         const num2 = this.dataSensort.value ? this.dataSensort.value : '3';
         const num3 = this.$changeTosixty(this.dataAddress.value ? this.dataAddress.value : '1');
-        const numCount = num1 + num2 + this.$changeTosixty(num3)
-        let sendValue = this.setHead + '0012' + numCount
-        sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValue=>', sendValue)
-        let getModule = this.getHead + '0012' + numCount
-        let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('sendValue=>', getValue)
-        this.sendMsgToDevice(sendValue, getValue, () => {
-          console.log('请求成功')
-        })
+        const numCount = '060612'+ num1 + num2
+        this.sendMinData(num3,numCount)
+        // let sendValue = this.setHead + '0012' + numCount
+        // sendValue = sendValue + this.$checkEnd(sendValue)
+        // console.log('sendValue=>', sendValue)
+        // let getModule = this.getHead + '0012' + numCount
+        // let getValue = getModule + this.$checkEnd(getModule)
+        // console.log('sendValue=>', getValue)
+        // this.sendMsgToDevice(sendValue, getValue, () => {
+        //   console.log('请求成功')
+        // })
       },
       //重合闸分闸时间
       bindPickerChangeOpen(e) {
         this.indexOpen = e.target.value
         this.dataOpen = this.arrOpen[this.indexOpen]
-        let sendValue = this.setHead + '0013' + this.$largechangeTosixty(this.dataOpen.value)
-        sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValuez=>', sendValue)
-        let getModule = this.getHead + '0013' + this.$largechangeTosixty(this.dataOpen.value)
-        let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('getValuezz=>', getValue)
-        this.sendMsgToDevice(sendValue, getValue, () => {
-          console.log('请求成功')
-        })
+        this.sendLargeData(this.dataOpen.value,'060613')
+        // let sendValue = this.setHead + '0013' + this.$largechangeTosixty(this.dataOpen.value)
+        // sendValue = sendValue + this.$checkEnd(sendValue)
+        // console.log('sendValuez=>', sendValue)
+        // let getModule = this.getHead + '0013' + this.$largechangeTosixty(this.dataOpen.value)
+        // let getValue = getModule + this.$checkEnd(getModule)
+        // console.log('getValuezz=>', getValue)
+        // this.sendMsgToDevice(sendValue, getValue, () => {
+        //   console.log('请求成功')
+        // })
       },
       //重合闸合闸时间
       bindPickerChangeClose(e) {
         this.indexClose = e.target.value
         this.dataClose = this.arrOpen[this.indexClose]
-        let sendValue = this.setHead + '0014' + this.$largechangeTosixty(this.dataClose.value)
-        sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValue=>', sendValue)
-        let getModule = this.getHead + '0014' + this.$largechangeTosixty(this.dataClose.value)
-        let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('getValue=>', getValue)
-        this.sendMsgToDevice(sendValue, getValue, () => {
-          console.log('请求成功')
-        })
+        this.sendLargeData(this.dataClose.value,'060614')
+        // let sendValue = this.setHead + '0014' + this.$largechangeTosixty(this.dataClose.value)
+        // sendValue = sendValue + this.$checkEnd(sendValue)
+        // console.log('sendValue=>', sendValue)
+        // let getModule = this.getHead + '0014' + this.$largechangeTosixty(this.dataClose.value)
+        // let getValue = getModule + this.$checkEnd(getModule)
+        // console.log('getValue=>', getValue)
+        // this.sendMsgToDevice(sendValue, getValue, () => {
+        //   console.log('请求成功')
+        // })
       },
       //测试时间
       bindPickerChangeTest(e) {
         this.indexTest = e.target.value
         this.dataTest = this.arrTest[this.indexTest]
-        let sendValue = this.setHead + '0015' + this.$largechangeTosixty(this.dataTest.value)
-        sendValue = sendValue + this.$checkEndhl(sendValue)
-        console.log('sendValue=>', sendValue)
-        let getModule = this.getHead + '0015' + this.$largechangeTosixty(this.dataTest.value)
-        let getValue = getModule + this.$checkEndhl(getModule)
-        console.log('getValue=>', getValue)
-        this.sendMsgToDevice(sendValue, getValue, () => {
-          console.log('请求成功')
-        })
+        this.sendLargeData(this.dataTest.value,'060615')
+        // let sendValue = this.setHead + '0015' + this.$largechangeTosixty(this.dataTest.value)
+        // sendValue = sendValue + this.$checkEnd(sendValue)
+        // console.log('sendValue=>', sendValue)
+        // let getModule = this.getHead + '0015' + this.$largechangeTosixty(this.dataTest.value)
+        // let getValue = getModule + this.$checkEnd(getModule)
+        // console.log('getValue=>', getValue)
+        // this.sendMsgToDevice(sendValue, getValue, () => {
+        //   console.log('请求成功')
+        // })
       },
       //速度定义
       bindPickerChangeEl(e) {
@@ -639,6 +671,12 @@
         this.bqianText = showText.bqianText
         this.bzhongText = showText.bzhongText
         this.bhouText = showText.bhouText
+        const sendValue = showText.value + 1
+       // console.log(this.indexEl)
+        if(this.indexEl!=10){
+          this.sendMinData(sendValue,'050610')
+        }
+        //this.sendVoltageData(this.indexEl+1,'0010')
       },
       /**输出电压*/
       replaceInputVoltage(event) {
@@ -649,6 +687,31 @@
           this.outPutVoltageData = 30;
         }
       },
+      sendLargeData(valueData,code){
+        let sendValue = this.setHead + code + this.$largechangeTosixty(valueData)
+        sendValue = sendValue + this.$checkEnd(sendValue)
+        let getModule = this.getHead + code + this.$largechangeTosixty(valueData)
+        let getValue = getModule + this.$checkEnd(getModule)
+        console.log(sendValue);
+        console.log(getValue);
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+        })
+      },
+      /**发送min 16进制消息和接收消息*/
+      sendMinData(valueData,code,getCode=''){
+        console.log('valueData',valueData);
+        let sendValue = this.setHead + code + this.$changeTosixty(valueData)
+        sendValue = sendValue + this.$checkEnd(sendValue)
+        console.log('sendValue',sendValue);
+        const newCode = getCode?getCode:code 
+        let getModule = this.getHead + newCode + this.$changeTosixty(valueData)
+        let getValue = getModule + this.$checkEnd(getModule)
+        console.log(' getValue',getValue);
+        this.sendMsgToDevice(sendValue, getValue, () => {
+          console.log('请求成功')
+        })
+      },
       /**开关行程*/
       replaceInputTravel(event) {
         var value = event.target.value;
@@ -657,18 +720,6 @@
         } else if (value < 0) {
           this.travelSwitchData = 0;
         }
-      },
-      travelOnblur(e) {
-        console.log(e.detail.value * 10)
-        const value = this.$largechangeTosixty(e.detail.value * 10)
-        let sendValue = this.setHead + '000e' + value
-        sendValue = sendValue + this.$checkEndhl(sendValue)
-        let getModule = this.getHead + '000e' + value
-        let getValue = getModule + this.$checkEndhl(getModule)
-        console.log(sendValue);
-        this.sendMsgToDevice(sendValue, getValue, () => {
-          console.log('请求成功')
-        })
       },
       changeQianText(text) {
         if (this.indexEl == 10) {
@@ -734,7 +785,7 @@
     line-height: 80rpx;
     color: #FFF;
     margin: 0 20rpx;
-    background: url(../../../static/images/btn-big-green.png) no-repeat;
+    background: url(../../static/images/btn-big-green.png) no-repeat;
     background-size: 100% auto;
     margin: 0 auto;
   }

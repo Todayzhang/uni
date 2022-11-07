@@ -498,10 +498,16 @@
     },
     methods: {
       getNotify(){
+        console.log('接收消息')
         this.openNotify((res)=>{
           if(res.includes('6aa605061603')){
             this.$modal.toast({
               message: '测试完成！',
+              duration: 1
+            });
+          }else if(res.includes('6aa618060b')){
+            this.$modal.toast({
+              message: '开始赋值！',
               duration: 1
             });
           }

@@ -29,7 +29,7 @@ export default {
       }else{
         str = str[0]
       }
-      console.log('计算校验str=》',str)
+      console.log('计算校验str====> ',str)
       let itotal = 0,
         len = str.length,
         num = 0;

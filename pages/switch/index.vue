@@ -14,62 +14,62 @@
         </view>
 
         <view class="centerBtm">
-          <view class="centerBtmItem close">
+          <view class="centerBtmItem" :class="arrDuan[15]==0?'close':'open'">
             <text>A1</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem open">
+          <view class="centerBtmItem" :class="arrDuan[14]==0?'close':'open'">
             <text>B1</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem close">
+          <view class="centerBtmItem" :class="arrDuan[13]==0?'close':'open'">
             <text>C1</text>
             <span class="icon"></span>
           </view>
-          <view class="centerBtmItem close">
+          <view class="centerBtmItem" :class="arrDuan[12]==0?'close':'open'">
             <text>A2</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem open">
+          <view class="centerBtmItem" :class="arrDuan[11]==0?'close':'open'">
             <text>B2</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem close">
+          <view class="centerBtmItem" :class="arrDuan[10]==0?'close':'open'">
             <text>C2</text>
             <span class="icon"></span>
           </view>
         </view>
 
         <view class="centerBtm">
-          <view class="centerBtmItem close">
+          <view class="centerBtmItem" :class="arrDuan[9]==0?'close':'open'">
             <text>A3</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem open">
+          <view class="centerBtmItem" :class="arrDuan[8]==0?'close':'open'">
             <text>B3</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem close">
+          <view class="centerBtmItem" :class="arrDuan[7]==0?'close':'open'">
             <text>C3</text>
             <span class="icon"></span>
           </view>
-          <view class="centerBtmItem close">
+          <view class="centerBtmItem" :class="arrDuan[6]==0?'close':'open'">
             <text>A4</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem open">
+          <view class="centerBtmItem" :class="arrDuan[5]==0?'close':'open'">
             <text>B4</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem close">
+          <view class="centerBtmItem" :class="arrDuan[4]==0?'close':'open'">
             <text>C4</text>
             <span class="icon"></span>
           </view>
@@ -144,7 +144,7 @@
             />
             <view style="flex: 1">
               <text class="centerText">{{
-                $t("closingopeningandclosing")
+                $t("openingclosingandopening")
               }}</text>
             </view>
           </view>
@@ -240,10 +240,11 @@ export default {
   },
   data() {
     return {
-      sendHead: "5aa50683000400",
-      getHead: "5aa50682000400",
+      sendHead: "6aa6050604",
+      getHead:  "6aa60682000400",
       currentModel: "1",
       isModelSelect: true,
+      arrDuan:["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
     };
   },
   onShow() {
@@ -251,8 +252,31 @@ export default {
       // 修改头部标题
       title: this.$i18n.messages[this.$i18n.locale].switch,
     });
+    this.getDuankou()
   },
   methods: {
+    /**获取当前断口数据*/
+    getDuankou(){
+      let sendValue = "6aa6070608ffff0089"
+      this.sendMsgToDevice(sendValue,'', () => {
+        console.log("请求成功，获取断口状态");
+      });
+      this.openNotify((res)=>{
+        console.log('获取断口状态');   
+        if(res.includes('070608')){
+          console.log('断口res=>',res)
+          const sixtyDuan = res.split('070608')[1].slice(0,4)
+          let arr = parseInt(sixtyDuan,16).toString(2).split("")
+          if(arr.length<16){
+            for (let i=arr.length;i<16;i++) {
+              arr.unshift("0")
+            }
+          }
+          console.log(arr);
+          this.arrDuan = arr
+        }
+      })
+    },
     goToTest(num) {
       // this.isModelSelect = false
       if (num) {
@@ -261,48 +285,30 @@ export default {
       // 非电机储能，设置当前测试模式
       if (this.currentModel !== "9") {
         let currModule = this.sendHead + this.$changeTosixty(this.currentModel);
-        console.log(currModule);
-        let sendValue = currModule + this.$checkEndhl(currModule);
-        console.log(sendValue);
-        let getModule = this.getHead + this.$changeTosixty(num);
-        let getValue = getModule + this.$checkEndhl(getModule);
-        const isTest = true;
-        if (isTest) {
+       // console.log(currModule);
+        let sendValue = currModule + this.$checkEnd(currModule);
+        console.log(sendValue)
+        //发送消息
+       // console.log(sendValue);
+       // let getModule = this.getHead + this.$changeTosixty(num);
+       // let getValue = getModule + this.$checkEnd(getModule);
+        // const isTest = true;
+        // if (isTest) {
+        //   this.isModelSelect = false;
+        //   this.sendMsgToDevice(sendValue, getValue, () => {
+        //     console.log("请求成功，跳转页面");
+        //   });
+        // } else {
+          this.sendMsgToDevice(sendValue, '', () => {
+            console.log("请求成功，跳转页面");
+          });
           this.isModelSelect = false;
-          this.sendMsgToDevice(sendValue, getValue, () => {
-            console.log("请求成功，跳转页面");
-          });
-        } else {
-          this.sendMsgToDevice(sendValue, getValue, () => {
-            console.log("请求成功，跳转页面");
-            this.isModelSelect = false;
-          });
-        }
+          this.openNotify((res)=>{
+            console.log('获取测试页面值')
+            console.log('res=>',res)
+          })
+        // }
       }
-      // let currModule = this.sendHead + this.$changeTosixty(num)
-      // console.log(currModule);
-      // let sendValue = currModule + this.$checkEndhl(currModule)
-      // console.log(sendValue);
-      // let getModule = this.getHead + this.$changeTosixty(num)
-      // let getValue = getModule + this.$checkEndhl(getModule)
-      // let item = {}
-      // //确定当前测试的项目  自动测试/分合测试/分闸测试/合分合
-      // const isTest = true;
-      // if (!isTest) {
-      // 	this.sendMsgToDevice(sendValue, getValue, () => {
-      // 		console.log('请求成功，跳转页面')
-      // 		this.goTo('/pages/switch/parameterSetting?item=' + encodeURIComponent(JSON.stringify(
-      // 			item)))
-      // 	})
-      // } else {
-      // 	console.log('直接跳转页面！')
-      // 	this.goTo('/pages/switch/parameterSetting?item=' + encodeURIComponent(JSON.stringify(item)))
-      // }
-    },
-    goTo(url) {
-      uni.navigateTo({
-        url,
-      });
     },
     resetModel() {
       this.isModelSelect = true;

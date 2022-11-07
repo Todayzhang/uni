@@ -77,7 +77,7 @@
   "openingtest":"分闸测试",
   "closingandopeningtest":"合分测试",
   "closingtest":"合闸测试",
-  "closingopeningandclosing":"合分合",
+  "openingclosingandopening":"分合分",
   "manualopeningandclosing":"手动分合",
   "lowvoltagetest":"低压测试",
   "fracturenumber":"断口编号",

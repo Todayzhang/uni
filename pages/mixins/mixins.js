@@ -7,15 +7,15 @@ export  const bleBoole = {
    //  },
     data(){
       return {
-        flag: false, //当前请求状态
+        flag: false, //当前请求状态 false 将不再请求
         count: 3,//请求次数
-        currSendMsg: '', //当前发送的消息
+        currSendMsg: '', //当前发送要接收的消息
       }
     },
   methods:{
     sendMsgToDevice(sendValue,getMsg,sendcallback){
       console.log(`-----发送-------${sendValue}----------------`);
-      this.currSendMsg = getMsg?getMsg:sendValue //存储当前发送的消息
+      this.currSendMsg = getMsg?getMsg:sendValue //存储当前要接收的消息
       this.flag = true //请求中等待返回...
       this.count = 3   //循环3次
       if (this.flag) {
@@ -37,7 +37,7 @@ export  const bleBoole = {
                 message: '发送中',
                 duration: 1
               });
-              this.sendToDevice(sendValue,()=>{
+              this.sendToDevice(sendValue,(res)=>{
                 clearInterval(this.timer)
               })
             } else {
@@ -92,13 +92,16 @@ export  const bleBoole = {
       this.$btble.openNotify(result => {
         //接收
         const content = JSON.stringify(result);
-        if(this.currSendMsg){
-          if (result.data == this.currSendMsg) {
+        if(this.currSendMsg && !this.currSendMsg.includes('050604')&& !this.currSendMsg.includes('070608')){
+          if(result.data == this.currSendMsg){
+             this.flag = false
+          }
+          console.log('接收设备返回=>', content)  
+        }else{
+          if(this.currSendMsg.includes('050604')||this.currSendMsg.includes('070608')){
+            console.log('终止请求')
             this.flag = false
           }
-          console.log('接收设备返回=>', content)
-          
-        }else{
           console.log('当前无信息发送=>', content)
           if(result.data && callback2){
             callback2 && callback2(result.data)

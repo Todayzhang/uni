@@ -278,7 +278,7 @@ export default {
       })
     },
     goToTest(num) {
-      // this.isModelSelect = false
+      this.isModelSelect = false
       if (num) {
         this.currentModel = num;
       }

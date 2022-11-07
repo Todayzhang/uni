@@ -42,9 +42,9 @@
 			replaceInputVoltage(event) {
 				var value = event.target.value;
 				if (value > 250) {
-				this.currentvoltage = 250;
+					this.currentvoltage = 250;
 				} else if (value < 5) {
-				event.target.value = 5
+					this.currentvoltage = 5
 				}
 			},
 

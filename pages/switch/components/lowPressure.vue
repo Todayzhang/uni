@@ -29,8 +29,8 @@
 						{{$t('initalvolta')}}(V)
 					</view>
 					<view class="uni-list-cell-db lineHang">
-						<input class="uni-input inputRight" type="number" @input="replaceInputVoltage"
-							v-model.number="initalvolta" placeholder="输出电压(V)" />
+						<input class="uni-input inputRight" type="number" @input="replaceRange('initalvolta', 2, 270)"
+							v-model.number="initalvolta" @blur="setInitalvolta" placeholder="输出电压(V)" />
 					</view>
 				</view>
 			</view>
@@ -41,8 +41,8 @@
 						{{$t('stepvolta')}}(V)
 					</view>
 					<view class="uni-list-cell-db lineHang">
-						<input class="uni-input inputRight" type="number" @input="replaceInputVoltage"
-							v-model.number="stepvolta" placeholder="输出电压(V)" />
+						<input class="uni-input inputRight" type="number" @input="replaceRange('stepvolta', 1,10)"
+							v-model.number="stepvolta" @blur="setStepvolta" placeholder="输出电压(V)" />
 					</view>
 				</view>
 			</view>
@@ -53,8 +53,8 @@
 						{{$t('duration')}}(ms)
 					</view>
 					<view class="uni-list-cell-db lineHang">
-						<input class="uni-input inputRight" type="number" @input="replaceInputVoltage"
-							v-model.number="stepvolta" placeholder="输出电压(V)" />
+						<input class="uni-input inputRight" type="number" @input="replaceRange('duration',100, 2000)"
+							v-model.number="duration" @blur="setDuration" placeholder="输出电压(V)" />
 					</view>
 				</view>
 			</view>
@@ -94,8 +94,37 @@
 			}
 		},
 		methods: {
-			replaceInputVoltage() {
-
+			replaceRange(data, min, max) {
+				var value = this[data];
+				if (value > max) {
+					this[data] = max;
+				} else if (value < min) {
+					this[data] = min
+				}
+			},
+			setStepvolta() {
+				const value = this.$changeTosixty(this.duration)
+				this.sendData(value, '05061C')
+			},
+			setDuration() {
+				const value = this.$largechangeTosixty(this.initalvolta)
+				this.sendData(value, '06061D')
+			},
+			setInitalvolta() {
+				const value = this.$largechangeTosixty(this.initalvolta)
+				this.sendData(value, '060617')
+			},
+			sendData(value, code, getCode = undefined) {
+				let sendValue = this.setHead + code + value;
+				sendValue = sendValue + this.$checkEnd(sendValue)
+				console.log('sendValue',sendValue);
+				const newCode = getCode ? getCode : code 
+				let getModule = this.getHead + newCode + value
+				let getValue = getModule + this.$checkEnd(getModule)
+				console.log(' getValue',getValue);
+				this.sendMsgToDevice(sendValue, getValue, () => {
+					console.log('请求成功')
+				})
 			}
 		}
 	}

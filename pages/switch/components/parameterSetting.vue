@@ -212,9 +212,9 @@
         </view>
 
       </view>
-      <view class="btmBtnBox">
+<!--      <view class="btmBtnBox">
         <view class="bottomBtn" @click="open()">{{$t('starttesting')}}</view>
-      </view>
+      </view> -->
 
       <!-- 确认弹框 -->
       <tips-modal ref="popup" @determine="sure"></tips-modal>
@@ -237,7 +237,63 @@
       EquipInfo,
       TipsModal
     },
-
+    props:['getMsgResult'],
+    watch: {
+      zhongText(newValue) {
+        if (this.indexEl == 10) {
+          this.arrayEl[this.indexEl].zhongText = newValue
+        }
+      },
+      bzhongText(newValue) {
+        if (this.indexEl == 10) {
+          this.arrayEl[this.indexEl].bzhongText = newValue
+        }
+      },
+    },
+    created() {
+      console.log('get',this.getMsgResult)
+      let newData = this.getMsgResult
+     // console.log(parseInt(newData.slice(12,14),16))
+      this.indexTrigger = parseInt(newData.slice(12,14),16)-1; //触发模式1     1
+      const speedDefine = parseInt(newData.slice(14,16),16);
+      this.indexEl = speedDefine-1;
+      console.log('indexEl',this.indexEl)
+      if(speedDefine==11){ //自定义
+        console.log('speedDefine=>',speedDefine)
+        this.fenJieSpeed(newData.slice(16,20),1)
+        this.fenJieSpeed(newData.slice(20,24),2)
+      }
+      // this. = parseInt(newData.slice(14,16),16); //速度定义1    2
+      // this. = parseInt(newData.slice(16,20),16); //自定义速度合2  3
+      // this. = parseInt(newData.slice(20,24),16); //自定义速度分2 4
+      this.outPutVoltageData = parseInt(newData.slice(24,28),16); //输出电压2 5
+      // this. = parseInt(newData.slice(28,32),16); //传感器设置2    6
+      this.fenJieSensors(newData.slice(28,32))
+      console.log('Close',parseInt(newData.slice(36,40),16))
+      console.log('indexOpen',parseInt(newData.slice(40,44),16))
+      this.travelSwitchData = parseInt(newData.slice(32,36),16)/10; //行程2   7
+      for (var i = 0; i < this.arrOpen.length; i++) {
+        if(this.arrOpen[i].value == parseInt(newData.slice(36,40),16)){
+          this.indexClose = i
+          }
+        if(this.arrOpen[i].value == parseInt(newData.slice(40,44),16)){
+          this.indexOpen = i
+        }
+      }
+      // this.indexClose = parseInt(newData.slice(36,40),16); //重合闸合闸2        8
+      // this. = parseInt(newData.slice(40,44),16); //重合闸分闸2  9
+      console.log('indexTest',parseInt(newData.slice(44,48),16))
+      for (var i = 0; i < this.arrTest.length; i++) {
+        if(this.arrTest[i].value == parseInt(newData.slice(44,48),16)){
+          this.indexTest = i
+          }
+      }
+      
+      // this. = parseInt(newData.slice(44,48),16); //测试时间2   10
+      // this. = parseInt(newData.slice(48,50),16); //开关类型1    11
+      this.indexSwitch = parseInt(newData.slice(48,50),16); //开关类型1
+      console.log(this.indexSwitch)
+    },
     data() {
       return {
         currTestMode: 1,
@@ -478,23 +534,11 @@
 
       }
     },
-    watch: {
-      zhongText(newValue) {
-        if (this.indexEl == 10) {
-          this.arrayEl[this.indexEl].zhongText = newValue
-        }
-      },
-      bzhongText(newValue) {
-        if (this.indexEl == 10) {
-          this.arrayEl[this.indexEl].bzhongText = newValue
-        }
-      },
-    },
     onShow() {
       uni.setNavigationBarTitle({ // 修改头部标题
         title: this.$i18n.messages[this.$i18n.locale].switchparametersetting
       });
-      this.getNotify()
+      //this.getNotify()
     },
     methods: {
       getNotify(){
@@ -515,10 +559,11 @@
       },
       //传输油管开关数据
       open() {
+        console.log(222)
         // open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
         //  let sendValue = '6aa60506160122'
         if(this.indexEl == 10){
-          //console.log('vvvv')
+          console.log('vvvv')
           let qianValue = 1
           if(this.qianText == '合前后' || this.qianText == '分前后' ){
             qianValue = 2
@@ -548,6 +593,27 @@
         //this.sendLargeData()
         //this.$refs.popup.open()
       },
+      fenJieSpeed(value,flag){
+        const qianValue = value.slice(0,1)
+        const zhongValue = value.slice(1,3)
+        const houValue = value.slice(3,4)
+        if(flag==1){//
+          if(qianValue == '1'){ this.qianText = '合前' }else{ this.qianText = '合前后'}
+          if(zhongValue){ this.zhongText = parseInt(zhongValue,16)}
+          if(houValue == '1'){ this.houText = 'mm' }else{ this.houText = 'ms'}
+        }else{
+          if(qianValue == '1'){ this.bqianText = '分后' }else{ this.bqianText = '分前后'}
+          if(zhongValue){ this.bzhongText = parseInt(zhongValue,16)}
+          if(houValue == '1'){ this.bhouText = 'mm' }else{ this.bhouText = 'ms'}
+        }    
+      },
+      fenJieSensors(value){
+        //const qianValue = value.slice(1,3)
+        this.indexSensort = value.slice(1,2)-1
+        this.indexAddress = value.slice(3,4)-1
+        console.log("indexSensort=>",this.indexSensort)
+        console.log("indexAddress=>",this.indexAddress)
+      },
       sure() {
         let sendValue = '6aa60506160122'
         console.log(sendValue)
@@ -568,6 +634,7 @@
       },
       // 开关类型  
       bindPickerChangeSwitch(e) {  
+          console.log('diaoyong')
           this.indexSwitch = e.target.value
           this.dataSwitch = this.arrSwitch[this.indexSwitch]
           this.sendMinData(this.dataSwitch.value,'05060c')
@@ -662,6 +729,7 @@
       },
       //速度定义
       bindPickerChangeEl(e) {
+        console.log("速度定义！")
         this.indexEl = e.target.value
         console.log(this.indexEl)
         const showText = this.arrayEl[this.indexEl]

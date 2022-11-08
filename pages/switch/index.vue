@@ -177,10 +177,10 @@
         </view>
       </template>
       <template v-else>
-        <manual v-if="currentModel === '7'" />
-        <lowPressure v-else-if="currentModel === '8'" />
-        <Energy v-else-if="currentModel === '9'" />
-        <parameter-setting v-else />
+        <manual :getMsgResult="getMsgResult" v-if="currentModel === '7'" />
+        <lowPressure :getMsgResult="getMsgResult" v-else-if="currentModel === '8'" />
+        <Energy :getMsgResult="getMsgResult" v-else-if="currentModel === '9'" />
+        <parameter-setting ref="paramSet" :getMsgResult="getMsgResult" v-else />
       </template>
     </view>
     <!-- 底部按钮 -->
@@ -212,10 +212,8 @@
       </view>
       <view class="btnFix" v-else>
         <view class="btmBtnBox">
-          <view class="bottomBtn left" @click="resetModel()">{{
-            $t("modelSelect")
-          }}</view>
-          <view class="bottomBtn right">{{ $t("starttesting") }}</view>
+          <view class="bottomBtn left" @click="resetModel()">{{$t("modelSelect")}}</view>
+          <view class="bottomBtn right" @click="startTest()">{{ $t("starttesting") }}</view>
         </view>
       </view>
     </template>
@@ -244,6 +242,7 @@ export default {
       getHead:  "6aa60682000400",
       currentModel: "1",
       isModelSelect: true,
+      getMsgResult:'',
       arrDuan:["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
     };
   },
@@ -255,6 +254,9 @@ export default {
     this.getDuankou()
   },
   methods: {
+    startTest(){
+      this.$refs.paramSet.open()
+    },
     /**获取当前断口数据*/
     getDuankou(){
       let sendValue = "6aa6070608ffff0089"
@@ -278,27 +280,18 @@ export default {
       })
     },
     goToTest(num) {
-      this.isModelSelect = false
+     // this.isModelSelect = false
       if (num) {
         this.currentModel = num;
       }
+     // this.getMsgResult = '6aa618060b01020b10511041001e120301f400c800c801f40100'
       // 非电机储能，设置当前测试模式
-      if (this.currentModel !== "9") {
+      if (this.currentModel !== "9" && 2==3) {
         let currModule = this.sendHead + this.$changeTosixty(this.currentModel);
        // console.log(currModule);
         let sendValue = currModule + this.$checkEnd(currModule);
         console.log(sendValue)
         //发送消息
-       // console.log(sendValue);
-       // let getModule = this.getHead + this.$changeTosixty(num);
-       // let getValue = getModule + this.$checkEnd(getModule);
-        // const isTest = true;
-        // if (isTest) {
-        //   this.isModelSelect = false;
-        //   this.sendMsgToDevice(sendValue, getValue, () => {
-        //     console.log("请求成功，跳转页面");
-        //   });
-        // } else {
           this.sendMsgToDevice(sendValue, '', () => {
             console.log("请求成功，跳转页面");
           });
@@ -306,6 +299,21 @@ export default {
           this.openNotify((res)=>{
             console.log('获取测试页面值')
             console.log('res=>',res)
+            // this.getMsgResult = res
+            this.getMsgResult = '6aa618060b01020110011001001e120101f400c800c801f40100'
+            //测试模式
+            // if(res.includes("18060b")){
+              
+              
+              
+            // }else if(res.includes("07060b07")){
+            //   //测试模式为7 手动分合
+              
+             
+            // }else if(res.includes("07060b07")){
+            //    //测试模式为8 低压模式
+               
+            // }
           })
         // }
       } else {

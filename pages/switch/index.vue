@@ -177,10 +177,10 @@
         </view>
       </template>
       <template v-else>
-        <manual :getMsgResult="getMsgResult" v-if="currentModel === '7'" />
-        <lowPressure :getMsgResult="getMsgResult" v-else-if="currentModel === '8'" />
+        <manual v-if="currentModel === '7'" />
+        <lowPressure v-else-if="currentModel === '8'" />
         <Energy v-else-if="currentModel === '9'" />
-        <parameter-setting ref="paramSet" :getMsgResult="getMsgResult" v-else />
+        <parameter-setting ref="paramSet" v-else />
       </template>
     </view>
     <!-- 底部按钮 -->
@@ -242,7 +242,7 @@ export default {
       getHead:  "6aa60682000400",
       currentModel: "1",
       isModelSelect: true,
-      getMsgResult:'',
+     // getMsgResult:'',
       arrDuan:["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
     };
   },
@@ -276,9 +276,9 @@ export default {
         console.log("请求成功，获取断口状态");
       });
       this.openNotify((res)=>{
-        if(res.includes('070608')){
+        if(res.startsWith('6aa6070608')){
           console.log('断口res=>',res)
-          const sixtyDuan = res.split('070608')[1].slice(0,4)
+          const sixtyDuan = res.split('6aa6070608')[1].slice(0,4)
           let arr = parseInt(sixtyDuan,16).toString(2).split("")
           if(arr.length<16){
             for (let i=arr.length;i<16;i++) {
@@ -287,13 +287,21 @@ export default {
           }
           console.log(arr);
           this.arrDuan = arr
-        }else{
+        }  
+        if(res.startsWith("6aa618060b07")){
           console.log(res)
           this.$modal.toast({
             message: res,
             duration: 2
+          }); 
+        }else if(res.startsWith("6aa618060b08")){
+          
+        }else if(res.startsWith("6aa618060b")){
+          this.$modal.toast({
+            message: res,
+            duration: 2
           });
-          this.getMsgResult = res
+          this.$refs.paramSet.initCurr(res)
         }
       })
     },

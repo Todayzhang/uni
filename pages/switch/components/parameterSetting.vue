@@ -237,7 +237,6 @@
       EquipInfo,
       TipsModal
     },
-    props:['getMsgResult'],
     watch: {
       zhongText(newValue) {
         if (this.indexEl == 10) {
@@ -249,50 +248,6 @@
           this.arrayEl[this.indexEl].bzhongText = newValue
         }
       },
-    },
-    created() {
-      console.log('get',this.getMsgResult)
-      let newData = this.getMsgResult
-     // console.log(parseInt(newData.slice(12,14),16))
-      this.indexTrigger = parseInt(newData.slice(12,14),16)-1; //触发模式1     1
-      const speedDefine = parseInt(newData.slice(14,16),16);
-      this.indexEl = speedDefine-1;
-      console.log('indexEl',this.indexEl)
-      if(speedDefine==11){ //自定义
-        console.log('speedDefine=>',speedDefine)
-        this.fenJieSpeed(newData.slice(16,20),1)
-        this.fenJieSpeed(newData.slice(20,24),2)
-      }
-      // this. = parseInt(newData.slice(14,16),16); //速度定义1    2
-      // this. = parseInt(newData.slice(16,20),16); //自定义速度合2  3
-      // this. = parseInt(newData.slice(20,24),16); //自定义速度分2 4
-      this.outPutVoltageData = parseInt(newData.slice(24,28),16); //输出电压2 5
-      // this. = parseInt(newData.slice(28,32),16); //传感器设置2    6
-      this.fenJieSensors(newData.slice(28,32))
-      console.log('Close',parseInt(newData.slice(36,40),16))
-      console.log('indexOpen',parseInt(newData.slice(40,44),16))
-      this.travelSwitchData = parseInt(newData.slice(32,36),16)/10; //行程2   7
-      for (var i = 0; i < this.arrOpen.length; i++) {
-        if(this.arrOpen[i].value == parseInt(newData.slice(36,40),16)){
-          this.indexClose = i
-          }
-        if(this.arrOpen[i].value == parseInt(newData.slice(40,44),16)){
-          this.indexOpen = i
-        }
-      }
-      // this.indexClose = parseInt(newData.slice(36,40),16); //重合闸合闸2        8
-      // this. = parseInt(newData.slice(40,44),16); //重合闸分闸2  9
-      console.log('indexTest',parseInt(newData.slice(44,48),16))
-      for (var i = 0; i < this.arrTest.length; i++) {
-        if(this.arrTest[i].value == parseInt(newData.slice(44,48),16)){
-          this.indexTest = i
-          }
-      }
-      
-      // this. = parseInt(newData.slice(44,48),16); //测试时间2   10
-      // this. = parseInt(newData.slice(48,50),16); //开关类型1    11
-      this.indexSwitch = parseInt(newData.slice(48,50),16); //开关类型1
-      console.log(this.indexSwitch)
     },
     data() {
       return {
@@ -541,25 +496,53 @@
       //this.getNotify()
     },
     methods: {
-      // getNotify(){
-      //   console.log('接收消息')
-      //   this.openNotify((res)=>{
-      //     if(res.includes('6aa605061603')){
-      //       this.$modal.toast({
-      //         message: '测试完成！',
-      //         duration: 1
-      //       });
-      //     }else if(res.includes('6aa618060b')){
-      //       this.$modal.toast({
-      //         message: '开始赋值！',
-      //         duration: 1
-      //       });
-      //     }
-      //   })
-      // },
+      initCurr(value){
+        // console.log('get',this.getMsgResult)
+         let newData = value
+        // console.log(parseInt(newData.slice(12,14),16))
+         this.indexTrigger = parseInt(newData.slice(12,14),16)-1; //触发模式1     1
+         const speedDefine = parseInt(newData.slice(14,16),16);
+         this.indexEl = speedDefine-1;
+         console.log('indexEl',this.indexEl)
+         if(speedDefine==11){ //自定义
+           console.log('speedDefine=>',speedDefine)
+           this.fenJieSpeed(newData.slice(16,20),1)
+           this.fenJieSpeed(newData.slice(20,24),2)
+         }
+         // this. = parseInt(newData.slice(14,16),16); //速度定义1    2
+         // this. = parseInt(newData.slice(16,20),16); //自定义速度合2  3
+         // this. = parseInt(newData.slice(20,24),16); //自定义速度分2 4
+         this.outPutVoltageData = parseInt(newData.slice(24,28),16); //输出电压2 5
+         // this. = parseInt(newData.slice(28,32),16); //传感器设置2    6
+         this.fenJieSensors(newData.slice(28,32))
+         console.log('Close',parseInt(newData.slice(36,40),16))
+         console.log('indexOpen',parseInt(newData.slice(40,44),16))
+         this.travelSwitchData = parseInt(newData.slice(32,36),16)/10; //行程2   7
+         for (var i = 0; i < this.arrOpen.length; i++) {
+           if(this.arrOpen[i].value == parseInt(newData.slice(36,40),16)){
+             this.indexClose = i
+             }
+           if(this.arrOpen[i].value == parseInt(newData.slice(40,44),16)){
+             this.indexOpen = i
+           }
+         }
+         // this.indexClose = parseInt(newData.slice(36,40),16); //重合闸合闸2        8
+         // this. = parseInt(newData.slice(40,44),16); //重合闸分闸2  9
+         console.log('indexTest',parseInt(newData.slice(44,48),16))
+         for (var i = 0; i < this.arrTest.length; i++) {
+           if(this.arrTest[i].value == parseInt(newData.slice(44,48),16)){
+             this.indexTest = i
+             }
+         }
+         
+         // this. = parseInt(newData.slice(44,48),16); //测试时间2   10
+         // this. = parseInt(newData.slice(48,50),16); //开关类型1    11
+         this.indexSwitch = parseInt(newData.slice(48,50),16); //开关类型1
+         console.log(this.indexSwitch)
+      },
       //传输油管开关数据
       open() {
-        console.log(222)
+        //console.log(222)
         // open 方法传入参数 等同在 uni-popup 组件上绑定 type属性
         //  let sendValue = '6aa60506160122'
         if(this.indexEl == 10){

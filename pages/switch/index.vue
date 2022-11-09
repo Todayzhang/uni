@@ -188,7 +188,7 @@
 
         <view class="row">
           <view class="rowItem rowLeft" @click="goToTest('7')">
-            <image
+            <image 
               class="image btmImage"
               mode="widthFix"
               src="../../static/images/switch-sd.png"

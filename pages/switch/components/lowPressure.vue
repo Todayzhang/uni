@@ -76,6 +76,20 @@
 <script>
 	export default {
 		name: 'manual',
+		props:['getMsgResult'],
+		create() {
+			// 6A A6 07 06 0b 08 00 96 0a 00 c8 02 8e
+			let newData = this.getMsgResult
+			console.log('getMsgResult', newData)
+			// 初始电压
+			this.currentvoltage = parseInt(newData.slice(14,16),16)
+			this.initalvolta = parseInt(newData.slice(14,16),16)
+			// 步进电压
+			this.stepvolta = parseInt(newData.slice(16,18),16)
+			// 脉冲宽度
+			this.duration = parseInt(newData.slice(16,22),16)
+			// 动作模式
+		},
 		data() {
 			return {
 				currentvoltage: 220,

@@ -14,62 +14,98 @@
         </view>
 
         <view class="centerBtm">
-          <view class="centerBtmItem" :class="arrDuan[15]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[15] == 0 ? 'close' : 'open'"
+          >
             <text>A1</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem" :class="arrDuan[14]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[14] == 0 ? 'close' : 'open'"
+          >
             <text>B1</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem" :class="arrDuan[13]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[13] == 0 ? 'close' : 'open'"
+          >
             <text>C1</text>
             <span class="icon"></span>
           </view>
-          <view class="centerBtmItem" :class="arrDuan[12]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[12] == 0 ? 'close' : 'open'"
+          >
             <text>A2</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem" :class="arrDuan[11]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[11] == 0 ? 'close' : 'open'"
+          >
             <text>B2</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem" :class="arrDuan[10]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[10] == 0 ? 'close' : 'open'"
+          >
             <text>C2</text>
             <span class="icon"></span>
           </view>
         </view>
 
         <view class="centerBtm">
-          <view class="centerBtmItem" :class="arrDuan[9]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[9] == 0 ? 'close' : 'open'"
+          >
             <text>A3</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem" :class="arrDuan[8]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[8] == 0 ? 'close' : 'open'"
+          >
             <text>B3</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem" :class="arrDuan[7]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[7] == 0 ? 'close' : 'open'"
+          >
             <text>C3</text>
             <span class="icon"></span>
           </view>
-          <view class="centerBtmItem" :class="arrDuan[6]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[6] == 0 ? 'close' : 'open'"
+          >
             <text>A4</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem" :class="arrDuan[5]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[5] == 0 ? 'close' : 'open'"
+          >
             <text>B4</text>
             <span class="icon"></span>
           </view>
 
-          <view class="centerBtmItem" :class="arrDuan[4]==0?'close':'open'">
+          <view
+            class="centerBtmItem"
+            :class="arrDuan[4] == 0 ? 'close' : 'open'"
+          >
             <text>C4</text>
             <span class="icon"></span>
           </view>
@@ -212,8 +248,12 @@
       </view>
       <view class="btnFix" v-else>
         <view class="btmBtnBox">
-          <view class="bottomBtn left" @click="resetModel()">{{$t("modelSelect")}}</view>
-          <view class="bottomBtn right" @click="startTest()">{{ $t("starttesting") }}</view>
+          <view class="bottomBtn left" @click="resetModel()">{{
+            $t("modelSelect")
+          }}</view>
+          <view class="bottomBtn right" @click="startTest()">{{
+            $t("starttesting")
+          }}</view>
         </view>
       </view>
     </template>
@@ -239,11 +279,10 @@ export default {
   data() {
     return {
       sendHead: "6aa6050604",
-      getHead:  "6aa60682000400",
+      getHead: "6aa60682000400",
       currentModel: "1",
       isModelSelect: true,
-     // getMsgResult:'',
-      arrDuan:["0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0", "0"]
+      arrDuan: ["0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0","0",],
     };
   },
   onShow() {
@@ -251,106 +290,79 @@ export default {
       // 修改头部标题
       title: this.$i18n.messages[this.$i18n.locale].switch,
     });
-    this.getDuankou()
+    this.getDuankou();
   },
-  onBackPress(e){
-    console.log("监听返回按钮事件",e);
-    //返回主页面，重置当前页面数据
-    this.sendMsgToDevice('','',()=>{
-      
-    })
-    uni.navigateTo({
-      url:"/pages/index/blueindex"
-    }) 
-    // 此处一定姚要return为true，否则页面不会返回到指定路径
-    //return true;
+  onHide() {
+    this.sendMsgToDevice("6aa60506160223");
+    this.closeNotify();
   },
   methods: {
-    startTest(){
-      this.$refs.paramSet.open()
+    startTest() {
+      this.$refs.paramSet.open();
     },
     /**获取当前断口数据*/
-    getDuankou(){
-      let sendValue = "6aa6070608ffff0089"
-      this.sendMsgToDevice(sendValue,'', () => {
+    getDuankou() {
+      let sendValue = "6aa6070608ffff0089";
+      this.sendMsgToDevice(sendValue, "", () => {
         console.log("请求成功，获取断口状态");
       });
-      this.openNotify((res)=>{
-        if(res.startsWith('6aa6070608')){
-          console.log('断口res=>',res)
-          const sixtyDuan = res.split('6aa6070608')[1].slice(0,4)
-          let arr = parseInt(sixtyDuan,16).toString(2).split("")
-          if(arr.length<16){
-            for (let i=arr.length;i<16;i++) {
-              arr.unshift("0")
+      this.openNotify((res) => {
+        if (res.startsWith("6aa6070608")) {
+          console.log("断口res=>", res);
+          const sixtyDuan = res.split("6aa6070608")[1].slice(0, 4);
+          let arr = parseInt(sixtyDuan, 16).toString(2).split("");
+          if (arr.length < 16) {
+            for (let i = arr.length; i < 16; i++) {
+              arr.unshift("0");
             }
           }
           console.log(arr);
-          this.arrDuan = arr
-        } else if(res.startsWith("6aa607060b07")){
+          this.arrDuan = arr;
+        } else if (res.startsWith("6aa607060b07")) {
           // 手动分合
-          console.log(res)
-          this.$refs.manual.initData(res)
+          console.log(res);
+          this.$refs.manual.initData(res);
           this.$modal.toast({
             message: res,
-            duration: 2
-          }); 
-        }else if(res.startsWith("6aa607060b08")){
-          // 低压测试
-          this.$refs.lowPressure.initData(res)
-        }else if(res.startsWith("6aa618060b")){
-          this.$modal.toast({
-            message: res,
-            duration: 2
+            duration: 2,
           });
-          this.$refs.paramSet.initCurr(res)
+        } else if (res.startsWith("6aa607060b08")) {
+          // 低压测试
+          this.$refs.lowPressure.initData(res);
+        } else if (res.startsWith("6aa618060b")) {
+          this.$modal.toast({
+            message: res,
+            duration: 2,
+          });
+          this.$refs.paramSet.initCurr(res);
+        } else if (res.startsWith("6aa618060b")) {
+          this.$modal.toast({
+            message: "测试完成",
+            duration: 2,
+          });
         }
-      })
+      });
     },
     goToTest(num) {
-     // this.isModelSelect = false
+      // this.isModelSelect = false
       if (num) {
         this.currentModel = num;
       }
-     // this.getMsgResult = '6aa618060b01020b10511041001e120301f400c800c801f40100'
+      // this.getMsgResult = '6aa618060b01020b10511041001e120301f400c800c801f40100'
       // 非电机储能，设置当前测试模式
       if (this.currentModel !== "9") {
         let currModule = this.sendHead + this.$changeTosixty(this.currentModel);
-       // console.log(currModule);
+        // console.log(currModule);
         let sendValue = currModule + this.$checkEnd(currModule);
-        console.log(sendValue)
+        console.log(sendValue);
         //发送消息
-          this.sendMsgToDevice(sendValue, '', () => {
-            console.log("请求成功，跳转页面");
-            this.isModelSelect = false;
-          });
-          // this.openNotify((res)=>{
-          //   console.log('获取测试页面值')
-          //   console.log('res=>',res)
-          //   this.getMsgResult = res
-          //   this.$modal.toast({
-          //     message: res,
-          //     duration: 1.5
-          //   });
-            //this.getMsgResult = '6aa618060b01020110011001001e120101f400c800c801f40100'
-            //测试模式
-            // if(res.includes("18060b")){
-              
-              
-              
-            // }else if(res.includes("07060b07")){
-            //   //测试模式为7 手动分合
-              
-             
-            // }else if(res.includes("07060b07")){
-            //    //测试模式为8 低压模式
-               
-            // }
-         // })
-        // }
+        this.sendMsgToDevice(sendValue, "", () => {
+          console.log("请求成功，跳转页面");
+          this.isModelSelect = false;
+        });
       } else {
         // 电机储能
-        this.isModelSelect = false
+        this.isModelSelect = false;
       }
     },
     resetModel() {

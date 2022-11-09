@@ -50,11 +50,32 @@
 				time: 0.0,
 				current: 0.0,
 				maxcurrent: 0.0,
-				voltage: 0.0
+				voltage: 0.0,
+				setHead: '6aa6',
+        		getHead: '6aa6',
 			}
 		},
 		methods: {
-
+			// 开始储能
+			start() {
+				this.sendData('01','050606')
+			},
+			// 停止储能
+			stop() {
+				this.sendData('02','050606')
+			},
+			sendData(value, code, getCode = undefined) {
+				let sendValue = this.setHead + code + value;
+				sendValue = sendValue + this.$checkEnd(sendValue)
+				console.log('sendValue',sendValue);
+				const newCode = getCode ? getCode : code 
+				let getModule = this.getHead + newCode + value
+				let getValue = getModule + this.$checkEnd(getModule)
+				console.log(' getValue',getValue);
+				this.sendMsgToDevice(sendValue, getValue, () => {
+					console.log('请求成功')
+				})
+			}
 		}
 	}
 </script>

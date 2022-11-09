@@ -541,22 +541,22 @@
       //this.getNotify()
     },
     methods: {
-      getNotify(){
-        console.log('接收消息')
-        this.openNotify((res)=>{
-          if(res.includes('6aa605061603')){
-            this.$modal.toast({
-              message: '测试完成！',
-              duration: 1
-            });
-          }else if(res.includes('6aa618060b')){
-            this.$modal.toast({
-              message: '开始赋值！',
-              duration: 1
-            });
-          }
-        })
-      },
+      // getNotify(){
+      //   console.log('接收消息')
+      //   this.openNotify((res)=>{
+      //     if(res.includes('6aa605061603')){
+      //       this.$modal.toast({
+      //         message: '测试完成！',
+      //         duration: 1
+      //       });
+      //     }else if(res.includes('6aa618060b')){
+      //       this.$modal.toast({
+      //         message: '开始赋值！',
+      //         duration: 1
+      //       });
+      //     }
+      //   })
+      // },
       //传输油管开关数据
       open() {
         console.log(222)
@@ -824,12 +824,6 @@
           }
         }
 
-      },
-      // 展示测试结果
-      goTo(url) {
-        uni.navigateTo({
-          url: url
-        })
       }
     }
   }

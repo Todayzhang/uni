@@ -31,12 +31,20 @@
 	export default {
 		name: 'manual',
 		mixins: [bleBoole],
+		props:['getMsgResult'],
 		data() {
 			return {
 				currentvoltage: 220,
 				setHead: '6aa6',
         		getHead: '6aa6',
 			}
+		},
+		create() {
+			// 6A A6 07 06 0b 07 00 96 b5
+			let newData = this.getMsgResult
+			console.log('getMsgResult', newData)
+			// 初始电压
+			this.currentvoltage = parseInt(newData.slice(14,16),16)
 		},
 		methods: {
 			replaceInputVoltage(event) {

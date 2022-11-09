@@ -294,8 +294,8 @@ export default {
         //发送消息
           this.sendMsgToDevice(sendValue, '', () => {
             console.log("请求成功，跳转页面");
+            this.isModelSelect = false;
           });
-          this.isModelSelect = false;
           this.openNotify((res)=>{
             console.log('获取测试页面值')
             console.log('res=>',res)

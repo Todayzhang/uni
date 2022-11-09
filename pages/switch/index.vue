@@ -177,8 +177,8 @@
         </view>
       </template>
       <template v-else>
-        <manual v-if="currentModel === '7'" />
-        <lowPressure v-else-if="currentModel === '8'" />
+        <manual ref="manual" v-if="currentModel === '7'" />
+        <lowPressure ref="lowPressure" v-else-if="currentModel === '8'" />
         <Energy v-else-if="currentModel === '9'" />
         <parameter-setting ref="paramSet" v-else />
       </template>
@@ -290,13 +290,14 @@ export default {
         } else if(res.startsWith("6aa607060b07")){
           // 手动分合
           console.log(res)
+          this.$refs.manual.initData(res)
           this.$modal.toast({
             message: res,
             duration: 2
           }); 
         }else if(res.startsWith("6aa607060b08")){
           // 低压测试
-          
+          this.$refs.lowPressure.initData(res)
         }else if(res.startsWith("6aa618060b")){
           this.$modal.toast({
             message: res,

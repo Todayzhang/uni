@@ -47,6 +47,11 @@
 			this.currentvoltage = parseInt(newData.slice(14,16),16)
 		},
 		methods: {
+			initData(val) {
+				// 6A A6 07 06 0b 07 00 96 b5
+				// 初始电压
+				this.currentvoltage = parseInt(val.slice(14,16),16)
+			},
 			replaceInputVoltage(event) {
 				var value = event.target.value;
 				if (value > 250) {

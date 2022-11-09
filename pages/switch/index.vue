@@ -287,14 +287,15 @@ export default {
           }
           console.log(arr);
           this.arrDuan = arr
-        }  
-        if(res.startsWith("6aa618060b07")){
+        } else if(res.startsWith("6aa607060b07")){
+          // 手动分合
           console.log(res)
           this.$modal.toast({
             message: res,
             duration: 2
           }); 
-        }else if(res.startsWith("6aa618060b08")){
+        }else if(res.startsWith("6aa607060b08")){
+          // 低压测试
           
         }else if(res.startsWith("6aa618060b")){
           this.$modal.toast({
